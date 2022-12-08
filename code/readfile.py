@@ -3,6 +3,7 @@ import openpyxl
 import xlrd
 import xlsxwriter
 
+
 pd.set_option('display.width', 0)
 #df = pd.read_excel("CerictContiEconomici2021-copia.xlsx", sheet_name=1)
 
