@@ -10,12 +10,12 @@ pd.set_option('display.width', 0)
 #print(df.head())
 #print(df.shape)
 #print(df.dtypes)
-location = "CerictContiEconomici2021-copia.xls"
-wb = xlrd.open_workbook(location)
-sheet = wb.sheet_by_index(1)
-print(sheet.cell_value(0, 0))
+location = "CerictContiEconomici2021-copia.xls"  #prendo il file
+wb = xlrd.open_workbook(location)   #copio un workbook identico al file
+sheet = wb.sheet_by_index(1)    #prendo il foglio di lavoro che mi interessa lavorare
+print(sheet.cell_value(0, 0))   #accedo alla prima cella -> suggerimento: fare un iterazione come se fosse una matrice
 
-
+#codice per scrivere su file excel
 outWorkbook = xlsxwriter.Workbook("out.xlsx")
 outSheet = outWorkbook.add_worksheet()
 Name = ["John"]
