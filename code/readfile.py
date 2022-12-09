@@ -16,6 +16,7 @@ sheet = wb.sheet_by_index(1)    #prendo il foglio di lavoro che mi interessa lav
 print(sheet.cell_value(0, 0))   #accedo alla prima cella -> suggerimento: fare un iterazione come se fosse una matrice
 
 #codice per scrivere su file excel
+"""
 outWorkbook = xlsxwriter.Workbook("out.xlsx")
 outSheet = outWorkbook.add_worksheet()
 Name = ["John"]
@@ -25,6 +26,7 @@ outSheet.write("B1", "sal")
 outSheet.write(1, 0, Name[0])
 outSheet.write(1, 1, Salary[0])
 outWorkbook.close()
+"""
 
 #data = pd.read_csv("Cerict Conti Economici 2021.csv", sep=';')
 #print(data.head())
