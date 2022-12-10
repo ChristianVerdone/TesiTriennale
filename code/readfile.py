@@ -16,14 +16,12 @@ pd.set_option('display.width', 0)
 location = "CerictContiEconomici2021-copia.xls"  #prendo il file
 wb = xlrd.open_workbook(location)   #copio un workbook identico al file
 sheet = wb.sheet_by_index(1)    #prendo il foglio di lavoro che mi interessa lavorare
-print(sheet.cell_value(0, 0))   #accedo alla prima cella -> suggerimento: fare un iterazione come se fosse una matrice
-"""list= splitCel(sheet.cell_value(0, 0))
-print(list)
-codConto= list[0]
+#print(sheet.cell_value(0, 0))   #accedo alla prima cella -> suggerimento: fare un iterazione come se fosse una matrice
+codConto, desConto = splitCel(sheet.cell_value(0, 0))
+
+print(desConto)
 print(codConto)
-list = list.remove(codConto)
-descConto = ''.join(list)
-print(descConto)"""
+
 #codice per scrivere su file excel
 """
 outWorkbook = xlsxwriter.Workbook("out.xlsx")
