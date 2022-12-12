@@ -38,6 +38,6 @@ def createItemConto(codC, des, row, wb):
             temp = 0
     saldo = row[8]
     contr = row[9]
-    item= ItemConto.ItemConto(codC, des, dataOp, cod, desOp, numDoc, dataDoc, numFat, importo, saldo, contr)
+    item= ItemConto.__init__(codC, des, dataOp, cod, desOp, numDoc, dataDoc, numFat, importo, saldo, contr)
     print(item)
     return item
