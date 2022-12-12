@@ -18,7 +18,6 @@ pd.set_option('display.width', 0)
 location = "CerictContiEconomici2021-copia.xls"  #prendo il file
 wb = xlrd.open_workbook(location)   #copio un workbook identico al file
 sheet = wb.sheet_by_index(1)    #prendo il foglio di lavoro che mi interessa lavorare
-#print(sheet.cell_value(0, 0))   #accedo alla prima cella -> suggerimento: fare un iterazione come se fosse una matrice
 listItem= []
 for n in range(0, sheet.nrows):
     temp = sheet.cell_value(n,0)
@@ -31,7 +30,6 @@ for n in range(0, sheet.nrows):
     row = sheet.row_values(n,0)
     item = createItemConto(codConto, desConto, row, wb)
     listItem.append(item)
-    print(row)
 
 print(desConto)
 print(codConto)
