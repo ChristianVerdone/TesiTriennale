@@ -14,8 +14,8 @@ class ItemConto:
         self.importo = importo
         self.saldo = saldo
         self.contropartita = contropartita
-        self.costiDirAttEconomiche = None
-        self.costiDirAttNonEconomiche = None
+        #self.costiDirAttEconomiche = None
+        #self.costiDirAttNonEconomiche = None
 
     #Getter
     def getCodiceConto(self):
