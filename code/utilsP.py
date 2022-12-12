@@ -1,6 +1,6 @@
 class ItemConto:
     def __int__(self, codConto, descrConto, dataOp, COD, descrOperazione, numDoc,
-                dataDoc, num, importo, saldo, contropartita):
+                dataDoc, numFattura, importo, saldo, contropartita):
         self.codConto = codConto
         self.descrConto = descrConto
         self.dataOp = dataOp
@@ -8,7 +8,7 @@ class ItemConto:
         self.descrOperazione = descrOperazione
         self.numDoc = numDoc
         self.dataDoc = dataDoc
-        self.num = num
+        self.numFattura = numFattura
         #self.dare = dare
         #self.avere = avere
         self.importo = importo
@@ -32,8 +32,8 @@ class ItemConto:
         return self.numDoc
     def getDataDocumento(self):
         return self.dataDoc
-    def getNumero(self):
-        return self.num
+    def getNumFattura(self):
+        return self.numFattura
     def getImporto(self):
         return self.importo
     def getSaldo(self):
