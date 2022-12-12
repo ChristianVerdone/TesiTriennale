@@ -17,7 +17,17 @@ location = "CerictContiEconomici2021-copia.xls"  #prendo il file
 wb = xlrd.open_workbook(location)   #copio un workbook identico al file
 sheet = wb.sheet_by_index(1)    #prendo il foglio di lavoro che mi interessa lavorare
 #print(sheet.cell_value(0, 0))   #accedo alla prima cella -> suggerimento: fare un iterazione come se fosse una matrice
-codConto, desConto = splitCel(sheet.cell_value(0, 0))
+
+for n in range(0, sheet.nrows):
+    temp = sheet.cell_value(n,0)
+    if temp.__class__ == str:
+        if sheet.cell_value(n, 0).__contains__('Codice'):
+          codConto, desConto = splitCel(sheet.cell_value(n, 0))
+          continue
+        if sheet.cell_value(n, 0).__contains__('DATA'):
+            continue
+    row = sheet.row(n)
+    print(row)
 
 print(desConto)
 print(codConto)
