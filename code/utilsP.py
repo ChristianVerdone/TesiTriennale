@@ -1,5 +1,5 @@
 class ItemConto:
-    def __int__(self, codConto, descrConto, dataOp, COD, descrOperazione, numDoc,
+    def __init__(self, codConto, descrConto, dataOp, COD, descrOperazione, numDoc,
                 dataDoc, numFattura, importo, saldo, contropartita):
         self.codConto = codConto
         self.descrConto = descrConto
