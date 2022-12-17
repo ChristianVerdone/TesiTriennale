@@ -31,7 +31,6 @@ def createItemConto(codC, des, row, wb):
             temp = 0
     elif row[7]:
         temp = row[7]
-        print(temp)
         if isinstance(temp, float):
             importo = -temp
             temp = 0
