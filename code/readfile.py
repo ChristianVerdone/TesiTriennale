@@ -10,7 +10,7 @@ import utilsP
 from utilsC import splitCel, createItemConto
 
 pd.set_option('display.width', 0)
-#df = pd.read_excel("CerictContiEconomici2021-copia.xlsx", sheet_name=1)
+
 
 #print(df.head())
 #print(df.shape)
@@ -32,3 +32,5 @@ for n in range(0, sheet.nrows):
     listItem.append(item)
 
 utilsP.writeNewFile(listItem)
+
+df = pd.read_excel("out.xlsx", sheet_name=1)

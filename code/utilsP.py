@@ -1,3 +1,5 @@
+from builtins import set
+
 import xlsxwriter
 
 
@@ -17,8 +19,10 @@ class ItemConto:
         self.importo = importo
         self.saldo = saldo
         self.contropartita = contropartita
-        #self.costiDirAttEconomiche = None
-        #self.costiDirAttNonEconomiche = None
+        self.costiDir = None
+        self.costiIndir = None
+        self.attivEconom = None
+        self.attivNonEconom = None
 
     #Getter
     def getCodiceConto(self):
@@ -43,17 +47,28 @@ class ItemConto:
         return self.saldo
     def getContropartita(self):
         return self.contropartita
+    def getCosti_Diretti(self):
+        return self.costiDir
+    def getCosti_Indiretti(self):
+        return self.costiIndir
+    def getAttivita_Economiche(self):
+        return self.attivEconom
+    def getAttivita_Non_Economiche(self):
+        return self.attivNonEconom
 
-
+    def setCosti_Diretti(self, bool):
+        self.costiDir = bool
+    def setCosti_Indiretti(self, bool):
+        self.costiIndir = bool
+    def setAttivita_Economiche(self, bool):
+        self.attivEconom = bool
+    def setAttivita_Non_Economiche(self, bool):
+        self.attivNonEconom = bool
     """
     def getAvere(self):
         return self.avere
     def getDare(self):
         return self.dare
-    def getCosti_Diretti_Attività_Economiche(self):
-        return self.costiDirAttEconomiche
-    def getCosti_Diretti_Attività_Non_Economiche(self):
-        return self.costiDirAttNonEconomiche
     """
 
 
@@ -72,6 +87,10 @@ def writeNewFile(listItem):
     outSheet.write(0, 8, "Importo")
     outSheet.write(0, 9, "Saldo")
     outSheet.write(0, 10, "Contropartita")
+    outSheet.write(0, 11, "Costi Diretti")
+    outSheet.write(0, 12, "Costi Indiretti")
+    outSheet.write(0, 13, "Attività economiche")
+    outSheet.write(0, 14, "Attività non economiche")
 
     for i in range(len(listItem)):
         outSheet.write(i + 1, 0, listItem[i].getCodiceConto())
