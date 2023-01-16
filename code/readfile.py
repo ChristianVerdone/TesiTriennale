@@ -11,10 +11,6 @@ from utilsC import splitCel, createItemConto
 
 pd.set_option('display.width', 0)
 
-
-#print(df.head())
-#print(df.shape)
-#print(df.dtypes)
 location = "CerictContiEconomici2021-copia.xls"  #prendo il file
 wb = xlrd.open_workbook(location)   #copio un workbook identico al file
 sheet = wb.sheet_by_index(1)    #prendo il foglio di lavoro che mi interessa lavorare
@@ -32,5 +28,9 @@ for n in range(0, sheet.nrows):
     listItem.append(item)
 
 utilsP.writeNewFile(listItem)
+utilsP.writeNewFileseparati(listItem)
 
-df = pd.read_excel("out.xlsx", sheet_name=1)
+df = pd.read_excel("out.xlsx")
+print(df.head())
+print(df.shape)
+print(df.dtypes)
