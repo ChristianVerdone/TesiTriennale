@@ -74,7 +74,7 @@ class ItemConto:
 
 def writeNewFileseparati(listItem):
     outWorkbook = xlsxwriter.Workbook("out2.xlsx")
-    outSheet = outWorkbook.add_worksheet()
+    outSheet = outWorkbook.add_worksheet(name=listItem[0].getCodiceConto())
 
     outSheet.write(0, 0, "Codice Conto")
     outSheet.write(0, 1, "Descrizione conto")
