@@ -23,6 +23,8 @@ class ItemConto:
         self.costiIndir = None
         self.attivEconom = None
         self.attivNonEconom = None
+        self.CodProg = None
+
 
     #Getter
     def getCodiceConto(self):
@@ -64,6 +66,8 @@ class ItemConto:
         self.attivEconom = bool
     def setAttivita_Non_Economiche(self, bool):
         self.attivNonEconom = bool
+    def getCodiceProgetto(self):
+        return self.CodProg
     """
     def getAvere(self):
         return self.avere
@@ -91,6 +95,7 @@ def writeNewFileseparati(listItem):
     outSheet.write(0, 12, "Costi Indiretti")
     outSheet.write(0, 13, "Attività economiche")
     outSheet.write(0, 14, "Attività non economiche")
+    outSheet.write(0, 15, "Codice progetto")
 
     j=0
     temp = None
@@ -142,6 +147,7 @@ def writeNewFile(listItem):
     outSheet.write(0, 12, "Costi Indiretti")
     outSheet.write(0, 13, "Attività economiche")
     outSheet.write(0, 14, "Attività non economiche")
+    outSheet.write(0, 15, "Codice progetto")
 
     for i in range(len(listItem)):
         outSheet.write(i + 1, 0, listItem[i].getCodiceConto())
