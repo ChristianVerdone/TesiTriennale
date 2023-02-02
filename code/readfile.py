@@ -10,11 +10,7 @@ import utilsP
 from utilsC import splitCel, createItemConto
 
 pd.set_option('display.width', 0)
-#df = pd.read_excel("CerictContiEconomici2021-copia.xlsx", sheet_name=1)
 
-#print(df.head())
-#print(df.shape)
-#print(df.dtypes)
 location = "CerictContiEconomici2021-copia.xls"  #prendo il file
 wb = xlrd.open_workbook(location)   #copio un workbook identico al file
 sheet = wb.sheet_by_index(1)    #prendo il foglio di lavoro che mi interessa lavorare
@@ -31,26 +27,10 @@ for n in range(0, sheet.nrows):
     item = createItemConto(codConto, desConto, row, wb)
     listItem.append(item)
 
-print(desConto)
-print(codConto)
-
-#codice per scrivere su file excel
-"""
-outWorkbook = xlsxwriter.Workbook("out.xls")
-outSheet = outWorkbook.add_worksheet()
-Name = ["John"]
-Salary = [12000]
-outSheet.write("A1", "Names")
-outSheet.write("B1", "sal")
-outSheet.write(1, 0, Name[0])
-outSheet.write(1, 1, Salary[0])
-outWorkbook.close()
-"""
-
 utilsP.writeNewFile(listItem)
+utilsP.writeNewFileseparati(listItem)
 
-
-#data = pd.read_csv("Cerict Conti Economici 2021.csv", sep=';')
-#print(data.head())
-#print(data.shape)
-#print(data.dtypes)
+df = pd.read_excel("out.xlsx")
+print(df.head())
+print(df.shape)
+print(df.dtypes)
