@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "914352168198",
-    "project_id": "tesitriennale-63ce1",
-    "storage_bucket": "tesitriennale-63ce1.appspot.com"
+    "project_number": "486802557831",
+    "project_id": "tesitriennale-4d2f1",
+    "storage_bucket": "tesitriennale-4d2f1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:914352168198:android:b1faf270f707db73a79287",
+        "mobilesdk_app_id": "1:486802557831:android:345a0224eaabd8c8662122",
         "android_client_info": {
           "package_name": "com.example.tesi_triennale"
         }
       },
       "oauth_client": [
         {
-          "client_id": "914352168198-s0marr2d02knqpgkv3lemo1ekoh71r88.apps.googleusercontent.com",
+          "client_id": "486802557831-tfn031sfnsq56hnnv666ai6t96g5fh2e.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA8lwUcLt9LQDzaKh1_Rw0yqI1zWznsiIA"
+          "current_key": "AIzaSyDdanVwLyCIctiW-Q0VZzavGKZkgD6FNq0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "914352168198-s0marr2d02knqpgkv3lemo1ekoh71r88.apps.googleusercontent.com",
+              "client_id": "486802557831-tfn031sfnsq56hnnv666ai6t96g5fh2e.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
