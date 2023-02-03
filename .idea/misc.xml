@@ -3,10 +3,5 @@
   <component name="FrameworkDetectionExcludesConfiguration">
     <type id="android" />
   </component>
-  <component name="ProjectRootManager">
-    <output url="file://$PROJECT_DIR$/out" />
-  </component>
-  <component name="SuppressKotlinCodeStyleNotification">
-    <option name="disableForAll" value="true" />
-  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="C:\Users\pioda\anaconda3" project-jdk-type="Python SDK" />
 </project>
