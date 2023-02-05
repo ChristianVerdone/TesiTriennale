@@ -53,6 +53,38 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+class SecondRoute extends StatelessWidget {
+  const SecondRoute({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Route'),
+      ),
+      body: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              // Navigate back to first route when tapped.
+              Navigator.pop(context);
+            },
+            child: const Text('Go back!'),
+          ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          child: TextFormField(
+            decoration: const InputDecoration(
+              border: UnderlineInputBorder(),
+              labelText: 'Enter path',
+            ),
+          ),
+        ),
+        ],
+      ),
+    );
+  }
+}
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
@@ -75,7 +107,6 @@ class _MyHomePageState extends State<MyHomePage> {
     };
     await doc.set(json);
   }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -110,6 +141,15 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            ElevatedButton(
+              child: const Text('Carica file'),
+              onPressed: () {
+                // Navigate to second route when tapped.
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => const SecondRoute())
+                );
+              },
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),
