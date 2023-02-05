@@ -48,14 +48,35 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
-
-class SecondRoute extends StatelessWidget {
+class SecondRoute extends StatefulWidget {
   const SecondRoute({super.key});
 
+  @override
+  State<SecondRoute> createState() => _SecondRouteState();
+}
+class _SecondRouteState extends State<SecondRoute> {
+  final myController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Start listening to changes.
+    myController.addListener(_printLatestValue);
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the widget tree.
+    // This also removes the _printLatestValue listener.
+    myController.dispose();
+    super.dispose();
+  }
+  void _printLatestValue() {
+    print('Second text field: ${myController.text}');
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,19 +88,25 @@ class SecondRoute extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               // Navigate back to first route when tapped.
-              Navigator.pop(context);
+
             },
-            child: const Text('Go back!'),
+            child: const Text('carica'),
           ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-          child: TextFormField(
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Enter path',
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                TextField(
+                  onChanged: (text) {
+                    print('Path: $text');
+                  },
+                ),
+                TextField(
+                  controller: myController,
+                ),
+              ],
             ),
           ),
-        ),
         ],
       ),
     );
