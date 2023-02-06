@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -37,7 +38,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -46,7 +46,6 @@ class MyHomePage extends StatefulWidget {
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
-
   final String title;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -58,25 +57,32 @@ class SecondRoute extends StatefulWidget {
   State<SecondRoute> createState() => _SecondRouteState();
 }
 class _SecondRouteState extends State<SecondRoute> {
-  final myController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // Start listening to changes.
-    myController.addListener(_printLatestValue);
   }
+  void _pickFile() async {
 
+    // opens storage to pick files and the picked file or files
+    // are assigned into result and if no file is chosen result is null.
+    // you can also toggle "allowMultiple" true or false depending on your need
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+
+    // if no file is picked
+    if (result == null) return;
+
+    // we will log the name, size and path of the
+    // first picked file (if multiple are selected)
+    print(result.files.first.name);
+    print(result.files.first.size);
+    print(result.files.first.path);
+  }
   @override
   void dispose() {
-    // Clean up the controller when the widget is removed from the widget tree.
-    // This also removes the _printLatestValue listener.
-    myController.dispose();
     super.dispose();
   }
-  void _printLatestValue() {
-    print('Second text field: ${myController.text}');
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,24 +94,9 @@ class _SecondRouteState extends State<SecondRoute> {
           ElevatedButton(
             onPressed: () {
               // Navigate back to first route when tapped.
-
+              _pickFile();
             },
             child: const Text('carica'),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                TextField(
-                  onChanged: (text) {
-                    print('Path: $text');
-                  },
-                ),
-                TextField(
-                  controller: myController,
-                ),
-              ],
-            ),
           ),
         ],
       ),
