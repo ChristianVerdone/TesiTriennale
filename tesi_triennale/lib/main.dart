@@ -55,6 +55,11 @@ class _MyHomePageState extends State<MyHomePage> {
     };
     await doc.set(json);
   }
+
+  void readCSV(){
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
