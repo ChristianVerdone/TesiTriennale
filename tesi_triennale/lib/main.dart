@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:csv/csv.dart';
 
 Future<void> main() async {
   await Firebase.initializeApp(
@@ -74,6 +75,10 @@ class _MyHomePageState extends State<MyHomePage> {
       'numero' : data
     };
     await doc.set(json);
+  }
+
+  void readCSV(){
+
   }
 
   @override
