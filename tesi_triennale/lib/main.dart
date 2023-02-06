@@ -3,6 +3,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:csv/csv.dart';
 
 Future<void> main() async {
   await Firebase.initializeApp(
@@ -97,23 +98,33 @@ class SecondRoute extends StatefulWidget { //seconda page di caricamento di un f
 }
 
 class _SecondRouteState extends State<SecondRoute> {
+
   @override
   void initState() {
     super.initState();
   }
-
+  late final file;
   void _pickFile() async {
     // opens storage to pick files and the picked file or files
     // are assigned into result and if no file is chosen result is null.
     // you can also toggle "allowMultiple" true or false depending on your need
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    final file = await FilePicker.platform.pickFiles(allowMultiple: false);
     // if no file is picked
-    if (result == null) return;
+    if (file == null) return;
     // we will log the name, size and path of the
     // first picked file (if multiple are selected)
-    print(result.files.first.name);
-    print(result.files.first.size);
-    print(result.files.first.path);
+    print(file.files.first.name);
+    print(file.files.first.size);
+    print(file.files.first.path);
+  }
+
+  List<List<dynamic>>? csvData;
+
+  Future<List<List<dynamic>>> processCsv() async {
+    var result2 = await DefaultAssetBundle.of(context).loadString(
+      "assets/outProvamix.csv",
+    );
+    return const CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
   }
 
   @override
@@ -136,7 +147,36 @@ class _SecondRouteState extends State<SecondRoute> {
             },
             child: const Text('carica'),
           ),
+          SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: csvData == null
+              ? const CircularProgressIndicator() : DataTable(columns: csvData![0].map(
+                (item) => DataColumn(
+                  label: Text(
+                    item.toString(),
+                  ),
+                ),
+              ).toList(),
+              rows: csvData!.map(
+                (csvrow) => DataRow(
+                  cells: csvrow.map(
+                    (csvItem) => DataCell(
+                      Text(
+                        csvItem.toString(),
+                      ),
+                    ),
+                  ).toList(),
+                ),
+              ).toList(),
+            ),
+          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          csvData = await processCsv();
+          setState(() {});
+        },
       ),
     );
   }
