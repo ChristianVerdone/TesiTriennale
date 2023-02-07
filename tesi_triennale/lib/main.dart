@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -58,10 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
     await doc.set(json);
   }
 
-  void readCSV(){
-
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,28 +107,8 @@ class _SecondRouteState extends State<SecondRoute> {
   void initState() {
     super.initState();
   }
-  late final file;
-  void _pickFile() async {
-    // opens storage to pick files and the picked file or files
-    // are assigned into result and if no file is chosen result is null.
-    // you can also toggle "allowMultiple" true or false depending on your need
-    final file = await FilePicker.platform.pickFiles(allowMultiple: false);
-    // if no file is picked
-    if (file == null) return;
-    // we will log the name, size and path of the
-    // first picked file (if multiple are selected)
-    print(file.files.first.name);
-    print(file.files.first.size);
-    print(file.files.first.path);
-  }
 
   List<List<dynamic>>? csvData;
-  Future<List<List<dynamic>>> processCsv() async {
-    var result2 = await DefaultAssetBundle.of(context).loadString(
-      "assets/outProvamix.csv",
-    );
-    return const CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
-  }
 
   @override
   void dispose() {
@@ -146,14 +123,6 @@ class _SecondRouteState extends State<SecondRoute> {
       ),
       body: Column(
         children: [
-          ElevatedButton(
-            onPressed: () async{
-              // Navigate back to first route when tapped.
-              csvData = await processCsvFromFile();
-              setState(() {});
-            },
-            child: const Text('carica'),
-          ),
           SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: csvData == null
@@ -188,14 +157,19 @@ class _SecondRouteState extends State<SecondRoute> {
     );
   }
 
-  Future<List<List<dynamic>>> processCsvFromFile()async{
-    
-    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false, allowedExtensions: ['csv'], type: FileType.custom);
-    if (result != null) {
-       File file = File(result.files.first.bytes as List<Object>, result.files.first.name);
-    } else {
-      // User canceled the picker
+  Future<List<List<dynamic>>> processCsvFromFile() async {
+    Uint8List? byteData = null;
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false,
+        allowedExtensions: ['csv'], type: FileType.custom);
+
+    if(result != null){
+      byteData = result.files.first.bytes;
     }
-    return const CsvToListConverter().convert(file, eol: "\n", fieldDelimiter: ';');
+    String result2 = new String.fromCharCodes(byteData as Iterable<int>);
+    print(result2);
+    List<List<dynamic>> data = CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
+    print("lista di oggetti");
+    print(data);
+    return data;
   }
 }
