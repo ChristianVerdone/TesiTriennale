@@ -43,22 +43,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-      writedata(_counter);
-    });
-  }
-
-  void writedata(int data) async {
-    final doc = FirebaseFirestore.instance.collection('numbers').doc('nuovo');
-    final json = {
-      'numero' : data
-    };
-    await doc.set(json);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,21 +61,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const SecondRoute()));
               },
             ),
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
@@ -124,7 +96,8 @@ class _SecondRouteState extends State<SecondRoute> {
       ),
       body: Column(
         children: [
-          SingleChildScrollView(
+          Container(
+            child:  SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: csvData == null
               ? const CircularProgressIndicator() : DataTable(columns: csvData![0].map(
@@ -134,7 +107,7 @@ class _SecondRouteState extends State<SecondRoute> {
                   ),
                 ),
               ).toList(),
-              rows: csvData!.map(
+              rows: csvData!.getRange(1, csvData!.length).map(
                 (csvrow) => DataRow(
                   cells: csvrow.map(
                     (csvItem) => DataCell(
@@ -147,12 +120,15 @@ class _SecondRouteState extends State<SecondRoute> {
               ).toList(),
             ),
           ),
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           csvData = await processCsvFromFile();
           setState(() {});
+          tooltip: 'carica';
+          child: const Icon(Icons.arrow_upward);
         },
       ),
     );
@@ -165,8 +141,10 @@ class _SecondRouteState extends State<SecondRoute> {
 
     if(result != null){
       byteData = result.files.first.bytes;
+      print(byteData);
     }
     String result2 = new String.fromCharCodes(byteData as Iterable<int>);
+    result2 = result2.replaceAll('ï»¿', '');
     print(result2);
     List<List<dynamic>> data = CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
     writedataFile(data);
