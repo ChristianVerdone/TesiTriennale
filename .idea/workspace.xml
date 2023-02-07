@@ -69,22 +69,11 @@
       <workItem from="1675502913695" duration="1299000" />
       <workItem from="1675624053838" duration="365000" />
       <workItem from="1675704908648" duration="907000" />
-      <workItem from="1675756829277" duration="9584000" />
+      <workItem from="1675756829277" duration="14094000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/tesi_triennale/lib/main.dart</url>
-          <line>172</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

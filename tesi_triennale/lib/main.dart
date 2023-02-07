@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -168,8 +169,41 @@ class _SecondRouteState extends State<SecondRoute> {
     String result2 = new String.fromCharCodes(byteData as Iterable<int>);
     print(result2);
     List<List<dynamic>> data = CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
-    print("lista di oggetti");
-    print(data);
+    writedataFile(data);
     return data;
+  }
+
+  void writedataFile(List<List<dynamic>> data) async {
+    for(final line in data){
+      String numConto = line[0];
+      numConto.replaceAll('ï»¿', '');
+      String s = generateRandomString(5);
+
+      final doc = FirebaseFirestore.instance.collection(numConto).doc(numConto+s);
+      final json = {
+        'Codice Conto' : numConto,
+        'Descrizione conto' : line[1],
+        'Data operazione' : line[2],
+        'COD' : line[3],
+        'Descrizione operazione' : line[4],
+        'Numero documento' : line[5],
+        'Data documento' : line[6],
+        'Numero Fattura' : line[7],
+        'Importo' : line[8],
+        'Saldo' : line[9],
+        'Contropartita' : line[10],
+        'Costi Diretti' : null,
+        'Costi Indiretti' : null,
+        'Attività economiche' : null,
+        'Attività non economiche' : null,
+        'Codice progetto' : null
+      };
+      await doc.set(json);
+    }
+  }
+
+  String generateRandomString(int len) {
+    var r = Random();
+    return String.fromCharCodes(List.generate(len, (index) => r.nextInt(33) + 89));
   }
 }
