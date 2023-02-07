@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -124,7 +126,6 @@ class _SecondRouteState extends State<SecondRoute> {
   }
 
   List<List<dynamic>>? csvData;
-
   Future<List<List<dynamic>>> processCsv() async {
     var result2 = await DefaultAssetBundle.of(context).loadString(
       "assets/outProvamix.csv",
@@ -146,9 +147,10 @@ class _SecondRouteState extends State<SecondRoute> {
       body: Column(
         children: [
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async{
               // Navigate back to first route when tapped.
-              _pickFile();
+              csvData = await processCsvFromFile();
+              setState(() {});
             },
             child: const Text('carica'),
           ),
@@ -179,10 +181,21 @@ class _SecondRouteState extends State<SecondRoute> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          csvData = await processCsv();
+          csvData = await processCsvFromFile();
           setState(() {});
         },
       ),
     );
+  }
+
+  Future<List<List<dynamic>>> processCsvFromFile()async{
+    
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false, allowedExtensions: ['csv'], type: FileType.custom);
+    if (result != null) {
+       File file = File(result.files.first.bytes as List<Object>, result.files.first.name);
+    } else {
+      // User canceled the picker
+    }
+    return const CsvToListConverter().convert(file, eol: "\n", fieldDelimiter: ';');
   }
 }
