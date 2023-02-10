@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -6,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tesi_triennale/readData/getConto.dart';
 import 'firebase_options.dart';
 import 'package:csv/csv.dart';
 
@@ -61,11 +61,83 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const SecondRoute()));
               },
             ),
+            ElevatedButton(
+              child: const Text('Visualizza Dati'),
+              onPressed: () {
+                // Navigate to second route when tapped.
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
+              },
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+class VisualizzaPage extends StatefulWidget { //seconda page di caricamento di un file csv per caricare dati sul database
+  const VisualizzaPage({super.key});
+  @override
+  State<VisualizzaPage> createState() => _VisualizzaPageState();
+}
+
+class _VisualizzaPageState extends State<VisualizzaPage>{
+
+  @override
+  void initState() {
+    getConti();
+
+    super.initState();
+  }
+
+  List<String> conti = [];
+
+  Future getConti() async{
+    await FirebaseFirestore.instance.collection('conti').get().then(
+            (snapshot) => snapshot.docs.forEach(
+                    (conto) {
+                      print(conto.reference);
+                      if(!(conti.contains(conto.reference.id))){
+                        conti.add(conto.reference.id);
+                      }
+                      print(conti.toString());
+                    }));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Carica file'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+                child: FutureBuilder(
+                  future: getConti(),
+                  builder: (context, snapshot){
+                    return ListView.builder(
+                        itemCount: conti.length,
+                        itemBuilder: (context, index){
+                          return ListTile(
+                            title: GetConto(idConto: conti[index]),
+                          );
+                        });
+                  })
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
 }
 
 class SecondRoute extends StatefulWidget { //seconda page di caricamento di un file csv per caricare dati sul database
@@ -141,11 +213,9 @@ class _SecondRouteState extends State<SecondRoute> {
 
     if(result != null){
       byteData = result.files.first.bytes;
-      print(byteData);
     }
     String result2 = new String.fromCharCodes(byteData as Iterable<int>);
     result2 = result2.replaceAll('ï»¿', '');
-    print(result2);
     List<List<dynamic>> data = CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
     writedataFile(data);
     return data;
@@ -155,28 +225,30 @@ class _SecondRouteState extends State<SecondRoute> {
     for(final line in data){
       String numConto = line[0];
       numConto.replaceAll('ï»¿', '');
-      String s = generateRandomString(5);
-
-      final doc = FirebaseFirestore.instance.collection(numConto).doc(numConto+s);
-      final json = {
-        'Codice Conto' : numConto,
-        'Descrizione conto' : line[1],
-        'Data operazione' : line[2],
-        'COD' : line[3],
-        'Descrizione operazione' : line[4],
-        'Numero documento' : line[5],
-        'Data documento' : line[6],
-        'Numero Fattura' : line[7],
-        'Importo' : line[8],
-        'Saldo' : line[9],
-        'Contropartita' : line[10],
-        'Costi Diretti' : null,
-        'Costi Indiretti' : null,
-        'Attività economiche' : null,
-        'Attività non economiche' : null,
-        'Codice progetto' : null
-      };
-      await doc.set(json);
+      if(numConto != 'Codice Conto'){
+        String s = generateRandomString(5);
+        String path = 'conti/'+numConto+'/lineeConto';
+        final doc = FirebaseFirestore.instance.collection(path).doc(numConto+s);
+        final json = {
+          'Codice Conto' : numConto,
+          'Descrizione conto' : line[1],
+          'Data operazione' : line[2],
+          'COD' : line[3],
+          'Descrizione operazione' : line[4],
+          'Numero documento' : line[5],
+          'Data documento' : line[6],
+          'Numero Fattura' : line[7],
+          'Importo' : line[8],
+          'Saldo' : line[9],
+          'Contropartita' : line[10],
+          'Costi Diretti' : null,
+          'Costi Indiretti' : null,
+          'Attività economiche' : null,
+          'Attività non economiche' : null,
+          'Codice progetto' : null
+        };
+        await doc.set(json);
+      }
     }
   }
 
