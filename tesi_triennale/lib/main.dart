@@ -113,7 +113,7 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Carica file'),
+        title: const Text('from firebase'),
       ),
       body: Center(
         child: Column(
@@ -227,8 +227,9 @@ class _SecondRouteState extends State<SecondRoute> {
       numConto.replaceAll('ï»¿', '');
       if(numConto != 'Codice Conto'){
         String s = generateRandomString(5);
-        String path = 'conti/'+numConto+'/lineeConto';
-        final doc = FirebaseFirestore.instance.collection(path).doc(numConto+s);
+        await FirebaseFirestore.instance.collection('conti').doc(numConto).set({
+          'Descrizione conto' : line[1]
+        });
         final json = {
           'Codice Conto' : numConto,
           'Descrizione conto' : line[1],
@@ -247,7 +248,8 @@ class _SecondRouteState extends State<SecondRoute> {
           'Attività non economiche' : null,
           'Codice progetto' : null
         };
-        await doc.set(json);
+
+        await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s).set(json);
       }
     }
   }

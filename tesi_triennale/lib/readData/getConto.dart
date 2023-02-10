@@ -9,13 +9,14 @@ class GetConto extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference conti = FirebaseFirestore.instance.collection('conti');
+    CollectionReference lineeConto = FirebaseFirestore.instance.collection('conti').doc(idConto).collection('lineeConto');
     return FutureBuilder<DocumentSnapshot>(
-        future: conti.doc(idConto+'/lineeConto').get(),
+        future: lineeConto.doc(idConto).get(),
         builder: ((context, snapshot){
           if(snapshot.connectionState == ConnectionState.done){
             Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-            return Text('lineeConto: ${data['lineeConto']}');
+
+            return Text('lineeConto: ${data}');
           }
           return Text('loading...');
         })
