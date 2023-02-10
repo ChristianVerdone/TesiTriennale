@@ -170,7 +170,7 @@ class ShowFile extends StatelessWidget{
                 ),
               )
                   .toList(),
-              rows: csvData
+              rows: csvData!.getRange(1, csvData!.length)
                   .map(
                     (csvrow) => DataRow(
                   cells: csvrow
