@@ -120,16 +120,16 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
           children: [
             Expanded(
                 child: FutureBuilder(
-                  future: getConti(),
-                  builder: (context, snapshot){
-                    return ListView.builder(
-                        itemCount: conti.length,
-                        itemBuilder: (context, index){
-                          return ListTile(
-                            title: GetConto(idConto: conti[index]),
-                          );
-                        });
-                  })
+                    future: getConti(),
+                    builder: (context, snapshot){
+                      return ListView.builder(
+                          itemCount: conti.length,
+                          itemBuilder: (context, index){
+                            return ListTile(
+                              title: GetConto(idConto: conti[index]),
+                            );
+                          });
+                    })
             )
           ],
         ),
@@ -171,26 +171,26 @@ class _SecondRouteState extends State<SecondRoute> {
             child:  SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: csvData == null
-              ? const CircularProgressIndicator() : DataTable(columns: csvData![0].map(
-                (item) => DataColumn(
+                  ? const CircularProgressIndicator() : DataTable(columns: csvData![0].map(
+                    (item) => DataColumn(
                   label: Text(
                     item.toString(),
                   ),
                 ),
               ).toList(),
-              rows: csvData!.getRange(1, csvData!.length).map(
-                (csvrow) => DataRow(
-                  cells: csvrow.map(
-                    (csvItem) => DataCell(
-                      Text(
-                        csvItem.toString(),
+                rows: csvData!.getRange(1, csvData!.length).map(
+                      (csvrow) => DataRow(
+                    cells: csvrow.map(
+                          (csvItem) => DataCell(
+                        Text(
+                          csvItem.toString(),
+                        ),
                       ),
-                    ),
-                  ).toList(),
-                ),
-              ).toList(),
+                    ).toList(),
+                  ),
+                ).toList(),
+              ),
             ),
-          ),
           )
         ],
       ),
