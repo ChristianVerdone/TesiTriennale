@@ -85,8 +85,6 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
 
   @override
   void initState() {
-    getConti();
-
     super.initState();
   }
 
@@ -95,13 +93,14 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
   Future getConti() async{
     await FirebaseFirestore.instance.collection('conti').get().then(
             (snapshot) => snapshot.docs.forEach(
-                (conto) {
-              print(conto.reference);
-              if(!(conti.contains(conto.reference.id))){
-                conti.add(conto.reference.id);
-              }
-              print(conti.toString());
-            }));
+                    (conto) {
+                      print(conto.reference);
+                      if(!(conti.contains(conto.reference.id))){
+                        conti.add(conto.reference.id);
+                      }
+                    }
+            )
+    );
   }
 
   @override
@@ -248,7 +247,6 @@ class _SecondRouteState extends State<SecondRoute> {
           'Attività non economiche' : null,
           'Codice progetto' : null
         };
-
         await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s).set(json);
       }
     }
