@@ -1,9 +1,11 @@
-import 'dart:html';
+import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tesi_triennale/readData/getConto.dart';
 import 'firebase_options.dart';
 import 'package:csv/csv.dart';
 
@@ -41,26 +43,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-      writedata(_counter);
-    });
-  }
-
-  void writedata(int data) async {
-    final doc = FirebaseFirestore.instance.collection('numbers').doc('nuovo');
-    final json = {
-      'numero' : data
-    };
-    await doc.set(json);
-  }
-
-  void readCSV(){
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,23 +61,83 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const SecondRoute()));
               },
             ),
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            ElevatedButton(
+              child: const Text('Visualizza Dati'),
+              onPressed: () {
+                // Navigate to second route when tapped.
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
+              },
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+class VisualizzaPage extends StatefulWidget { //seconda page di caricamento di un file csv per caricare dati sul database
+  const VisualizzaPage({super.key});
+  @override
+  State<VisualizzaPage> createState() => _VisualizzaPageState();
+}
+
+class _VisualizzaPageState extends State<VisualizzaPage>{
+
+  @override
+  void initState() {
+    getConti();
+
+    super.initState();
+  }
+
+  List<String> conti = [];
+
+  Future getConti() async{
+    await FirebaseFirestore.instance.collection('conti').get().then(
+            (snapshot) => snapshot.docs.forEach(
+                    (conto) {
+                      print(conto.reference);
+                      if(!(conti.contains(conto.reference.id))){
+                        conti.add(conto.reference.id);
+                      }
+                      print(conti.toString());
+                    }));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('from firebase'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+                child: FutureBuilder(
+                  future: getConti(),
+                  builder: (context, snapshot){
+                    return ListView.builder(
+                        itemCount: conti.length,
+                        itemBuilder: (context, index){
+                          return ListTile(
+                            title: GetConto(idConto: conti[index]),
+                          );
+                        });
+                  })
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
 }
 
 class SecondRoute extends StatefulWidget { //seconda page di caricamento di un file csv per caricare dati sul database
@@ -110,28 +152,8 @@ class _SecondRouteState extends State<SecondRoute> {
   void initState() {
     super.initState();
   }
-  late final file;
-  void _pickFile() async {
-    // opens storage to pick files and the picked file or files
-    // are assigned into result and if no file is chosen result is null.
-    // you can also toggle "allowMultiple" true or false depending on your need
-    final file = await FilePicker.platform.pickFiles(allowMultiple: false);
-    // if no file is picked
-    if (file == null) return;
-    // we will log the name, size and path of the
-    // first picked file (if multiple are selected)
-    print(file.files.first.name);
-    print(file.files.first.size);
-    print(file.files.first.path);
-  }
 
   List<List<dynamic>>? csvData;
-  Future<List<List<dynamic>>> processCsv() async {
-    var result2 = await DefaultAssetBundle.of(context).loadString(
-      "assets/outProvamix.csv",
-    );
-    return const CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
-  }
 
   @override
   void dispose() {
@@ -146,15 +168,8 @@ class _SecondRouteState extends State<SecondRoute> {
       ),
       body: Column(
         children: [
-          ElevatedButton(
-            onPressed: () async{
-              // Navigate back to first route when tapped.
-              csvData = await processCsvFromFile();
-              setState(() {});
-            },
-            child: const Text('carica'),
-          ),
-          SingleChildScrollView(
+          Container(
+            child:  SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: csvData == null
               ? const CircularProgressIndicator() : DataTable(columns: csvData![0].map(
@@ -164,7 +179,7 @@ class _SecondRouteState extends State<SecondRoute> {
                   ),
                 ),
               ).toList(),
-              rows: csvData!.map(
+              rows: csvData!.getRange(1, csvData!.length).map(
                 (csvrow) => DataRow(
                   cells: csvrow.map(
                     (csvItem) => DataCell(
@@ -177,25 +192,70 @@ class _SecondRouteState extends State<SecondRoute> {
               ).toList(),
             ),
           ),
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           csvData = await processCsvFromFile();
           setState(() {});
+          tooltip: 'carica';
+          child: const Icon(Icons.arrow_upward);
         },
       ),
     );
   }
 
-  Future<List<List<dynamic>>> processCsvFromFile()async{
-    
-    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false, allowedExtensions: ['csv'], type: FileType.custom);
-    if (result != null) {
-       File file = File(result.files.first.bytes as List<Object>, result.files.first.name);
-    } else {
-      // User canceled the picker
+  Future<List<List<dynamic>>> processCsvFromFile() async {
+    Uint8List? byteData = null;
+    FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false,
+        allowedExtensions: ['csv'], type: FileType.custom);
+
+    if(result != null){
+      byteData = result.files.first.bytes;
     }
-    return const CsvToListConverter().convert(file, eol: "\n", fieldDelimiter: ';');
+    String result2 = new String.fromCharCodes(byteData as Iterable<int>);
+    result2 = result2.replaceAll('ï»¿', '');
+    List<List<dynamic>> data = CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
+    writedataFile(data);
+    return data;
+  }
+
+  void writedataFile(List<List<dynamic>> data) async {
+    for(final line in data){
+      String numConto = line[0];
+      numConto.replaceAll('ï»¿', '');
+      if(numConto != 'Codice Conto'){
+        String s = generateRandomString(5);
+        await FirebaseFirestore.instance.collection('conti').doc(numConto).set({
+          'Descrizione conto' : line[1]
+        });
+        final json = {
+          'Codice Conto' : numConto,
+          'Descrizione conto' : line[1],
+          'Data operazione' : line[2],
+          'COD' : line[3],
+          'Descrizione operazione' : line[4],
+          'Numero documento' : line[5],
+          'Data documento' : line[6],
+          'Numero Fattura' : line[7],
+          'Importo' : line[8],
+          'Saldo' : line[9],
+          'Contropartita' : line[10],
+          'Costi Diretti' : null,
+          'Costi Indiretti' : null,
+          'Attività economiche' : null,
+          'Attività non economiche' : null,
+          'Codice progetto' : null
+        };
+
+        await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s).set(json);
+      }
+    }
+  }
+
+  String generateRandomString(int len) {
+    var r = Random();
+    return String.fromCharCodes(List.generate(len, (index) => r.nextInt(33) + 89));
   }
 }
