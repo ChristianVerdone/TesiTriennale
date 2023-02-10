@@ -6,8 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/readData/getConto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/readData/getConto.dart" afterDir="false" />
+=======
+=======
+      <change beforePath="$PROJECT_DIR$/code/out.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/out2.xlsx" beforeDir="false" />
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,8 +80,16 @@
       <workItem from="1675439569855" duration="1854000" />
       <workItem from="1675502913695" duration="1299000" />
       <workItem from="1675624053838" duration="365000" />
+<<<<<<< Updated upstream
       <workItem from="1675704908648" duration="907000" />
+<<<<<<< Updated upstream
       <workItem from="1675756829277" duration="36999000" />
+=======
+      <workItem from="1675756829277" duration="3340000" />
+=======
+      <workItem from="1675758826801" duration="599000" />
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
