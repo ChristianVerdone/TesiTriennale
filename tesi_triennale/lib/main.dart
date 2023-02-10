@@ -85,8 +85,6 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
 
   @override
   void initState() {
-    getConti();
-
     super.initState();
   }
 
@@ -100,8 +98,9 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
                       if(!(conti.contains(conto.reference.id))){
                         conti.add(conto.reference.id);
                       }
-                      print(conti.toString());
-                    }));
+                    }
+            )
+    );
   }
 
   @override
@@ -248,7 +247,6 @@ class _SecondRouteState extends State<SecondRoute> {
           'Attività non economiche' : null,
           'Codice progetto' : null
         };
-
         await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s).set(json);
       }
     }
