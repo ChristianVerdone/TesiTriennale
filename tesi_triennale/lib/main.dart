@@ -1,14 +1,12 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
-
-import 'ShowDatabase.dart';
-import 'ShowFile.dart';
+import 'view/ShowDatabase.dart';
+import 'view/ShowFile.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
@@ -36,6 +34,7 @@ class HomePage extends StatefulWidget{
   @override
   State<HomePage> createState() => _homePageState();
 }
+
 class _homePageState extends State<HomePage>{
   List<List<dynamic>>? csvData;
   String? filePath;
@@ -140,7 +139,6 @@ class _homePageState extends State<HomePage>{
           'Attività non economiche' : null,
           'Codice progetto' : null
         };
-
         await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s).set(json);
       }
     }

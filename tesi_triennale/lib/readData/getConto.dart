@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tesi_triennale/view/VisualizzaTabConto.dart';
 
 class GetConto extends StatelessWidget{
 
@@ -16,7 +17,13 @@ class GetConto extends StatelessWidget{
           if(snapshot.connectionState == ConnectionState.done){
             Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
 
-            return Text(idConto+'descrizione: ${data['Descrizione conto']}');
+            return TextButton(
+                onPressed: (){
+                 // Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaConto();));
+                },
+                child: Text(idConto)
+            );
+            // Text(idConto+'descrizione: ${data['Descrizione conto']}');
           }
           return Text('loading...');
         })
