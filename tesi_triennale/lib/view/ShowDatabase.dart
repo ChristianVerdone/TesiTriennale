@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tesi_triennale/readData/getConto.dart';
 
-class VisualizzaPage extends StatefulWidget { //seconda page di caricamento di un file csv per caricare dati sul database
+class VisualizzaPage extends StatefulWidget { //seconda page di caricamento di dati dal database
   const VisualizzaPage({super.key});
   @override
   State<VisualizzaPage> createState() => _VisualizzaPageState();
@@ -65,5 +65,4 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
       ),
     );
   }
-
 }
