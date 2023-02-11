@@ -1,13 +1,15 @@
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:tesi_triennale/readData/getConto.dart';
-import 'firebase_options.dart';
+import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
+
+import 'ShowDatabase.dart';
+import 'ShowFile.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   await Firebase.initializeApp(
@@ -16,206 +18,97 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget{
   const MyApp({super.key});
-  // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        primarySwatch: Colors.indigo,
-      ),
-      home: const MyHomePage(title: 'tesi triennale'), //titolo dell'applicazione
+      title: 'Layout basic',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-  final String title;
+class HomePage extends StatefulWidget{
+  const HomePage({Key? key}) : super(key: key);
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _homePageState();
 }
-
-class _MyHomePageState extends State<MyHomePage> {
-
+class _homePageState extends State<HomePage>{
+  List<List<dynamic>>? csvData;
+  String? filePath;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
+        appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            // Status bar color
+            statusBarColor: Colors.white,
+            // Status bar brightness (optional)
+            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+            statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          ),
+          centerTitle: true,
+          title: const Text("Home",
+              style: TextStyle(color: Colors.white,
+                fontSize: 20.0, )
+          ),
+        ),
+        body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
-              child: const Text('Carica file'),
-              onPressed: () {
-                // Navigate to second route when tapped.
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const SecondRoute()));
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Visualizza Dati'),
-              onPressed: () {
-                // Navigate to second route when tapped.
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class VisualizzaPage extends StatefulWidget { //seconda page di caricamento di un file csv per caricare dati sul database
-  const VisualizzaPage({super.key});
-  @override
-  State<VisualizzaPage> createState() => _VisualizzaPageState();
-}
-
-class _VisualizzaPageState extends State<VisualizzaPage>{
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  List<String> conti = [];
-
-  Future getConti() async{
-    await FirebaseFirestore.instance.collection('conti').get().then(
-            (snapshot) => snapshot.docs.forEach(
-                    (conto) {
-                      print(conto.reference);
-                      if(!(conti.contains(conto.reference.id))){
-                        conti.add(conto.reference.id);
-                      }
+            Container(
+              child: Center(
+                child: ElevatedButton(
+                  child: const Text("Carica file"),
+                  onPressed: () async {
+                    csvData = await processCsvFromFile();
+                    setState(() {});
+                    if(csvData != null){
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ShowFile(csvData : csvData!))
+                      );
                     }
-            )
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('from firebase'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-                child: FutureBuilder(
-                    future: getConti(),
-                    builder: (context, snapshot){
-                      return ListView.builder(
-                          itemCount: conti.length,
-                          itemBuilder: (context, index){
-                            return ListTile(
-                              title: GetConto(idConto: conti[index]),
-                            );
-                          });
-                    })
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-}
-
-class SecondRoute extends StatefulWidget { //seconda page di caricamento di un file csv per caricare dati sul database
-  const SecondRoute({super.key});
-  @override
-  State<SecondRoute> createState() => _SecondRouteState();
-}
-
-class _SecondRouteState extends State<SecondRoute> {
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  List<List<dynamic>>? csvData;
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Carica file'),
-      ),
-      body: Column(
-        children: [
-          Container(
-            child:  SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: csvData == null
-                  ? const CircularProgressIndicator() : DataTable(columns: csvData![0].map(
-                    (item) => DataColumn(
-                  label: Text(
-                    item.toString(),
-                  ),
+                  },
                 ),
-              ).toList(),
-                rows: csvData!.getRange(1, csvData!.length).map(
-                      (csvrow) => DataRow(
-                    cells: csvrow.map(
-                          (csvItem) => DataCell(
-                        Text(
-                          csvItem.toString(),
-                        ),
-                      ),
-                    ).toList(),
-                  ),
-                ).toList(),
               ),
             ),
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          csvData = await processCsvFromFile();
-          setState(() {});
-          tooltip: 'carica';
-          child: const Icon(Icons.arrow_upward);
-        },
-      ),
+            Container(
+              child: SizedBox(
+                height: 30,
+              ),
+            ),
+            Container(
+              child: Center(
+                child: ElevatedButton(
+                  child: const Text('Visualizza Dati'),
+                  onPressed: () {
+                    // Navigate to second route when tapped.
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
+                  },
+                ),
+              ),
+            ),
+          ],
+        )
     );
   }
 
   Future<List<List<dynamic>>> processCsvFromFile() async {
-    Uint8List? byteData = null;
+    Uint8List? byteData;
     FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false,
         allowedExtensions: ['csv'], type: FileType.custom);
 
     if(result != null){
       byteData = result.files.first.bytes;
+      print(byteData);
     }
-    String result2 = new String.fromCharCodes(byteData as Iterable<int>);
+    String result2 = String.fromCharCodes(byteData as Iterable<int>);
     result2 = result2.replaceAll('ï»¿', '');
-    List<List<dynamic>> data = CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
+    print(result2);
+    List<List<dynamic>> data = const CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
     writedataFile(data);
     return data;
   }
@@ -247,6 +140,7 @@ class _SecondRouteState extends State<SecondRoute> {
           'Attività non economiche' : null,
           'Codice progetto' : null
         };
+
         await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s).set(json);
       }
     }
@@ -257,3 +151,4 @@ class _SecondRouteState extends State<SecondRoute> {
     return String.fromCharCodes(List.generate(len, (index) => r.nextInt(33) + 89));
   }
 }
+
