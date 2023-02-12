@@ -116,14 +116,11 @@ class _homePageState extends State<HomePage>{
     Uint8List? byteData;
     FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false,
         allowedExtensions: ['csv'], type: FileType.custom);
-
     if(result != null){
       byteData = result.files.first.bytes;
-      print(byteData);
     }
     String result2 = String.fromCharCodes(byteData as Iterable<int>);
     result2 = result2.replaceAll('ï»¿', '');
-    print(result2);
     List<List<dynamic>> data = const CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
     writedataFile(data);
     return data;
