@@ -1,6 +1,9 @@
+import 'dart:html';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
+import 'package:tesi_triennale/model/Conto.dart';
 
 class VisualizzaConto extends StatelessWidget{
 
@@ -78,8 +81,38 @@ class VisualizzaConto extends StatelessWidget{
     await FirebaseFirestore.instance.collection('conti/'+idConto+'/lineeConto').get().then(
             (snapshot) => snapshot.docs.forEach(
                 (linea) {
+                  print(linea.reference);
+                  Map<String, dynamic> c = {
+                    'Codice Conto': linea.get('Codice Conto'),
+                    'Descrizione conto': linea.get('Descrizione conto'),
+                    'Data operazione': linea.get('Data operazione'),
+                    'COD': linea.get('COD'),
+                    'Descrizione operazione': linea.get('Descrizione operazione'),
+                    'Numero documento': linea.get('Numero documento'),
+                    'Data documento': linea.get('Data documento'),
+                    'Numero Fattura': linea.get('Numero Fattura'),
+                    'Importo': linea.get('Importo'),
+                    'Saldo': linea.get('Saldo'),
+                    'Contropartita': linea.get('Contropartita'),
+                    'Costi Diretti': linea.get('Costi Diretti'),
+                    'Costi Indiretti': linea.get('Costi Indiretti'),
+                    'Attività economiche': linea.get('Attività economiche'),
+                    'Attività non economiche': linea.get('Attività non economiche'),
+                    'Codice progetto': linea.get('Codice progetto')
+                  };
+                csvData.add(c);
+             }
+        )
+    );
+  }
+
+  Future getLinesConto(String idConto) async{
+    await FirebaseFirestore.instance.collection('conti/'+idConto+'/lineeConto').get().then(
+            (snapshot) => snapshot.docs.forEach(
+                (linea) {
               print(linea.reference);
               csvData.add(linea.data());
+              
             }
         )
     );
