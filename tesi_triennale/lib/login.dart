@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Layout basic',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const Login(),

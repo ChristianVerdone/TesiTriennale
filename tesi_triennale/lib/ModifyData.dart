@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tesi_triennale/Widget/ScrollableWidget.dart';
+import 'package:tesi_triennale/model/Conto.dart';
 import 'package:tesi_triennale/model/user.dart';
 import 'package:tesi_triennale/utils.dart';
 
@@ -9,19 +10,21 @@ import 'Widget/showTextDialog.dart';
 import 'data/users.dart';
 
 class ModifyData extends StatefulWidget{
-  const ModifyData({super.key});
+  final String idConto;
+  final List<Map<String, dynamic>> csvData;
+
+
+  ModifyData({super.key, required this.csvData, required this.idConto});
   @override
   State<ModifyData> createState() => _ModifyDataState();
 }
 
 class _ModifyDataState extends State<ModifyData>{
-  late List<User> users;
-
+  List<Conto> conti = [];
   @override
   void initState() {
     super.initState();
-
-    this.users = List.of(allUsers);
+    conti = convertMapToObject(widget.csvData);
   }
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -43,24 +46,65 @@ class _ModifyDataState extends State<ModifyData>{
   );
 
   Widget buildDataTable() {
-    final columns = ['First Name', 'Last Name', 'Age'];
+
+    final columns = [ 'CodiceConto', 'DescrizioneConto', 'DataOperazione', 'COD', 'DescrizioneOperazione', 'NumeroDocumento',
+      'DataDocumento', 'NumeroFattura', 'Importo', 'Saldo', 'Contropartita', 'CostiDiretti', 'CostiIndiretti', 'AttivitaEconomiche',
+      'AttivitaNonEconomiche', 'CodiceProgetto'];
 
     return DataTable(
       columns: getColumns(columns),
-      rows: getRows(users),
+      rows: getRows(conti),
     );
   }
 
   List<DataColumn> getColumns(List<String> columns){
-    return columns.map((String columns) {
-      return DataColumn(
-          label: Text(columns),
-      );
-    }).toList();
+    return columns.map(
+          (item) => DataColumn(
+        label: Text(
+          item.toString(),
+        ),
+      ),
+    ).toList();
   }
 
-  List<DataRow> getRows(List<User> users) => users.map((User user){
-    final cells = [user.firstName, user.lastName, user.age];
+  List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData.map((item) => Conto(
+      codiceConto: item['Codice Conto'],
+      descrizioneConto: item['Descrizione conto'],
+      dataOperazione: item['Data operazione'],
+      COD: item['COD'],
+      descrizioneOperazione: item['Descrizione operazione'],
+      numeroDocumento: item['Numero documento'],
+      dataDocumento: item['Data documento'],
+      numeroFattura: item['Numero Fattura'],
+      importo: item['Importo'],
+      saldo: item['Saldo'],
+      contropartita: item['Contropartita'],
+      costiDiretti: item['Costi Diretti'],
+      costiIndiretti: item['Costi Indiretti'],
+      attivitaEconomiche: item['Attività economiche'],
+      attivitaNonEconomiche: item['Attività non economiche'],
+      codiceProgetto: item['Codice progetto'])
+  ).toList();
+
+  List<DataRow> getRows(List<Conto> conti) => conti.map((Conto conto){
+
+    final cells = [conto.codiceConto,
+      conto.descrizioneConto,
+      conto.dataOperazione,
+      conto.COD,
+      conto.descrizioneOperazione,
+      conto.numeroDocumento,
+      conto.dataDocumento,
+      conto.numeroFattura,
+      conto.importo,
+      conto.saldo,
+      conto.contropartita,
+      conto.costiDiretti,
+      conto.costiIndiretti,
+      conto.attivitaEconomiche,
+      conto.attivitaNonEconomiche,
+      conto.codiceProgetto];
+
     return DataRow(
       cells: Utils.modelBuilder(cells, (index, cell) {
         final showEditIcon = index  == 0 || index == 1;
@@ -70,10 +114,10 @@ class _ModifyDataState extends State<ModifyData>{
             onTap: (){
               switch(index){
                 case 0:
-                  editFirstName(user);
+                editCodiceConto(conto);
                   break;
                 case 1:
-                  editLastName(user);
+                // editLastName(user);
                   break;
               }
             }
@@ -82,20 +126,22 @@ class _ModifyDataState extends State<ModifyData>{
     );
   }).toList();
 
-  Future editFirstName(User editUser) async {
-    final firstName = await showTextDialog(
+  Future editCodiceConto(Conto editConto) async {
+    final codiceConto = await showTextDialog(
       context,
-      title: 'Modifica nome',
-      value: editUser.firstName,
+      title: 'Modifica codice conto',
+      value: editConto.codiceConto,
     );
 
-    setState(() => users = users.map((user) {
-      final isEditedUser = user == editUser;
-
-      return isEditedUser ? user.copy(firstName: firstName) : user;
-    }).toList());
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.codiceConto != codiceConto;
+      print(codiceConto);
+      print(isEditedUser);
+      return isEditedUser ? conto.copy(codiceConto: codiceConto) : conto;
+    }).toList();
+    });
   }
-
+/*
   Future editLastName(User editUser) async {
     final lastName = await showTextDialog(
       context,
@@ -109,4 +155,6 @@ class _ModifyDataState extends State<ModifyData>{
       return isEditedUser ? user.copy(lastName: lastName) : user;
     }).toList());
   }
+
+ */
 }
