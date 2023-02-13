@@ -34,7 +34,7 @@ class _ModifyDataState extends State<ModifyData>{
         statusBarBrightness: Brightness.light, // For iOS (dark icons)
       ),
       centerTitle: true,
-      title: const Text('Modifica',
+      title: const Text("Visualizzazione file caricato",
           style: TextStyle(color: Colors.white,
             fontSize: 20.0, )
       ),
@@ -43,7 +43,9 @@ class _ModifyDataState extends State<ModifyData>{
   );
 
   Widget buildDataTable() {
-    final columns = ['First Name', 'Last Name', 'Age'];
+    final columns = [ 'CodiceConto', 'DescrizioneConto', 'DataOperazione', 'COD', 'DescrizioneOperazione', 'NumeroDocumento',
+      'DataDocumento', 'NumeroFattura', 'Importo', 'Saldo', 'Contropartita', 'CostiDiretti', 'CostiIndiretti', 'AttivitaEconomiche',
+      'AttivitaNonEconomiche', 'CodiceProgetto'];
 
     return DataTable(
       columns: getColumns(columns),
@@ -52,11 +54,13 @@ class _ModifyDataState extends State<ModifyData>{
   }
 
   List<DataColumn> getColumns(List<String> columns){
-    return columns.map((String columns) {
-      return DataColumn(
-          label: Text(columns),
-      );
-    }).toList();
+    return columns.map(
+          (item) => DataColumn(
+        label: Text(
+          item.toString(),
+        ),
+      ),
+    ).toList();
   }
 
   List<DataRow> getRows(List<User> users) => users.map((User user){

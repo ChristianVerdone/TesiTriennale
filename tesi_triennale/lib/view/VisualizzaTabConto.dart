@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import 'package:tesi_triennale/model/Conto.dart';
 
+import '../ModifyData.dart';
+
 class VisualizzaConto extends StatelessWidget{
 
   String idConto;
@@ -32,6 +34,15 @@ class VisualizzaConto extends StatelessWidget{
             style: TextStyle(color: Colors.white,
               fontSize: 20.0, )
         ),
+        actions: <Widget>[
+          ElevatedButton(
+            child: const Text('Modifica'),
+            onPressed: () {
+              // Navigate to second route when tapped.
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const ModifyData()));
+            },
+          ),
+        ],
       ),
       body: FutureBuilder(
           future: getLines(idConto),
