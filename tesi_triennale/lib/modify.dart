@@ -25,25 +25,27 @@ class _ModifyDataState extends State<ModifyData>{
   }
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        systemOverlayStyle: const SystemUiOverlayStyle(
-          // Status bar color
-          statusBarColor: Colors.white,
-          // Status bar brightness (optional)
-          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          statusBarBrightness: Brightness.light, // For iOS (dark icons)
-        ),
-        centerTitle: true,
-        title: const Text("Visualizzazione file caricato",
-            style: TextStyle(color: Colors.white,
-              fontSize: 20.0, )
-        ),
+    appBar: AppBar(
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        // Status bar color
+        statusBarColor: Colors.white,
+        // Status bar brightness (optional)
+        statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+        statusBarBrightness: Brightness.light, // For iOS (dark icons)
       ),
+      centerTitle: true,
+      title: const Text("Visualizzazione file caricato",
+          style: TextStyle(color: Colors.white,
+            fontSize: 20.0, )
+      ),
+    ),
     body: ScrollableWidget(child: buildDataTable()),
   );
 
   Widget buildDataTable() {
-    final columns = ['First Name', 'Last Name', 'Age'];
+    final columns = [ 'CodiceConto', 'DescrizioneConto', 'DataOperazione', 'COD', 'DescrizioneOperazione', 'NumeroDocumento',
+      'DataDocumento', 'NumeroFattura', 'Importo', 'Saldo', 'Contropartita', 'CostiDiretti', 'CostiIndiretti', 'AttivitaEconomiche',
+      'AttivitaNonEconomiche', 'CodiceProgetto'];
 
     return DataTable(
       columns: getColumns(columns),
@@ -52,11 +54,13 @@ class _ModifyDataState extends State<ModifyData>{
   }
 
   List<DataColumn> getColumns(List<String> columns){
-    return columns.map((String columns) {
-      return DataColumn(
-          label: Text(columns),
-      );
-    }).toList();
+    return columns.map(
+          (item) => DataColumn(
+        label: Text(
+          item.toString(),
+        ),
+      ),
+    ).toList();
   }
 
   List<DataRow> getRows(List<User> users) => users.map((User user){
