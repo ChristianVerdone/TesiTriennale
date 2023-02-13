@@ -89,7 +89,7 @@ class VisualizzaConto extends StatelessWidget{
     await FirebaseFirestore.instance.collection('conti/'+idConto+'/lineeConto').get().then(
             (snapshot) => snapshot.docs.forEach(
                 (linea) {
-                  print(linea.reference);
+                  //print(linea.reference);
                   Map<String, dynamic> c = {
                     'Codice Conto': linea.get('Codice Conto'),
                     'Descrizione conto': linea.get('Descrizione conto'),
@@ -118,7 +118,7 @@ class VisualizzaConto extends StatelessWidget{
     await FirebaseFirestore.instance.collection('conti/'+idConto+'/lineeConto').get().then(
             (snapshot) => snapshot.docs.forEach(
                 (linea) {
-              print(linea.reference);
+              //print(linea.reference);
               csvData.add(linea.data());
               
             }

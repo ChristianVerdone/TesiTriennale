@@ -140,11 +140,11 @@ class _homePageState extends State<HomePage>{
           'Importo' : line[8],
           'Saldo' : line[9],
           'Contropartita' : line[10],
-          'Costi Diretti' : null,
-          'Costi Indiretti' : null,
-          'Attività economiche' : null,
-          'Attività non economiche' : null,
-          'Codice progetto' : null
+          'Costi Diretti' : line[11],
+          'Costi Indiretti' : line[12],
+          'Attività economiche' : line[13],
+          'Attività non economiche' : line[14],
+          'Codice progetto' : line[15]
         };
         String iS = i.toString();
         if(i>9){
