@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tesi_triennale/Widget/ScrollableWidget.dart';
 import 'package:tesi_triennale/model/user.dart';
 import 'package:tesi_triennale/utils.dart';
@@ -24,6 +25,20 @@ class _ModifyDataState extends State<ModifyData>{
   }
   @override
   Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      systemOverlayStyle: const SystemUiOverlayStyle(
+        // Status bar color
+        statusBarColor: Colors.white,
+        // Status bar brightness (optional)
+        statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+        statusBarBrightness: Brightness.light, // For iOS (dark icons)
+      ),
+      centerTitle: true,
+      title: const Text('Modifica',
+          style: TextStyle(color: Colors.white,
+            fontSize: 20.0, )
+      ),
+    ),
     body: ScrollableWidget(child: buildDataTable()),
   );
 
