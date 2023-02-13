@@ -116,25 +116,29 @@ class _homePageState extends State<HomePage>{
     Uint8List? byteData;
     FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false,
         allowedExtensions: ['csv'], type: FileType.custom);
-
     if(result != null){
       byteData = result.files.first.bytes;
-      print(byteData);
     }
     String result2 = String.fromCharCodes(byteData as Iterable<int>);
     result2 = result2.replaceAll('ï»¿', '');
-    print(result2);
     List<List<dynamic>> data = const CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ';');
     writedataFile(data);
     return data;
   }
 
   void writedataFile(List<List<dynamic>> data) async {
+    int i = 0;
+    String temp = '';
+    String s = 'line_';
+    String numConto = '';
     for(final line in data){
-      String numConto = line[0];
+      numConto = line[0];
       numConto.replaceAll('ï»¿', '');
       if(numConto != 'Codice Conto'){
-        String s = generateRandomString(5);
+        if(numConto != temp){
+          temp = numConto;
+          i = 0;
+        }
         await FirebaseFirestore.instance.collection('conti').doc(numConto).set({
           'Descrizione conto' : line[1]
         });
@@ -156,14 +160,11 @@ class _homePageState extends State<HomePage>{
           'Attività non economiche' : null,
           'Codice progetto' : null
         };
-        await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s).set(json);
+        String iS = i.toString();
+        await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
+        i++;
       }
     }
-  }
-
-  String generateRandomString(int len) {
-    var r = Random();
-    return String.fromCharCodes(List.generate(len, (index) => r.nextInt(33) + 89));
   }
 }
 

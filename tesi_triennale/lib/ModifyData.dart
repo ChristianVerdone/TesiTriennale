@@ -50,21 +50,21 @@ class _ModifyDataState extends State<ModifyData>{
       cells: Utils.modelBuilder(cells, (index, cell) {
         final showEditIcon = index  == 0 || index == 1;
         return DataCell(
-          Text('$cell'),
-          showEditIcon: showEditIcon,
-          onTap: (){
-            switch(index){
-              case 0:
-                editFirstName(user);
-                break;
-              case 1:
-                editLastName(user);
-                break;
+            Text('$cell'),
+            showEditIcon: showEditIcon,
+            onTap: (){
+              switch(index){
+                case 0:
+                  editFirstName(user);
+                  break;
+                case 1:
+                  editLastName(user);
+                  break;
+              }
             }
-          }
         );
-  }),
-      );
+      }),
+    );
   }).toList();
 
   Future editFirstName(User editUser) async {
