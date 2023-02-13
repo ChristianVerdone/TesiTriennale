@@ -129,7 +129,7 @@ class _homePageState extends State<HomePage>{
   void writedataFile(List<List<dynamic>> data) async {
     int i = 0;
     String temp = '';
-    String s = 'line_';
+    String s = 'line_00';
     String numConto = '';
     for(final line in data){
       numConto = line[0];
@@ -161,6 +161,12 @@ class _homePageState extends State<HomePage>{
           'Codice progetto' : null
         };
         String iS = i.toString();
+        if(i>9){
+          s = 'line_0';
+        }
+        if(i>99){
+          s = 'line_';
+        }
         await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
         i++;
       }
