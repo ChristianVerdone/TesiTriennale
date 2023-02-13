@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -9,26 +10,6 @@ import 'package:tesi_triennale/ModifyData.dart';
 import 'view/ShowDatabase.dart';
 import 'view/ShowFile.dart';
 import 'firebase_options.dart';
-
-Future<void> main() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget{
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Layout basic',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomePage(),
-    );
-  }
-}
 
 class HomePage extends StatefulWidget{
   const HomePage({Key? key}) : super(key: key);
@@ -43,6 +24,11 @@ class _homePageState extends State<HomePage>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () => FirebaseAuth.instance.signOut() )
+          ],
           systemOverlayStyle: const SystemUiOverlayStyle(
             // Status bar color
             statusBarColor: Colors.white,
@@ -173,4 +159,3 @@ class _homePageState extends State<HomePage>{
     }
   }
 }
-

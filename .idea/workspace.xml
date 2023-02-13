@@ -5,9 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/assets/out3.CSV" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/assets/out3.CSV" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ModifyData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/ModifyData.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugins.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugins.cmake" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,8 +66,8 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
-      <option name="filePath" value="$PROJECT_DIR$/tesi_triennale/lib/main.dart" />
+    <configuration name="login.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/tesi_triennale/lib/login.dart" />
       <method v="2" />
     </configuration>
   </component>
@@ -78,7 +87,7 @@
       <workItem from="1675502913695" duration="1299000" />
       <workItem from="1675624053838" duration="365000" />
       <workItem from="1675704908648" duration="907000" />
-      <workItem from="1675756829277" duration="63040000" />
+      <workItem from="1675756829277" duration="65791000" />
     </task>
     <servers />
   </component>
