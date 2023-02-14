@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
@@ -20,6 +18,8 @@ class VisualizzaConto extends StatelessWidget{
   List<Map<String, dynamic>> csvData = [];
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -38,14 +38,12 @@ class VisualizzaConto extends StatelessWidget{
           ElevatedButton(
             child: const Text('Modifica'),
             onPressed: () {
-              // Navigate to second route when tapped.
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const ModifyData()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>  ModifyData(csvData: csvData!, idConto: idConto!)));
             },
           ),
         ],
       ),
-      body: FutureBuilder(
-          future: getLines(idConto),
+      body: FutureBuilder(future: getLines(idConto),
           builder: (context, snapshot){
            return Scrollbar(
               controller: controller2,
@@ -63,7 +61,8 @@ class VisualizzaConto extends StatelessWidget{
                           item.toString(),
                         ),
                       ),
-                    ).toList(),
+                    )
+                        .toList(),
                     rows: csvData
                         .map(
                           (csvrow) => DataRow(
@@ -76,7 +75,8 @@ class VisualizzaConto extends StatelessWidget{
                           ),
                         ).toList(),
                       ),
-                    ).toList(),
+                    )
+                        .toList(),
                   ),
                 ),
               ),

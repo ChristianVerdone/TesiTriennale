@@ -22,7 +22,7 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
     await FirebaseFirestore.instance.collection('conti').get().then(
             (snapshot) => snapshot.docs.forEach(
                 (conto) {
-              print(conto.reference);
+              //print(conto.reference);
               if(!(conti.contains(conto.reference.id))){
                 conti.add(conto.reference.id);
               }
