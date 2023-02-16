@@ -108,6 +108,7 @@ class VisualizzaConto extends StatelessWidget{
                     'Codice progetto': linea.get('Codice progetto')
                   };
                 csvData.add(c);
+                //print(csvData);
              }
         )
     );
