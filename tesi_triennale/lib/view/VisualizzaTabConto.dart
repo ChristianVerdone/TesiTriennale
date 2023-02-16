@@ -19,7 +19,6 @@ class VisualizzaConto extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -109,6 +108,7 @@ class VisualizzaConto extends StatelessWidget{
                     'Codice progetto': linea.get('Codice progetto')
                   };
                 csvData.add(c);
+                //print(csvData);
              }
         )
     );

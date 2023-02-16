@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
+import 'package:tesi_triennale/view/viewcategorie.dart';
 import 'view/ShowDatabase.dart';
 import 'view/ShowFile.dart';
 import 'firebase_options.dart';
@@ -71,6 +72,22 @@ class _homePageState extends State<HomePage>{
                   onPressed: () {
                     // Navigate to second route when tapped.
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
+                  },
+                ),
+              ),
+            ),
+            Container(
+              child: SizedBox(
+                height: 30,
+              ),
+            ),
+            Container(
+              child: Center(
+                child: ElevatedButton(
+                  child: const Text('Mostra Categorie'),
+                  onPressed: () {
+                    // Navigate to second route when tapped.
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaCatPage()));
                   },
                 ),
               ),
