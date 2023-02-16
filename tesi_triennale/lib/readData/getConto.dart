@@ -15,7 +15,6 @@ class GetConto extends StatelessWidget{
         future: lineeConto.doc(idConto).get(),
         builder: ((context, snapshot){
           if(snapshot.connectionState == ConnectionState.done){
-            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
             return TextButton(
                 onPressed: (){
 

@@ -19,7 +19,6 @@ class VisualizzaConto extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
 
-
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
