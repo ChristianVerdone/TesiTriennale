@@ -72,4 +72,23 @@ class Conto {
         attivitaNonEconomiche: attivitaNonEconomiche ?? this.attivitaNonEconomiche,
         codiceProgetto: codiceProgetto ?? this.codiceProgetto,
       );
+
+  static Conto fromJson(Map<String, dynamic> json) => Conto(
+    codiceConto: json['Codice Conto'],
+    descrizioneConto: json['Descrizione conto'],
+    dataOperazione: json['Data operazione'],
+    COD: json['COD'],
+    descrizioneOperazione: json['Descrizione operazione'],
+    numeroDocumento: json['Numero documento'],
+    dataDocumento: json['Data documento'],
+    numeroFattura: json['Numero fattura'],
+    importo: json['Importo'],
+    saldo: json['Saldo'],
+    contropartita: json['Contropartita'],
+    costiDiretti: json['Costi diretti'],
+    costiIndiretti: json['Costi indiretti'],
+    attivitaEconomiche: json['Attività economiche'],
+    attivitaNonEconomiche: json['Attività non economiche'],
+    codiceProgetto: json['Codice progetto'],
+  );
 }

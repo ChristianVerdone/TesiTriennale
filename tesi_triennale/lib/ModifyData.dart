@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,11 +19,17 @@ class ModifyData extends StatefulWidget{
 
 class _ModifyDataState extends State<ModifyData>{
   List<Conto> conti = [];
+  final Stream<QuerySnapshot> snap = FirebaseFirestore.instance.collection('conti/8.01.031/lineeConto').snapshots();
   @override
   void initState() {
     super.initState();
+
     conti = convertMapToObject(widget.csvData);
+    print(conti);
   }
+
+
+
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
@@ -52,6 +59,7 @@ class _ModifyDataState extends State<ModifyData>{
       columns: getColumns(columns),
       rows: getRows(conti),
     );
+
   }
 
   List<DataColumn> getColumns(List<String> columns){
@@ -83,6 +91,7 @@ class _ModifyDataState extends State<ModifyData>{
       codiceProgetto: item['Codice progetto'])
   ).toList();
 
+
   List<DataRow> getRows(List<Conto> conti) => conti.map((Conto conto){
 
     final cells = [conto.codiceConto,
@@ -104,54 +113,274 @@ class _ModifyDataState extends State<ModifyData>{
 
     return DataRow(
       cells: Utils.modelBuilder(cells, (index, cell) {
-        final showEditIcon = index  == 0 || index == 1;
+        final showEditIcon = index  > 0 && index < 16;
         return DataCell(
             Text('$cell'),
             showEditIcon: showEditIcon,
             onTap: (){
               switch(index){
-                case 0:
-                editCodiceConto(conto);
-                  break;
                 case 1:
-                // editLastName(user);
+                  editDescrizioneConto(conto);
+                  break;
+                case 2:
+                  editDataOperazione(conto);
+                  break;
+                case 3:
+                  editCOD(conto);
+                  break;
+                case 4:
+                  editDescrizioneOperazione(conto);
+                  break;
+                case 5:
+                  editNumeroDocumento(conto);
+                  break;
+                case 6:
+                  editDataDocumento(conto);
+                  break;
+                case 7:
+                  editNumeroFattura(conto);
+                  break;
+                case 8:
+                  editImporto(conto);
+                  break;
+                case 9:
+                  editSaldo(conto);
+                  break;
+                case 10:
+                  editContropartita(conto);
+                  break;
+                case 11:
+                  editCostiDiretti(conto);
+                  break;
+                case 12:
+                  editCostiIndiretti(conto);
+                  break;
+                case 13:
+                  editAttivitaEconomiche(conto);
+                  break;
+                case 14:
+                  editAttivitaNonEconomiche(conto);
+                  break;
+                case 15:
+                  editCodiceProgetto(conto);
                   break;
               }
             }
         );
       }),
     );
-  }).toList();
+  }
+  ).toList();
 
-  Future editCodiceConto(Conto editConto) async {
-    final codiceConto = await showTextDialog(
+
+  Future editDescrizioneConto(Conto editConto) async {
+    final descrizioneConto = await showTextDialog(
       context,
-      title: 'Modifica codice conto',
-      value: editConto.codiceConto,
+      title: 'Modifica descrizione conto',
+      value: editConto.descrizioneConto,
     );
 
     setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.codiceConto != codiceConto;
-      print(codiceConto);
-      print(isEditedUser);
-      return isEditedUser ? conto.copy(codiceConto: codiceConto) : conto;
+      final isEditedUser = conto.descrizioneConto != descrizioneConto;
+      return isEditedUser ? conto.copy(descrizioneConto: descrizioneConto) : conto;
     }).toList();
     });
   }
-/*
-  Future editLastName(User editUser) async {
-    final lastName = await showTextDialog(
-      context,
-      title: 'Modifica cognome',
-      value: editUser.lastName,
+
+  Future editDataOperazione(Conto editConto)  async{
+    final dataOperazione = await showTextDialog(
+        context,
+        title: 'Modifica data operazione',
+        value: editConto.dataOperazione,
     );
 
-    setState(() => users = users.map((user) {
-      final isEditedUser = user == editUser;
-
-      return isEditedUser ? user.copy(lastName: lastName) : user;
-    }).toList());
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.dataOperazione != dataOperazione;
+      return isEditedUser ? conto.copy(dataOperazione: dataOperazione) : conto;
+    }).toList();
+    });
   }
 
- */
+  Future editCOD(Conto editConto)  async{
+    final COD = await showTextDialog(
+        context,
+        title: 'Modifica COD',
+        value: editConto.COD,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.COD != COD;
+      return isEditedUser ? conto.copy(COD: COD) : conto;
+    }).toList();
+    });
+  }
+
+  Future editDescrizioneOperazione(Conto editConto)  async{
+    final descrizioneOperazione = await showTextDialog(
+        context,
+        title: 'Modifica descrizione operazione',
+        value: editConto.descrizioneOperazione,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.descrizioneOperazione != descrizioneOperazione;
+      return isEditedUser ? conto.copy(descrizioneOperazione: descrizioneOperazione) : conto;
+    }).toList();
+    });
+  }
+
+  Future editNumeroDocumento(Conto editConto)  async{
+    final numeroDocumento = await showTextDialog(
+        context,
+        title: 'Modifica numero documento',
+        value: editConto.numeroDocumento,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.numeroDocumento != numeroDocumento;
+      return isEditedUser ? conto.copy(numeroDocumento: numeroDocumento) : conto;
+    }).toList();
+    });
+  }
+
+  Future editDataDocumento(Conto editConto)  async{
+    final dataDocumento = await showTextDialog(
+        context,
+        title: 'Modifica data documento',
+        value: editConto.dataDocumento,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.dataDocumento != dataDocumento;
+      return isEditedUser ? conto.copy(dataDocumento: dataDocumento) : conto;
+    }).toList();
+    });
+  }
+
+  Future editNumeroFattura(Conto editConto)  async{
+    final numeroFattura = await showTextDialog(
+        context,
+        title: 'Modifica numero fattura',
+        value: editConto.numeroFattura,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.numeroFattura != numeroFattura;
+      return isEditedUser ? conto.copy(numeroFattura: numeroFattura) : conto;
+    }).toList();
+    });
+  }
+
+  Future editImporto(Conto editConto)  async{
+    final importo = await showTextDialog(
+        context,
+        title: 'Modifica importo',
+        value: editConto.importo,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.importo != importo;
+      return isEditedUser ? conto.copy(importo: importo) : conto;
+    }).toList();
+    });
+  }
+
+  Future editSaldo(Conto editConto)  async{
+    final saldo = await showTextDialog(
+        context,
+        title: 'Modifica saldo',
+        value: editConto.saldo,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.saldo != saldo;
+      return isEditedUser ? conto.copy(saldo: saldo) : conto;
+    }).toList();
+    });
+  }
+
+  Future editContropartita(Conto editConto) async{
+    final contropartita = await showTextDialog(
+      context,
+      title: 'Modifica contropartita',
+      value: editConto.contropartita,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.contropartita != contropartita;
+      return isEditedUser ? conto.copy(contropartita: contropartita) : conto;
+    }).toList();
+    });
+  }
+
+  Future editCostiDiretti(Conto editConto)  async{
+    final costiDiretti = await showTextDialog(
+        context,
+        title: 'Modifica costi diretti',
+        value: editConto.costiDiretti,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.costiDiretti != costiDiretti;
+      return isEditedUser ? conto.copy(costiDiretti: costiDiretti) : conto;
+    }).toList();
+    });
+  }
+
+  Future editCostiIndiretti(Conto editConto)  async{
+    final costiIndiretti = await showTextDialog(
+        context,
+        title: 'Modifica costi indiretti',
+        value: editConto.costiIndiretti,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.costiIndiretti != costiIndiretti;
+      return isEditedUser ? conto.copy(costiIndiretti: costiIndiretti) : conto;
+    }).toList();
+    });
+  }
+
+  Future editAttivitaEconomiche(Conto editConto)  async{
+    final attivitaEconomiche = await showTextDialog(
+        context,
+        title: 'Modifica attività economiche',
+        value: editConto.attivitaEconomiche,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.attivitaEconomiche != attivitaEconomiche;
+      return isEditedUser ? conto.copy(attivitaEconomiche: attivitaEconomiche) : conto;
+    }).toList();
+    });
+  }
+
+  Future editAttivitaNonEconomiche(Conto editConto)  async{
+    final attivitaNonEconomiche = await showTextDialog(
+        context,
+        title: 'Modifica attività non economiche',
+        value: editConto.attivitaNonEconomiche,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.attivitaNonEconomiche != attivitaNonEconomiche;
+      return isEditedUser ? conto.copy(attivitaNonEconomiche: attivitaNonEconomiche) : conto;
+    }).toList();
+    });
+  }
+
+  Future editCodiceProgetto(Conto editConto)  async{
+    final codiceProgetto = await showTextDialog(
+        context,
+        title: 'Modifica codice progetto',
+        value: editConto.codiceProgetto,
+    );
+
+    setState(() { conti = conti.map((conto) {
+      final isEditedUser = conto.codiceProgetto != codiceProgetto;
+      return isEditedUser ? conto.copy(codiceProgetto: codiceProgetto) : conto;
+    }).toList();
+    });
+  }
+
 }
