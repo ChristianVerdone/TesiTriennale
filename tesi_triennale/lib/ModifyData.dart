@@ -23,9 +23,10 @@ class _ModifyDataState extends State<ModifyData>{
   @override
   void initState() {
     super.initState();
-
     conti = convertMapToObject(widget.csvData);
-    print(conti);
+    print(conti[0].numeroDocumento);
+    print(conti[1].numeroDocumento);
+    print(conti[2].numeroDocumento);
   }
 
 
@@ -180,12 +181,12 @@ class _ModifyDataState extends State<ModifyData>{
       value: editConto.descrizioneConto,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.descrizioneConto != descrizioneConto;
-      return isEditedUser ? conto.copy(descrizioneConto: descrizioneConto) : conto;
-    }).toList();
-    });
-  }
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+
+      return isEditedConto ? conto.copy(descrizioneConto: descrizioneConto) : conto;
+      }).toList());
+    }
 
   Future editDataOperazione(Conto editConto)  async{
     final dataOperazione = await showTextDialog(
@@ -194,11 +195,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.dataOperazione,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.dataOperazione != dataOperazione;
-      return isEditedUser ? conto.copy(dataOperazione: dataOperazione) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+      
+      return isEditedConto ? conto.copy(dataOperazione: dataOperazione) : conto;
+    }).toList());
   }
 
   Future editCOD(Conto editConto)  async{
@@ -208,11 +209,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.COD,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.COD != COD;
-      return isEditedUser ? conto.copy(COD: COD) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+      
+      return isEditedConto ? conto.copy(COD: COD) : conto;
+    }).toList());
   }
 
   Future editDescrizioneOperazione(Conto editConto)  async{
@@ -222,11 +223,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.descrizioneOperazione,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.descrizioneOperazione != descrizioneOperazione;
-      return isEditedUser ? conto.copy(descrizioneOperazione: descrizioneOperazione) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+      
+      return isEditedConto ? conto.copy(descrizioneOperazione: descrizioneOperazione) : conto;
+    }).toList());
   }
 
   Future editNumeroDocumento(Conto editConto)  async{
@@ -236,11 +237,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.numeroDocumento,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.numeroDocumento != numeroDocumento;
-      return isEditedUser ? conto.copy(numeroDocumento: numeroDocumento) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+      
+      return isEditedConto ? conto.copy(numeroDocumento: numeroDocumento) : conto;
+    }).toList());
   }
 
   Future editDataDocumento(Conto editConto)  async{
@@ -250,11 +251,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.dataDocumento,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.dataDocumento != dataDocumento;
-      return isEditedUser ? conto.copy(dataDocumento: dataDocumento) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+      
+      return isEditedConto ? conto.copy(dataDocumento: dataDocumento) : conto;
+    }).toList());
   }
 
   Future editNumeroFattura(Conto editConto)  async{
@@ -264,11 +265,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.numeroFattura,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.numeroFattura != numeroFattura;
-      return isEditedUser ? conto.copy(numeroFattura: numeroFattura) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+      
+      return isEditedConto ? conto.copy(numeroFattura: numeroFattura) : conto;
+    }).toList());
   }
 
   Future editImporto(Conto editConto)  async{
@@ -278,11 +279,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.importo,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.importo != importo;
-      return isEditedUser ? conto.copy(importo: importo) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+
+      return isEditedConto ? conto.copy(importo: importo) : conto;
+    }).toList());
   }
 
   Future editSaldo(Conto editConto)  async{
@@ -292,11 +293,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.saldo,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.saldo != saldo;
-      return isEditedUser ? conto.copy(saldo: saldo) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+
+      return isEditedConto ? conto.copy(saldo: saldo) : conto;
+    }).toList());
   }
 
   Future editContropartita(Conto editConto) async{
@@ -306,11 +307,11 @@ class _ModifyDataState extends State<ModifyData>{
       value: editConto.contropartita,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.contropartita != contropartita;
-      return isEditedUser ? conto.copy(contropartita: contropartita) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+
+      return isEditedConto ? conto.copy(contropartita: contropartita) : conto;
+    }).toList());
   }
 
   Future editCostiDiretti(Conto editConto)  async{
@@ -320,11 +321,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.costiDiretti,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.costiDiretti != costiDiretti;
-      return isEditedUser ? conto.copy(costiDiretti: costiDiretti) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+
+      return isEditedConto ? conto.copy(costiDiretti: costiDiretti) : conto;
+    }).toList());
   }
 
   Future editCostiIndiretti(Conto editConto)  async{
@@ -334,11 +335,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.costiIndiretti,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.costiIndiretti != costiIndiretti;
-      return isEditedUser ? conto.copy(costiIndiretti: costiIndiretti) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+
+      return isEditedConto ? conto.copy(costiIndiretti: costiIndiretti) : conto;
+    }).toList());
   }
 
   Future editAttivitaEconomiche(Conto editConto)  async{
@@ -348,11 +349,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.attivitaEconomiche,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.attivitaEconomiche != attivitaEconomiche;
-      return isEditedUser ? conto.copy(attivitaEconomiche: attivitaEconomiche) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+
+      return isEditedConto ? conto.copy(attivitaEconomiche: attivitaEconomiche) : conto;
+    }).toList());
   }
 
   Future editAttivitaNonEconomiche(Conto editConto)  async{
@@ -362,11 +363,11 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.attivitaNonEconomiche,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.attivitaNonEconomiche != attivitaNonEconomiche;
-      return isEditedUser ? conto.copy(attivitaNonEconomiche: attivitaNonEconomiche) : conto;
-    }).toList();
-    });
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
+
+      return isEditedConto ? conto.copy(attivitaNonEconomiche: attivitaNonEconomiche) : conto;
+    }).toList());
   }
 
   Future editCodiceProgetto(Conto editConto)  async{
@@ -376,11 +377,10 @@ class _ModifyDataState extends State<ModifyData>{
         value: editConto.codiceProgetto,
     );
 
-    setState(() { conti = conti.map((conto) {
-      final isEditedUser = conto.codiceProgetto != codiceProgetto;
-      return isEditedUser ? conto.copy(codiceProgetto: codiceProgetto) : conto;
-    }).toList();
-    });
-  }
+    setState(() => conti = conti.map((conto) {
+      final isEditedConto = conto == editConto;
 
+      return isEditedConto ? conto.copy(codiceProgetto: codiceProgetto) : conto;
+    }).toList());
+  }
 }

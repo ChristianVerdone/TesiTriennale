@@ -73,6 +73,34 @@ class Conto {
         codiceProgetto: codiceProgetto ?? this.codiceProgetto,
       );
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is Conto &&
+              runtimeType == other.runtimeType &&
+
+              codiceConto == other.codiceConto &&
+              descrizioneConto == other.descrizioneConto &&
+              dataOperazione == other.dataOperazione &&
+              COD == other.COD &&
+              descrizioneOperazione == other.descrizioneOperazione &&
+              numeroDocumento == other.numeroDocumento &&
+              dataDocumento == other.dataDocumento&&
+              numeroFattura == other.numeroFattura &&
+              importo == other.importo &&
+              saldo == other.saldo &&
+              contropartita == other.contropartita &&
+              costiDiretti == other.costiDiretti &&
+              costiIndiretti == other.costiIndiretti &&
+              attivitaEconomiche == other.attivitaEconomiche &&
+              attivitaNonEconomiche == other.attivitaNonEconomiche &&
+              codiceProgetto == other.codiceProgetto;
+
+  @override
+  int get hashCode => codiceConto.hashCode ^ descrizioneConto.hashCode ^ dataOperazione.hashCode ^ COD.hashCode ^ descrizioneOperazione.hashCode
+                    ^ numeroDocumento.hashCode ^ dataDocumento.hashCode ^ numeroFattura.hashCode ^ importo.hashCode ^ saldo.hashCode ^ contropartita.hashCode
+                    ^ costiDiretti.hashCode ^ costiIndiretti.hashCode ^ attivitaEconomiche.hashCode ^ attivitaNonEconomiche.hashCode ^ codiceProgetto.hashCode;
+
   static Conto fromJson(Map<String, dynamic> json) => Conto(
     codiceConto: json['Codice Conto'],
     descrizioneConto: json['Descrizione conto'],
@@ -91,4 +119,5 @@ class Conto {
     attivitaNonEconomiche: json['Attività non economiche'],
     codiceProgetto: json['Codice progetto'],
   );
+
 }

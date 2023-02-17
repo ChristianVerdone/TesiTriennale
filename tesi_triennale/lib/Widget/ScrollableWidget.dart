@@ -2,20 +2,19 @@ import 'package:flutter/material.dart';
 
 class ScrollableWidget extends StatelessWidget {
   final Widget child;
-  final ScrollController controller1 = ScrollController();
-  final ScrollController controller2 = ScrollController();
 
-   ScrollableWidget({
+  const ScrollableWidget({
     Key? key,
     required this.child,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => Scrollbar(
-    controller: controller2,
-    thumbVisibility: false,
+  Widget build(BuildContext context) => SingleChildScrollView(
+    physics: BouncingScrollPhysics(),
+    scrollDirection: Axis.horizontal,
     child: SingleChildScrollView(
-      controller: controller1,
+      physics: BouncingScrollPhysics(),
+      scrollDirection: Axis.vertical,
       child: child,
     ),
   );
