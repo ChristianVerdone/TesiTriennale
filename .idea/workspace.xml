@@ -7,9 +7,8 @@
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/assets/811011.CSV" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/assets/811011.CSV" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/ViewContiCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view/ViewContiCat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/viewcategorie.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view/viewcategorie.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ModifyData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/ModifyData.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +81,7 @@
       <workItem from="1675704908648" duration="907000" />
       <workItem from="1675756829277" duration="70728000" />
       <workItem from="1676456374775" duration="3447000" />
-      <workItem from="1676462795784" duration="10192000" />
+      <workItem from="1676462795784" duration="12694000" />
     </task>
     <servers />
   </component>

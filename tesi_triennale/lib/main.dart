@@ -128,6 +128,7 @@ class _homePageState extends State<HomePage>{
         if(numConto != temp){
           temp = numConto;
           i = 0;
+          s = 'line_00';
         }
         await FirebaseFirestore.instance.collection('conti').doc(numConto).set({
           'Descrizione conto' : line[1]

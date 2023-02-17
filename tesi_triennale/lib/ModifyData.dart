@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tesi_triennale/Widget/ScrollableWidget.dart';
 import 'package:tesi_triennale/model/Conto.dart';
-import 'package:tesi_triennale/model/user.dart';
 import 'package:tesi_triennale/utils.dart';
 
 import 'Widget/showTextDialog.dart';
-import 'data/users.dart';
 
 class ModifyData extends StatefulWidget{
   final String idConto;
   final List<Map<String, dynamic>> csvData;
-
 
   ModifyData({super.key, required this.csvData, required this.idConto});
   @override
