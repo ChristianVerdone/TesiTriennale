@@ -1,11 +1,6 @@
-from itertools import count
-
 import pandas as pd
-import openpyxl
 import xlrd
-import xlsxwriter
-from setuptools import sic
-import datetime
+
 import utilsP
 from utilsC import splitCel, createItemConto
 

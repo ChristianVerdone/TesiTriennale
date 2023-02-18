@@ -113,7 +113,7 @@ class _ModifyDataState extends State<ModifyData>{
 
     return DataRow(
       cells: Utils.modelBuilder(cells, (index, cell) {
-        final showEditIcon = index  > 0 && index < 16;
+        final showEditIcon = (index  >= 0 && index <= 16);
         return DataCell(
             Text('$cell'),
             showEditIcon: showEditIcon,
