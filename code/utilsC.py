@@ -1,5 +1,7 @@
 import xlrd
 
+#from firebase_admin import credentials
+
 from utilsP import ItemConto
 import datetime
 def splitCel (stringa):
