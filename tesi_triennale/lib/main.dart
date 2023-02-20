@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
+import 'package:tesi_triennale/exceluploader.dart';
 import 'package:tesi_triennale/view/viewcategorie.dart';
 import 'view/ShowDatabase.dart';
 import 'view/ShowFile.dart';
@@ -95,6 +96,17 @@ class _homePageState extends State<HomePage>{
                 height: 30,
               ),
             ),
+            Container(
+              child: Center(
+                child: ElevatedButton(
+                  child: const Text('excel uploader'),
+                  onPressed: () {
+                    // Navigate to second route when tapped.
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ExcelFilePage()));
+                  },
+                ),
+              ),
+            ),
           ],
         )
     );
@@ -105,6 +117,7 @@ class _homePageState extends State<HomePage>{
     FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: false,
         allowedExtensions: ['csv'], type: FileType.custom);
     if(result != null){
+      print(result.files.first.path);
       byteData = result.files.first.bytes;
     }
     String result2 = String.fromCharCodes(byteData as Iterable<int>);
