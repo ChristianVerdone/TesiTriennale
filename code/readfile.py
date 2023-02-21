@@ -12,13 +12,13 @@ from google.cloud import storage
 import utilsP
 from utilsC import splitCel, createItemConto
 
-cred = credentials.Certificate('tesitriennale-4d2f1-177be252b698.json')
+cred = credentials.Certificate('C:/UTILS/tesitriennale-4d2f1-177be252b698.json')
 firebase_admin.initialize_app(cred, {
     'storageBucket': 'gs://tesitriennale-4d2f1.appspot.com'
 })
 
 bucket_name = 'tesitriennale-4d2f1.appspot.com'
-storage_client = storage.Client.from_service_account_json('tesitriennale-4d2f1-177be252b698.json')
+storage_client = storage.Client.from_service_account_json('C:/UTILS/tesitriennale-4d2f1-177be252b698.json')
 bucket = storage_client.get_bucket(bucket_name)
 blob = bucket.get_blob('CerictContiEconomici2021-copia.xls')
 file_bytes = blob.download_as_bytes()
