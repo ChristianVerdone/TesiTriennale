@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tesi_triennale/Widget/ScrollableWidget.dart';
@@ -10,9 +9,12 @@ import 'Widget/showTextDialog.dart';
 
 class ModifyData extends StatefulWidget{
   final String idConto;
+  final List<String> lines;
   final List<Map<String, dynamic>> csvData;
 
-  ModifyData({super.key, required this.csvData, required this.idConto});
+
+
+  ModifyData({super.key, required this.csvData, required this.idConto, required this.lines});
   @override
   State<ModifyData> createState() => _ModifyDataState();
 }
@@ -23,13 +25,17 @@ class _ModifyDataState extends State<ModifyData>{
   @override
   void initState() {
     super.initState();
-    conti = convertMapToObject(widget.csvData);
-    print(conti[0].numeroDocumento);
-    print(conti[1].numeroDocumento);
-    print(conti[2].numeroDocumento);
+    conti  = convertMapToObject(widget.csvData);
   }
 
-
+  /*
+   void mapLineToConto(){
+    conti = convertMapToObject(widget.csvData);
+    for(int i= 0; i<widget.lines.length; i++){
+      mappaConti[widget.lines[i]] = conti[i] as Conto;
+    }
+  }
+   */
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -46,6 +52,41 @@ class _ModifyDataState extends State<ModifyData>{
           style: TextStyle(color: Colors.white,
             fontSize: 20.0, )
       ),
+      actions: <Widget>[
+        ElevatedButton(
+          child: const Text('Applica'),
+          onPressed: () async{
+            String linea;
+            print(conti[0].descrizioneConto);
+
+            for(int i = 0; i<widget.lines.length; i++){
+              linea = widget.lines[i];
+
+              final json = {
+                'Codice Conto' : conti[i].codiceConto,
+                'Descrizione conto' : conti[i].descrizioneConto,
+                'Data operazione' : conti[i].dataOperazione,
+                'COD' : conti[i].COD,
+                'Descrizione operazione' : conti[i].descrizioneOperazione,
+                'Numero documento' : conti[i].numeroDocumento,
+                'Data documento' : conti[i].dataDocumento,
+                'Numero Fattura' : conti[i].numeroFattura,
+                'Importo' : conti[i].importo,
+                'Saldo' : conti[i].saldo,
+                'Contropartita' : conti[i].contropartita,
+                'Costi Diretti' : conti[i].costiDiretti,
+                'Costi Indiretti' : conti[i].costiIndiretti,
+                'Attività economiche' : conti[i].attivitaEconomiche,
+                'Attività non economiche' : conti[i].attivitaNonEconomiche,
+                'Codice progetto' : conti[i].codiceProgetto
+              };
+
+
+              await FirebaseFirestore.instance.collection('conti').doc(widget.idConto).collection('lineeConto').doc(linea).set(json);
+            }
+          },
+        ),
+      ],
     ),
     body: ScrollableWidget(child: buildDataTable()),
   );
@@ -77,13 +118,13 @@ class _ModifyDataState extends State<ModifyData>{
       codiceConto: item['Codice Conto'],
       descrizioneConto: item['Descrizione conto'],
       dataOperazione: item['Data operazione'],
-      COD: item['COD'],
+      COD: item['COD'].toString(),
       descrizioneOperazione: item['Descrizione operazione'],
-      numeroDocumento: item['Numero documento'],
+      numeroDocumento: item['Numero documento'].toString(),
       dataDocumento: item['Data documento'],
-      numeroFattura: item['Numero Fattura'],
-      importo: item['Importo'],
-      saldo: item['Saldo'],
+      numeroFattura: item['Numero Fattura'].toString(),
+      importo: item['Importo'].toString(),
+      saldo: item['Saldo'].toString(),
       contropartita: item['Contropartita'],
       costiDiretti: item['Costi Diretti'],
       costiIndiretti: item['Costi Indiretti'],

@@ -119,5 +119,30 @@ class Conto {
     attivitaNonEconomiche: json['Attività non economiche'],
     codiceProgetto: json['Codice progetto'],
   );
+/*
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (conti != null) {
+      conti!.map((v) => v.toJson()).toList();
+    }
+    data['codiceConto'] = this.codiceConto;
+    data['descrizioneConto'] = this.descrizioneConto;
+    data['dataOperazione'] = this.dataOperazione;
+    data['COD'] = this.COD;
+    data['descrizioneOperazione'] = this.descrizioneOperazione;
+    data['numeroDocumento'] = this.numeroDocumento;
+    data['dataDocumento'] = this.dataDocumento;
+    data['numeroFattura'] = this.numeroFattura;
+    data['importo'] = this.importo;
+    data['saldo'] = this.saldo;
+    data['contropartita'] = this.contropartita;
+    data['costiDiretti'] = this.costiDiretti;
+    data['costiIndiretti'] = this.costiIndiretti;
+    data['attivitaEconomiche'] = this.attivitaEconomiche;
+    data['attivitaNonEconomiche'] = this.attivitaNonEconomiche;
+    data['codiceProgetto'] = this.codiceProgetto;
+    return data;
+  }
 
+ */
 }

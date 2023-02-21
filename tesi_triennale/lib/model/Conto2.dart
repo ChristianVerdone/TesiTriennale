@@ -96,4 +96,24 @@ class Conto {
     data['codiceProgetto'] = this.codiceProgetto;
     return data;
   }
+
+  List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData.map((item) => Conto(
+      codiceConto: item['Codice Conto'],
+      descrizioneConto: item['Descrizione conto'],
+      dataOperazione: item['Data operazione'],
+      COD: item['COD'],
+      descrizioneOperazione: item['Descrizione operazione'],
+      numeroDocumento: item['Numero documento'],
+      dataDocumento: item['Data documento'],
+      numeroFattura: item['Numero Fattura'],
+      importo: item['Importo'],
+      saldo: item['Saldo'],
+      contropartita: item['Contropartita'],
+      costiDiretti: item['Costi Diretti'],
+      costiIndiretti: item['Costi Indiretti'],
+      attivitaEconomiche: item['Attività economiche'],
+      attivitaNonEconomiche: item['Attività non economiche'],
+      codiceProgetto: item['Codice progetto'])
+  ).toList();
+
 }
