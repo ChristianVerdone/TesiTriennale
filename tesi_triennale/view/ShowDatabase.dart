@@ -1,23 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tesi_triennale/readData/getConto.dart';
-import 'package:tesi_triennale/view/ViewContiCat.dart';
+import '../readData/getConto.dart';
 
-class VisualizzaCatPage extends StatefulWidget { //seconda page di caricamento di dati dal database
-  const VisualizzaCatPage({super.key});
+class VisualizzaPage extends StatefulWidget { //seconda page di caricamento di dati dal database
+  const VisualizzaPage({super.key});
   @override
-  State<VisualizzaCatPage> createState() => _VisualizzaCatPageState();
+  State<VisualizzaPage> createState() => _VisualizzaPageState();
 }
 
-class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
+class _VisualizzaPageState extends State<VisualizzaPage>{
 
   @override
   void initState() {
     super.initState();
   }
 
-  List<String> cat = [ 'Materie Prime', 'Servizi', 'God beni terzi', 'Ammortamenti', 'Oneri diversi'];
+  List<String> conti = [];
+
+  Future getConti() async{
+    await FirebaseFirestore.instance.collection('conti').get().then(
+            (snapshot) => snapshot.docs.forEach(
+                (conto) {
+              //print(conto.reference);
+              if(!(conti.contains(conto.reference.id))){
+                conti.add(conto.reference.id);
+              }
+            }
+        )
+    );
+  }
 
   @override
   void dispose() {
@@ -37,17 +49,13 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
           children: [
             Expanded(
                 child: FutureBuilder(
+                    future: getConti(),
                     builder: (context, snapshot){
                       return ListView.builder(
-                          itemCount: cat.length,
+                          itemCount: conti.length,
                           itemBuilder: (context, index){
                             return ListTile(
-                              title:  TextButton(
-                                onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewContiCatPage(idCat: cat.elementAt(index))));
-                              },
-                              child: Text(cat.elementAt(index))
-                              ),
+                              title: GetConto(idConto: conti[index]),
                             );
                           });
                     })

@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tesi_triennale/Widget/ScrollableWidget.dart';
-import 'package:tesi_triennale/model/Conto.dart';
-import 'package:tesi_triennale/utils.dart';
+import 'Widget/ScrollableWidget.dart';
+import 'model/Conto.dart';
+import 'utils.dart';
 
 import 'Widget/showTextDialog.dart';
 

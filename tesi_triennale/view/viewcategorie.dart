@@ -1,35 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:tesi_triennale/readData/getConto.dart';
+import '../readData/getConto.dart';
+import '../view/ViewContiCat.dart';
 
-class VisualizzaPage extends StatefulWidget { //seconda page di caricamento di dati dal database
-  const VisualizzaPage({super.key});
+class VisualizzaCatPage extends StatefulWidget { //seconda page di caricamento di dati dal database
+  const VisualizzaCatPage({super.key});
   @override
-  State<VisualizzaPage> createState() => _VisualizzaPageState();
+  State<VisualizzaCatPage> createState() => _VisualizzaCatPageState();
 }
 
-class _VisualizzaPageState extends State<VisualizzaPage>{
+class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
 
   @override
   void initState() {
     super.initState();
   }
 
-  List<String> conti = [];
-
-  Future getConti() async{
-    await FirebaseFirestore.instance.collection('conti').get().then(
-            (snapshot) => snapshot.docs.forEach(
-                (conto) {
-              //print(conto.reference);
-              if(!(conti.contains(conto.reference.id))){
-                conti.add(conto.reference.id);
-              }
-            }
-        )
-    );
-  }
+  List<String> cat = [ 'Materie Prime', 'Servizi', 'God beni terzi', 'Ammortamenti', 'Oneri diversi'];
 
   @override
   void dispose() {
@@ -49,13 +37,17 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
           children: [
             Expanded(
                 child: FutureBuilder(
-                    future: getConti(),
                     builder: (context, snapshot){
                       return ListView.builder(
-                          itemCount: conti.length,
+                          itemCount: cat.length,
                           itemBuilder: (context, index){
                             return ListTile(
-                              title: GetConto(idConto: conti[index]),
+                              title:  TextButton(
+                                onPressed: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewContiCatPage(idCat: cat.elementAt(index))));
+                              },
+                              child: Text(cat.elementAt(index))
+                              ),
                             );
                           });
                     })

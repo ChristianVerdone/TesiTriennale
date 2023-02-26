@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
-import 'package:tesi_triennale/model/Conto.dart';
+import '../model/Conto.dart';
 
 import '../ModifyData.dart';
 

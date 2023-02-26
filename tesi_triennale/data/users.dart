@@ -1,4 +1,4 @@
-import 'package:tesi_triennale/model/user.dart';
+import '../model/user.dart';
 
 final allUsers = <User>[
   User(firstName: 'Emma', lastName: 'Field', age: 37),

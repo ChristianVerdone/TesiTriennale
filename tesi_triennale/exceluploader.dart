@@ -2,6 +2,9 @@ import 'dart:html';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
+
+
 
 class ExcelFilePage extends StatefulWidget {
   @override
@@ -23,10 +26,12 @@ class _ExcelFilePageState extends State<ExcelFilePage> {
 
       reader.onLoadEnd.listen((event) async {
         final storageRef = FirebaseStorage.instance.ref().child(file.name);
+        print(file.name);
 
         await storageRef.putData(reader.result as Uint8List);
         final downloadUrl = await storageRef.getDownloadURL();
         print('File caricato su Firebase Storage: $downloadUrl');
+
       });
     });
   }
