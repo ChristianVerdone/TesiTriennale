@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show SystemUiOverlayStyle;
+import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 
-class ShowFile extends StatelessWidget{
+class ShowFile extends StatelessWidget {
   final List<List<dynamic>> csvData;
-  ShowFile({super.key, required this.csvData});
-
 
   final ScrollController controller1 = ScrollController();
   final ScrollController controller2 = ScrollController();
+
+  ShowFile({super.key, required this.csvData});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class ShowFile extends StatelessWidget{
           scrollDirection: Axis.horizontal,
           child: SingleChildScrollView(
             controller: controller1,
-            child: DataTable(
+            child:DataTable(
               columns: csvData[0]
                   .map(
                     (item) => DataColumn(

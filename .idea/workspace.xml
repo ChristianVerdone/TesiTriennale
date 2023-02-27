@@ -10,38 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/code/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tesi_triennale/utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/.idea/code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/code/.idea/code.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/readfile.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/readfile.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utilsP.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/utilsP.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ModifyData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/ModifyData.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/Widget/ScrollableWidget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/Widget/ScrollableWidget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/Widget/showTextDialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/Widget/showTextDialog.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/data/users.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/data/users.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/exceluploader.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/exceluploader.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/firebase_options.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/firebase_options.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/login.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/model/Conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/model/Conto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/model/Conto2.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/model/Conto2.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/model/user.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/model/user.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/readData/getConto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/readData/getConto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/ShowDatabase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ShowDatabase.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/ShowFile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ShowFile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/ViewContiCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/VisualizzaTabConto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaTabConto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/viewcategorie.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/viewcategorie.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/exceluploader.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/test/widget_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/test/widget_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/ShowFile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ShowFile.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -209,23 +182,12 @@
       <workItem from="1676978327914" duration="309000" />
       <workItem from="1676978658911" duration="5250000" />
       <workItem from="1676992117272" duration="9832000" />
-      <workItem from="1677082254235" duration="28990000" />
+      <workItem from="1677082254235" duration="36489000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/tesi_triennale/main.dart</url>
-          <line>168</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -5,14 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
-import 'exceluploader.dart';
 import 'view/viewcategorie.dart';
 import 'view/ShowDatabase.dart';
 import 'view/ShowFile.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 
 class HomePage extends StatefulWidget{
@@ -26,6 +23,10 @@ class _homePageState extends State<HomePage>{
   String? filePath;
   Timer scheduleTimeout([int milliseconds = 10000]) =>
       Timer(Duration(milliseconds: milliseconds), handleTimeout);
+  Timer scheduleTimeout2([int milliseconds = 10000]) =>
+      Timer(Duration(milliseconds: milliseconds), handleTimeout2);
+  Timer scheduleTimeout3([int milliseconds = 10000]) =>
+      Timer(Duration(milliseconds: milliseconds), handleTimeout3);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,16 +59,10 @@ class _homePageState extends State<HomePage>{
                   onPressed: () async {
                       print('sto in carica');
                       await _selectExcelFile().then((value) async {
-                        print('value:$value');
-                        print('i:$i');
-                        scheduleTimeout(30 * 1000);
-                        if(csvData != null){
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => ShowFile(csvData : csvData!))
-                          );
-                        }
+                        scheduleTimeout(20*1000);
+                        scheduleTimeout2(40*1000);
+                        scheduleTimeout3(80*1000);
                       });
-
                   },
                 ),
               ),
@@ -109,27 +104,28 @@ class _homePageState extends State<HomePage>{
                 height: 30,
               ),
             ),
-            Container(
-              child: Center(
-                child: ElevatedButton(
-                  child: const Text('excel uploader'),
-                  onPressed: () {
-                    // Navigate to second route when tapped.
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ExcelFilePage()));
-                  },
-                ),
-              ),
-            ),
           ],
         )
     );
   }
+
   Future<void> handleTimeout() async {  // callback function
     if(i == 1) {
       fetchHello();
     }
   }
+  Future<void> handleTimeout2() async {
+    csvData = await processCsvFromFile();
+  }
+
+  void handleTimeout3(){
+    print('ultimo timer');
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => ShowFile(csvData: csvData!)));
+  }
+
   late int i;
+
   void fetchHello() async {
     print('sono in hello');
     Map<String, String> headers = {
@@ -137,17 +133,15 @@ class _homePageState extends State<HomePage>{
     };
     final response = await http.get(Uri.parse('http://127.0.0.1:5000/ciao'), headers: headers);
     if(response.statusCode == 200){
-      csvData = await processCsvFromFile();
       setState(() {});
-
     }
   }
-   _selectExcelFile() async{
+
+  _selectExcelFile() async{
     i = 0;
     print('sono in select');
     var uploadInput = FileUploadInputElement();
     uploadInput.click();
-
     uploadInput.onChange.listen((event) async {
       final file = uploadInput.files!.first;
       final reader = FileReader();
@@ -158,11 +152,8 @@ class _homePageState extends State<HomePage>{
         await storageRef.putData(reader.result as Uint8List);
         final downloadUrl = await storageRef.getDownloadURL();
         print('File caricato su Firebase Storage: $downloadUrl'+'i: $i');
-
       });
     });
-    print(i);
-
   }
 
   Future<List<List<dynamic>>> processCsvFromFile() async {
@@ -177,13 +168,14 @@ class _homePageState extends State<HomePage>{
     String result2 = String.fromCharCodes(byteData as Iterable<int>);
     print(result2);
     result2 = result2.replaceAll('ï»¿', '');
+    print(result2);
     List<List<dynamic>> data = const CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ',');
-    print(data.toString());
+    print(data.first);
     writedataFile(data);
     return data;
   }
 
-  void writedataFile(List<List<dynamic>> data) async {
+  Future<int> writedataFile(List<List<dynamic>> data) async {
     int i = 0;
     String temp = '';
     String s = 'line_00';
@@ -229,5 +221,7 @@ class _homePageState extends State<HomePage>{
         i++;
       }
     }
+    print(i);
+    return i;
   }
 }
