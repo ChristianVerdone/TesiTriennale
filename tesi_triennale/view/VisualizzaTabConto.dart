@@ -84,7 +84,7 @@ class VisualizzaConto extends StatelessWidget{
   }
 
   Future getLines(String idConto) async{
-    await FirebaseFirestore.instance.collection('conti/'+idConto+'/lineeConto').get().then(
+    await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
             (snapshot) => snapshot.docs.forEach(
                 (linea) {
                   //print(linea.reference);
@@ -115,7 +115,7 @@ class VisualizzaConto extends StatelessWidget{
   }
 
   Future getLinesConto(String idConto) async{
-    await FirebaseFirestore.instance.collection('conti/'+idConto+'/lineeConto').get().then(
+    await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
             (snapshot) => snapshot.docs.forEach(
                 (linea) {
               //print(linea.reference);

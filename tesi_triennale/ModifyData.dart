@@ -1,11 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tesi_triennale/Widget/ScrollableWidget.dart';
-import 'package:tesi_triennale/model/Conto.dart';
-import 'package:tesi_triennale/utils.dart';
-
+import 'Widget/ScrollableWidget.dart';
 import 'Widget/showTextDialog.dart';
+import 'model/Conto.dart';
+import 'utils.dart';
 
 class ModifyData extends StatefulWidget {
   final List<String> lines;

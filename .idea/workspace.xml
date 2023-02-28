@@ -10,10 +10,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/readfile.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/readfile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/ModifyData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/ModifyData.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/Widget/ScrollableWidget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/Widget/ScrollableWidget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/Widget/showTextDialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/Widget/showTextDialog.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/readData/getConto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/readData/getConto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/test/widget_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/test/widget_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/ShowDatabase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ShowDatabase.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/ShowFile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ShowFile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaTabConto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaTabConto.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/view/viewcategorie.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/viewcategorie.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -52,29 +62,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/TesiTriennale/tesi_triennale&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15234375&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;dart.settings&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "io.flutter.reload.alreadyRun": "true",
+    "last_opened_file_path": "C:/TesiTriennale/tesi_triennale",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Problems",
+    "project.structure.proportion": "0.15234375",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "dart.settings",
+    "show.migrate.to.gradle.popup": "false",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\TesiTriennale\tesi_triennale" />
@@ -150,22 +159,13 @@
       <workItem from="1676992117272" duration="9832000" />
       <workItem from="1677082254235" duration="39043000" />
       <workItem from="1677574214161" duration="6320000" />
+      <workItem from="1677581910439" duration="1054000" />
+      <workItem from="1677583385100" duration="3202000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart</url>
-          <line>83</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

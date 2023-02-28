@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:tesi_triennale/view/VisualizzaTabConto.dart';
+import '../view/VisualizzaTabConto.dart';
 
 class GetConto extends StatelessWidget{
 
   String idConto;
 
-  GetConto({required this.idConto});
+  GetConto({super.key, required this.idConto});
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +18,12 @@ class GetConto extends StatelessWidget{
             return TextButton(
                 onPressed: (){
 
-                 Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaConto(idConto: this.idConto)));
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaConto(idConto: idConto)));
                 },
                 child: Text(idConto)
             );
           }
-          return Center(
+          return const Center(
             child: Text('loading...'),
           );
         })

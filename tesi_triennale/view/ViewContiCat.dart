@@ -85,12 +85,10 @@ class ViewContiCatPage extends StatelessWidget{
   }
 
   Future getLinesConto() async {
-    print('get lines');
-    findConti(idCat);
+    await findConti(idCat);
     for (var idC in conti) {
       DocumentReference s = idC as DocumentReference;
-      print(s.id);
-     await FirebaseFirestore.instance.collection('${s.id}/lineeConto').get().then(
+     await FirebaseFirestore.instance.collection('conti/${s.id}/lineeConto').get().then(
               (snapshot) => snapshot.docs.forEach(
                   (linea) {
                 Map<String, dynamic> c = {
@@ -126,11 +124,9 @@ class ViewContiCatPage extends StatelessWidget{
                 (cat) {
               if(cat.id == idcat){
                 conti = cat.get('Conti') as List<dynamic>;
-                print(conti.first);
               }
             }
         )
     );
-    print('finito find');
   }
 }

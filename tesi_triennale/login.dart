@@ -1,12 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutterfire_ui/auth.dart';
 import 'main.dart';
 import 'firebase_options.dart';
-import 'utils.dart';
 
 
 late final app ;
@@ -45,9 +42,9 @@ class _loginState extends State<Login>{
       builder: (context, snapshot){
         if(snapshot.hasData){
           //signed in
-          return HomePage();
+          return const HomePage();
         }else{
-          return SignInScreen(
+          return const SignInScreen(
             providerConfigs: [
               EmailProviderConfiguration()
             ]

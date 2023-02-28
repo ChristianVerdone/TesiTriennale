@@ -7,11 +7,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
-import 'view/viewcategorie.dart';
 import 'view/ShowDatabase.dart';
 import 'view/ShowFile.dart';
-import 'firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 
 class HomePage extends StatefulWidget{
@@ -35,7 +32,7 @@ class _homePageState extends State<HomePage>{
         appBar: AppBar(
           actions: [
             IconButton(
-              icon: Icon(Icons.logout),
+              icon: const Icon(Icons.logout),
               onPressed: () => FirebaseAuth.instance.signOut() )
           ],
           systemOverlayStyle: const SystemUiOverlayStyle(
@@ -54,45 +51,34 @@ class _homePageState extends State<HomePage>{
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              child: Center(
-                child: ElevatedButton(
-                  child: const Text("Carica file"),
-                  onPressed: () async {
-                      print('sto in carica');
-                      await _selectExcelFile().then((value) async {
-                        scheduleTimeout(20*1000);
-                        scheduleTimeout2(40*1000);
-                        scheduleTimeout3(80*1000);
-                      });
-                  },
-                ),
+            Center(
+              child: ElevatedButton(
+                child: const Text("Carica file"),
+                onPressed: () async {
+                    await _selectExcelFile().then((value) async {
+                      scheduleTimeout(20*1000);
+                      scheduleTimeout2(40*1000);
+                      scheduleTimeout3(80*1000);
+                    });
+                },
               ),
             ),
-            Container(
-              child: SizedBox(
-                height: 30,
+            const SizedBox(
+              height: 30,
+            ),
+            Center(
+              child: ElevatedButton(
+                child: const Text('Visualizza Dati'),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
+                },
               ),
             ),
-            Container(
-              child: Center(
-                child: ElevatedButton(
-                  child: const Text('Visualizza Dati'),
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
-                  },
-                ),
-              ),
+            const SizedBox(
+              height: 30,
             ),
-            Container(
-              child: SizedBox(
-                height: 30,
-              ),
-            ),
-            Container(
-              child: SizedBox(
-                height: 30,
-              ),
+            const SizedBox(
+              height: 30,
             ),
           ],
         )
@@ -109,7 +95,6 @@ class _homePageState extends State<HomePage>{
   }
 
   void handleTimeout3(){
-    print('ultimo timer');
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ShowFile(csvData: csvData!)));
   }
@@ -117,7 +102,6 @@ class _homePageState extends State<HomePage>{
   late int i;
 
   void fetchHello() async {
-    print('sono in hello');
     Map<String, String> headers = {
       "Content-Type": "text/plain",
     };
@@ -129,7 +113,6 @@ class _homePageState extends State<HomePage>{
 
   _selectExcelFile() async{
     i = 0;
-    print('sono in select');
     var uploadInput = FileUploadInputElement();
     uploadInput.click();
     uploadInput.onChange.listen((event) async {
@@ -141,26 +124,19 @@ class _homePageState extends State<HomePage>{
         var storageRef = FirebaseStorage.instance.ref('source.xls');
         await storageRef.putData(reader.result as Uint8List);
         final downloadUrl = await storageRef.getDownloadURL();
-        print('File caricato su Firebase Storage: $downloadUrl'+'i: $i');
+        print('File caricato su Firebase Storage: $downloadUrl''i: $i');
       });
     });
   }
 
   Future<List<List<dynamic>>> processCsvFromFile() async {
-    print('sono in process');
     Uint8List? byteData;
     var storageRef = FirebaseStorage.instanceFor(bucket: 'tesitriennale-4d2f1.appspot.com').ref('file.csv');
-    print(storageRef.name);
-    print('tento con get data');
     await storageRef.getDownloadURL().then((value) => print(value));
     byteData = await storageRef.getData();
-    print(byteData);
     String result2 = String.fromCharCodes(byteData as Iterable<int>);
-    print(result2);
     result2 = result2.replaceAll('ï»¿', '');
-    print(result2);
     List<List<dynamic>> data = const CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ',');
-    print(data.first);
     writedataFile(data);
     return data;
   }
@@ -211,7 +187,6 @@ class _homePageState extends State<HomePage>{
         await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
       }
     }
-    print(i);
     return i;
   }
 }
