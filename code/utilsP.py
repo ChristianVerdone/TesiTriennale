@@ -1,5 +1,5 @@
 from builtins import set
-
+import openpyxl
 import xlsxwriter
 
 
@@ -130,6 +130,7 @@ def caricamento(outSheet,listItem, i, j):
 
 def writeNewFile(listItem):
     outWorkbook = xlsxwriter.Workbook("out.xlsx")
+
     outSheet = outWorkbook.add_worksheet()
 
     outSheet.write(0, 0, "Codice Conto")
@@ -161,4 +162,3 @@ def writeNewFile(listItem):
         outSheet.write(i + 1, 8, listItem[i].getImporto())
         outSheet.write(i + 1, 9, listItem[i].getSaldo())
         outSheet.write(i + 1, 10, listItem[i].getContropartita())
-    outWorkbook.close()

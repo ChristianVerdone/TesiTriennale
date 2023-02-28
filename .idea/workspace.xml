@@ -1,25 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ModifyData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/ModifyData.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/readfile.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/readfile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/viewcategorie.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/viewcategorie.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectId" id="2LB4X6nqPRpPmIfTlbyrtYn8JPK" />
   <component name="ProjectLevelVcsManager">
@@ -38,30 +61,63 @@
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
     &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/prova&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/TesiTriennale/tesi_triennale&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15234375&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;dart.settings&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\TesiTriennale\tesi_triennale" />
+      <recent name="C:\TesiTriennale\tesi_triennale\lib" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\TesiTriennale\tesi_triennale" />
+      <recent name="C:\TesiTriennale\tesi_triennale\lib" />
       <recent name="C:\TesiTriennale\tesi_triennale\lib\view" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="login.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
-      <option name="filePath" value="$PROJECT_DIR$/tesi_triennale/lib/login.dart" />
+  <component name="RunManager" selected="Flutter.login.dart">
+    <configuration name="login.dart" type="FlutterRunConfigurationType" factoryName="Flutter" nameIsGenerated="true">
+      <option name="filePath" value="$PROJECT_DIR$/tesi_triennale/login.dart" />
       <method v="2" />
     </configuration>
+    <configuration name="readfile" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="code" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/code" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/code/readfile.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.readfile" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -81,11 +137,38 @@
       <workItem from="1675704908648" duration="907000" />
       <workItem from="1675756829277" duration="70728000" />
       <workItem from="1676456374775" duration="3447000" />
-      <workItem from="1676462795784" duration="12694000" />
+      <workItem from="1676462795784" duration="17435000" />
+      <workItem from="1676646060371" duration="575000" />
+      <workItem from="1676648753494" duration="6284000" />
+      <workItem from="1676803573547" duration="240000" />
+      <workItem from="1676804060911" duration="198000" />
+      <workItem from="1676884294171" duration="1065000" />
+      <workItem from="1676911534496" duration="800000" />
+      <workItem from="1676970409846" duration="6840000" />
+      <workItem from="1676978327914" duration="309000" />
+      <workItem from="1676978658911" duration="5250000" />
+      <workItem from="1676992117272" duration="9832000" />
+      <workItem from="1677082254235" duration="39043000" />
+      <workItem from="1677574214161" duration="6320000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart</url>
+          <line>83</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

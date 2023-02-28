@@ -16,7 +16,7 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
     super.initState();
   }
 
-  List<String> cat = [ 'Materie Prime', 'Servizi', 'God beni terzi', 'Ammortamenti', 'Oneri diversi'];
+  List<String> cat = [ 'Materie Prime', 'Servizi', 'God beni terzi', 'Ammortamenti', 'Oneri diversi', 'Personale'];
 
   @override
   void dispose() {
