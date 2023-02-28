@@ -1,15 +1,12 @@
-import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
-import 'package:tesi_triennale/model/Conto.dart';
-
 import '../ModifyData.dart';
 
 class ViewContiCatPage extends StatelessWidget{
 
   String idCat;
+  List<String> lines = [];
   ViewContiCatPage({super.key, required this.idCat});
 
   final ScrollController controller1 = ScrollController();
@@ -36,6 +33,14 @@ class ViewContiCatPage extends StatelessWidget{
               style: const TextStyle(color: Colors.white,
                 fontSize: 20.0, )
           ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: const Text('Modifica'),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>  ModifyData(csvData: csvData, lines: lines)));
+              },
+            ),
+          ],
         ),
         body: FutureBuilder(future: getLinesConto(),
             builder: (context, snapshot){
@@ -85,7 +90,6 @@ class ViewContiCatPage extends StatelessWidget{
      await FirebaseFirestore.instance.collection('conti/$idC/lineeConto').get().then(
               (snapshot) => snapshot.docs.forEach(
                   (linea) {
-                print(linea.reference);
                 Map<String, dynamic> c = {
                   'Codice Conto': linea.get('Codice Conto'),
                   'Descrizione conto': linea.get('Descrizione conto'),
@@ -104,6 +108,7 @@ class ViewContiCatPage extends StatelessWidget{
                   'Attività non economiche': linea.get('Attività non economiche'),
                   'Codice progetto': linea.get('Codice progetto')
                 };
+                lines.add(linea.id);
                 csvData.add(c);
                 //print(csvData);
               }

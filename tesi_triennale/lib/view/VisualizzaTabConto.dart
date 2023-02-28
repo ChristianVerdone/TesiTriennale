@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
-
 import '../ModifyData.dart';
 
 class VisualizzaConto extends StatelessWidget{
@@ -37,7 +36,7 @@ class VisualizzaConto extends StatelessWidget{
           ElevatedButton(
             child: const Text('Modifica'),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) =>  ModifyData(csvData: csvData, idConto: idConto, lines: lines)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>  ModifyData(csvData: csvData, lines: lines)));
             },
           ),
         ],

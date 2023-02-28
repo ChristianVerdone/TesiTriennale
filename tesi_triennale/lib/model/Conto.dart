@@ -10,10 +10,10 @@ class Conto {
   final dynamic importo;
   final dynamic saldo;
   final dynamic contropartita;
-  final dynamic costiDiretti;
-  final dynamic costiIndiretti;
-  final dynamic attivitaEconomiche;
-  final dynamic attivitaNonEconomiche;
+  final bool costiDiretti;
+  final bool costiIndiretti;
+  final bool attivitaEconomiche;
+  final bool attivitaNonEconomiche;
   final dynamic codiceProgetto;
 
   const Conto(

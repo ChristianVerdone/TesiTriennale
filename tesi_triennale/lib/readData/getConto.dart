@@ -23,7 +23,9 @@ class GetConto extends StatelessWidget{
                 child: Text(idConto)
             );
           }
-          return Text('loading...');
+          return Center(
+            child: Text('loading...'),
+          );
         })
     );
   }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tesi_triennale/readData/getConto.dart';
+import 'package:tesi_triennale/view/viewcategorie.dart';
 
 class VisualizzaPage extends StatefulWidget { //seconda page di caricamento di dati dal database
   const VisualizzaPage({super.key});
@@ -22,7 +23,6 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
     await FirebaseFirestore.instance.collection('conti').get().then(
             (snapshot) => snapshot.docs.forEach(
                 (conto) {
-              //print(conto.reference);
               if(!(conti.contains(conto.reference.id))){
                 conti.add(conto.reference.id);
               }
@@ -42,6 +42,15 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Dati dal database'),
+        actions: <Widget>[
+          ElevatedButton(
+            child: const Text('Mostra Categorie'),
+            onPressed: () {
+              // Navigate to second route when tapped.
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaCatPage()));
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(

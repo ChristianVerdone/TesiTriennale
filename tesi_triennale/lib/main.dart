@@ -82,17 +82,6 @@ class _homePageState extends State<HomePage>{
               ),
             ),
             Container(
-              child: Center(
-                child: ElevatedButton(
-                  child: const Text('Mostra Categorie'),
-                  onPressed: () {
-                    // Navigate to second route when tapped.
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaCatPage()));
-                  },
-                ),
-              ),
-            ),
-            Container(
               child: SizedBox(
                 height: 30,
               ),
