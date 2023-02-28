@@ -28,15 +28,6 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Progetti'),
-        actions: <Widget>[
-          ElevatedButton(
-            child: const Text('Mostra Categorie'),
-            onPressed: () {
-              // Navigate to second route when tapped.
-              //Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaCatPage()));
-            },
-          ),
-        ],
       ),
       body: Center(
         child: Column(

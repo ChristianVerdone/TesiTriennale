@@ -9,6 +9,7 @@ import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
 import 'view/ShowDatabase.dart';
 import 'view/ShowFile.dart';
+import 'view/VisualizzaProgetti.dart';
 
 
 class HomePage extends StatefulWidget{
@@ -81,7 +82,7 @@ class _homePageState extends State<HomePage>{
               child: ElevatedButton(
                 child: const Text('Visualizza Progetti'),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaProg()));
                 },
               ),
             ),

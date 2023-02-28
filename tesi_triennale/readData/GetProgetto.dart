@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
 import '../view/VisualizzaProgetto.dart';
 
 class GetProgetto extends StatelessWidget{
@@ -11,9 +10,9 @@ class GetProgetto extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference lineeConto = FirebaseFirestore.instance.collection('progetti');
+    CollectionReference progettiRef = FirebaseFirestore.instance.collection('progetti');
     return FutureBuilder<DocumentSnapshot>(
-        future: lineeConto.doc(idProg).get(),
+        future: progettiRef.doc(idProg).get(),
         builder: ((context, snapshot){
           if(snapshot.connectionState == ConnectionState.done){
             return TextButton(

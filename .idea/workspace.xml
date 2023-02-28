@@ -10,9 +10,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/assets/811011.CSV" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/assets/lavoro.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/assets/out3 - Copia.CSV" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/assets/out3.CSV" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/assets/outAll.CSV" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/assets/outProvamix - Copia.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/assets/outProvamix.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/assets/prova.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/readData/GetProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/readData/GetProgetto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetti.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetti.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetto.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,7 +168,8 @@
       <workItem from="1677082254235" duration="39043000" />
       <workItem from="1677574214161" duration="6320000" />
       <workItem from="1677581910439" duration="1054000" />
-      <workItem from="1677583385100" duration="6248000" />
+      <workItem from="1677583385100" duration="6284000" />
+      <workItem from="1677620690599" duration="2765000" />
     </task>
     <servers />
   </component>
