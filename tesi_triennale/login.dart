@@ -5,7 +5,6 @@ import 'package:flutterfire_ui/auth.dart';
 import 'main.dart';
 import 'firebase_options.dart';
 
-
 late final app ;
 
 Future<void> main() async {
@@ -52,5 +51,4 @@ class _loginState extends State<Login>{
         }
       }
   ) ;
-
 }

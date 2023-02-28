@@ -77,6 +77,14 @@ class _homePageState extends State<HomePage>{
             const SizedBox(
               height: 30,
             ),
+            Center(
+              child: ElevatedButton(
+                child: const Text('Visualizza Progetti'),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
+                },
+              ),
+            ),
             const SizedBox(
               height: 30,
             ),
