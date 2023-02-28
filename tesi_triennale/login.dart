@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutterfire_ui/auth.dart';
-import 'main.dart';
+
 import 'firebase_options.dart';
-import 'utils.dart';
+import 'main.dart';
 
 
 late final app ;

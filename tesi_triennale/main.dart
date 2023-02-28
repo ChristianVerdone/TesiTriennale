@@ -7,7 +7,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
-import 'view/viewcategorie.dart';
 import 'view/ShowDatabase.dart';
 import 'view/ShowFile.dart';
 import 'firebase_options.dart';
