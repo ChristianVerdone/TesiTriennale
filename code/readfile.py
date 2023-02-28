@@ -3,7 +3,6 @@ import pandas as pd
 import xlrd
 from firebase_admin import credentials
 from google.cloud import storage
-
 import utilsP
 from utilsC import splitCel, createItemConto
 

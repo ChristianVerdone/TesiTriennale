@@ -15,7 +15,7 @@ class ViewContiCatPage extends StatelessWidget{
     'DataDocumento', 'NumeroFattura', 'Importo', 'Saldo', 'Contropartita', 'CostiDiretti', 'CostiIndiretti', 'AttivitaEconomiche',
     'AttivitaNonEconomiche', 'CodiceProgetto'];
   List<Map<String, dynamic>> csvData = [];
-  List<String> conti = [];
+  List<dynamic> conti = [];
   @override
   Widget build(BuildContext context) {
 
@@ -85,9 +85,12 @@ class ViewContiCatPage extends StatelessWidget{
   }
 
   Future getLinesConto() async {
+    print('get lines');
     findConti(idCat);
-    for (String idC in conti) {
-     await FirebaseFirestore.instance.collection('conti/$idC/lineeConto').get().then(
+    for (var idC in conti) {
+      DocumentReference s = idC as DocumentReference;
+      print(s.id);
+     await FirebaseFirestore.instance.collection('${s.id}/lineeConto').get().then(
               (snapshot) => snapshot.docs.forEach(
                   (linea) {
                 Map<String, dynamic> c = {
@@ -118,25 +121,16 @@ class ViewContiCatPage extends StatelessWidget{
   }
 
   Future findConti(String idcat) async {
-    switch (idcat) {
-      case 'Materie Prime':{
-        conti = ['8.01.010', '8.11.011'];
-      }break;
-      case 'Servizi':{
-        conti = ['8.01.009', '8.01.031', '8.04.010', '8.09.005', '8.11.013', '8.14.000', '8.14.001', '8.14.004', '8.14.007',
-          '8.14.021', '8.14.024', '8.16.000', '8.16.019', '8.17.000', '8.18.000', '8.19.000'];
-      }break;
-      case 'God beni terzi':{
-        conti = [' 8.12.000'];
-      }break;
-      case 'Ammortamenti':{
-        conti = ['8.22.003', '8.22.005', '8.22.009', '8.22.010', '8.22.013', '8.22.015', '8.26.004'];
-      }break;
-      case 'Oneri diversi':{
-        conti = ['8.11.000', '8.14.005', '8.14.010', '8.14.011', '8.15.005', '8.17.006', '8.20.002', '8.20.007', '8.20.010',
-          '8.21.000', '8.21.005', '8.21.006', '8.36.001', '8.36.004', '8.37.010', '8.38.003', '8.38.004', '8.38.005',
-          '8.38.012', '8.46.005', '8.46.007', '8.46.008', '8.46.009'];
-      }break;
-    }
+    await FirebaseFirestore.instance.collection('categorie').get().then(
+            (snapshot) => snapshot.docs.forEach(
+                (cat) {
+              if(cat.id == idcat){
+                conti = cat.get('Conti') as List<dynamic>;
+                print(conti.first);
+              }
+            }
+        )
+    );
+    print('finito find');
   }
 }
