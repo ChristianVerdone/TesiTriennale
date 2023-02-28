@@ -10,6 +10,8 @@ import 'package:csv/csv.dart';
 import 'view/viewcategorie.dart';
 import 'view/ShowDatabase.dart';
 import 'view/ShowFile.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 
 class HomePage extends StatefulWidget{
@@ -77,7 +79,6 @@ class _homePageState extends State<HomePage>{
                 child: ElevatedButton(
                   child: const Text('Visualizza Dati'),
                   onPressed: () {
-                    // Navigate to second route when tapped.
                     Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
                   },
                 ),
@@ -86,17 +87,6 @@ class _homePageState extends State<HomePage>{
             Container(
               child: SizedBox(
                 height: 30,
-              ),
-            ),
-            Container(
-              child: Center(
-                child: ElevatedButton(
-                  child: const Text('Mostra Categorie'),
-                  onPressed: () {
-                    // Navigate to second route when tapped.
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaCatPage()));
-                  },
-                ),
               ),
             ),
             Container(
@@ -217,8 +207,8 @@ class _homePageState extends State<HomePage>{
         if(i>99){
           s = 'line_';
         }
-        await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
         i++;
+        await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
       }
     }
     print(i);

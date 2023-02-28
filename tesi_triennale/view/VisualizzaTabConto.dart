@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
-import '../model/Conto.dart';
-
 import '../ModifyData.dart';
 
 class VisualizzaConto extends StatelessWidget{
 
   String idConto;
+  List<String> lines = [];
   VisualizzaConto({super.key, required this.idConto});
 
   final ScrollController controller1 = ScrollController();
@@ -37,7 +36,7 @@ class VisualizzaConto extends StatelessWidget{
           ElevatedButton(
             child: const Text('Modifica'),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) =>  ModifyData(csvData: csvData!, idConto: idConto!)));
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>  ModifyData(csvData: csvData, lines: lines)));
             },
           ),
         ],
@@ -107,7 +106,8 @@ class VisualizzaConto extends StatelessWidget{
                     'Attività non economiche': linea.get('Attività non economiche'),
                     'Codice progetto': linea.get('Codice progetto')
                   };
-                csvData.add(c);
+                  lines.add(linea.id);
+                  csvData.add(c);
                 //print(csvData);
              }
         )

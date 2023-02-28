@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../readData/getConto.dart';
-import '../view/ViewContiCat.dart';
+import 'package:tesi_triennale/view/ViewContiCat.dart';
 
 class VisualizzaCatPage extends StatefulWidget { //seconda page di caricamento di dati dal database
   const VisualizzaCatPage({super.key});

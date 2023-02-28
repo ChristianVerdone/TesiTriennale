@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../view/VisualizzaTabConto.dart';
-
+import 'package:tesi_triennale/view/VisualizzaTabConto.dart';
 
 class GetConto extends StatelessWidget{
 
@@ -24,7 +23,9 @@ class GetConto extends StatelessWidget{
                 child: Text(idConto)
             );
           }
-          return Text('loading...');
+          return Center(
+            child: Text('loading...'),
+          );
         })
     );
   }
