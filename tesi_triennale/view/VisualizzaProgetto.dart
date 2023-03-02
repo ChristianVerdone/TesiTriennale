@@ -8,6 +8,7 @@ class VisualizzaProgetto extends StatelessWidget{
   VisualizzaProgetto({super.key, required this.p});
   Progetto p;
   List<String> categories= [];
+  num n = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,28 +35,43 @@ class VisualizzaProgetto extends StatelessWidget{
                   children: [
                     Text('Anno: ${p.anno}'),
                     Text('Valore: ${p.valore}'),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     const Text('Costi Diretti:', textAlign: TextAlign.left),
                     Expanded(
                         child:  ListView.builder(
                             itemCount: p.costiDiretti.length,
+                            itemExtent: 40,
                             itemBuilder: (context, index){
                               return ListTile(
+                                visualDensity: VisualDensity.compact,
                                 title: Text('${p.costiDiretti.keys.elementAt(index)}: ${p.costiDiretti.values.elementAt(index)}'),
                               );
                             }
                         ),
                     ),
+                    Text('Totale:${n = getSum(p.costiDiretti.values)}'),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     const Text('Costi Indiretti:', textAlign: TextAlign.left),
                     Expanded(
                         child: ListView.builder(
                             itemCount: p.costiIndiretti.length,
+                            itemExtent: 40,
                             itemBuilder: (context, index){
                               return ListTile(
+                                visualDensity: VisualDensity.compact,
                                 title: Text('${p.costiIndiretti.keys.elementAt(index)}: ${p.costiIndiretti.values.elementAt(index)}'),
                               );
                             }
                         )
-                    )
+                    ),
+                    Text('Totale:${n = getSum(p.costiIndiretti.values)}'),
+                    const SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
             );
@@ -74,5 +90,13 @@ class VisualizzaProgetto extends StatelessWidget{
         categories.add(element.id);
       }
     });
+  }
+
+  num getSum(Iterable<dynamic> iterable) {
+    n = 0;
+    iterable.forEach((element) {
+      n = n + num.parse(element) ;
+    });
+    return n;
   }
 }

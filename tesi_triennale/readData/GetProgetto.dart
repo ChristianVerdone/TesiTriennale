@@ -19,7 +19,6 @@ class GetProgetto extends StatelessWidget{
             return TextButton(
                 onPressed: () async {
                   await progettiRef.doc(idProg).get().then((value) {
-                    print(value.id);
                     p = Progetto.prog(nomeProgetto: idProg, anno: value.get('Anno'), valore: value.get('Valore'),
                         costiDiretti: value.get('Costi Diretti'), costiIndiretti: value.get('Costi Indiretti'));
                   });
