@@ -20,6 +20,14 @@ class VisualizzaProgetto extends StatelessWidget{
             statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
+          actions: <Widget>[
+            ElevatedButton(
+                onPressed: (){
+                  evaluate(p.nomeProgetto);
+                },
+                child: const Text('Calcola costi')
+            )
+          ],
           centerTitle: true,
           title: Text('Visualizzazione Progetto: ${p.nomeProgetto}',
               style: const TextStyle(color: Colors.white,
@@ -98,5 +106,31 @@ class VisualizzaProgetto extends StatelessWidget{
       n = n + num.parse(element) ;
     });
     return n;
+  }
+
+  evaluate(String nomeProgetto) async {
+    num s;
+    for (var element in p.costiDiretti.keys) {
+      s = 0;
+      await FirebaseFirestore.instance.collection('categorie').doc(element).get().then(
+              (value) {
+                (value.get('Conti') as List<dynamic>).forEach((element) async {
+                  await FirebaseFirestore.instance.collection('${element.toString()}/lineeConto').get().then(
+                          (value) => value.docs.forEach(
+                                  (linea) {
+                                    if(linea.get('Codice progetto').toString() == nomeProgetto && linea.get('Costi Diretti') == true){
+                                      print('valore linea ${linea.get('Importo')}');
+                                      s = s + num.parse(linea.get('Importo'));
+                                      print('importo: $s');
+                                    }
+                                  }
+                          )
+                  );
+                });
+              }
+      );
+      p.costiDiretti.update(element, (value) => s.toString());
+      print(p.costiDiretti[element]);
+    }
   }
 }
