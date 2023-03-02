@@ -69,7 +69,7 @@ class _homePageState extends State<HomePage>{
             ),
             Center(
               child: ElevatedButton(
-                child: const Text('Visualizza Dati'),
+                child: const Text('Visualizza Conti'),
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
                 },
