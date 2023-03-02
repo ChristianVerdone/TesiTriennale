@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'ViewContiCat.dart';
 
+import 'ViewContiCat.dart';
+
 class VisualizzaCatPage extends StatefulWidget { //seconda page di caricamento di dati dal database
   const VisualizzaCatPage({super.key});
   @override

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+
+import 'model/Conto.dart';
 class Utils{
   static List<T> modelBuilder<M, T>(
       List<M> models, T Function(int index, M model) builder )=>
@@ -26,3 +28,28 @@ Future<int?> myDartFunction(int arg) async {
   }
   return null;
 }
+
+List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData
+    .map((item) => Conto(
+    codiceConto: item['Codice Conto'],
+    descrizioneConto: item['Descrizione conto'],
+    dataOperazione: item['Data operazione'],
+    COD: item['COD'].toString(),
+    descrizioneOperazione: item['Descrizione operazione'],
+    numeroDocumento: item['Numero documento'].toString(),
+    dataDocumento: item['Data documento'],
+    numeroFattura: item['Numero Fattura'].toString(),
+    importo: item['Importo'].toString(),
+    saldo: item['Saldo'].toString(),
+    contropartita: item['Contropartita'],
+    costiDiretti:
+    item['Costi Diretti'].toString() == "" ? false : item['Costi Diretti'],
+    costiIndiretti:
+    item['Costi Indiretti'].toString() == "" ? false : item['Costi Diretti'],
+    attivitaEconomiche:
+    item['Attività economiche'].toString() == "" ? false : item['Costi Diretti'],
+    attivitaNonEconomiche: item['Attività non economiche'].toString() == ""
+        ? false
+        : item['Costi Diretti'],
+    codiceProgetto: item['Codice progetto']))
+    .toList();
