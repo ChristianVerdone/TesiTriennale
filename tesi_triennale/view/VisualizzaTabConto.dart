@@ -114,15 +114,9 @@ class _VisualizzaConto extends State<VisualizzaConto> {
 
     return DataRow(
       cells: Utils.modelBuilder(cells, (index, cell) {
-        if((index >0 && index <8) || index == 12)
-          return DataCell(
-            Text('$cell'),
-          );
-        if(index >7 && index <12){
-          return DataCell(
-            Text('$cell'), showEditIcon
-          );
-        }
+        return DataCell(
+          Text('$cell'),
+        );
       }),
     );
   }).toList();
