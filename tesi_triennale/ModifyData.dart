@@ -18,9 +18,6 @@ class ModifyData extends StatefulWidget {
 
 class _ModifyDataState extends State<ModifyData> {
   List<Conto> conti = [];
-  late int selectedRow;
-  late int selectedColumn;
-  List<int> selectIndex = List.generate(15, (index) => 0);
 
   @override
   void initState() {
@@ -28,30 +25,6 @@ class _ModifyDataState extends State<ModifyData> {
     conti = convertMapToObject(widget.csvData);
   }
 
-  List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData
-      .map((item) => Conto(
-          codiceConto: item['Codice Conto'],
-          descrizioneConto: item['Descrizione conto'],
-          dataOperazione: item['Data operazione'],
-          COD: item['COD'].toString(),
-          descrizioneOperazione: item['Descrizione operazione'],
-          numeroDocumento: item['Numero documento'].toString(),
-          dataDocumento: item['Data documento'],
-          numeroFattura: item['Numero Fattura'].toString(),
-          importo: item['Importo'].toString(),
-          saldo: item['Saldo'].toString(),
-          contropartita: item['Contropartita'],
-          costiDiretti:
-              item['Costi Diretti'].toString() == "" ? false : item['Costi Diretti'],
-          costiIndiretti:
-              item['Costi Indiretti'].toString() == "" ? false : item['Costi Diretti'],
-          attivitaEconomiche:
-              item['Attività economiche'].toString() == "" ? false : item['Costi Diretti'],
-          attivitaNonEconomiche: item['Attività non economiche'].toString() == ""
-              ? false
-              : item['Costi Diretti'],
-          codiceProgetto: item['Codice progetto']))
-      .toList();
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -116,22 +89,19 @@ class _ModifyDataState extends State<ModifyData> {
 
   Widget buildDataTable() {
     final columns = [
-      'CodiceConto',
-      'DescrizioneConto',
-      'DataOperazione',
+      'Data operazione',
       'COD',
-      'DescrizioneOperazione',
-      'NumeroDocumento',
-      'DataDocumento',
+      'Descrizione operazione',
+      'Numero documento',
+      'Data documento',
       'NumeroFattura',
       'Importo',
-      'Saldo',
       'Contropartita',
-      'CostiDiretti',
-      'CostiIndiretti',
-      'AttivitaEconomiche',
-      'AttivitaNonEconomiche',
-      'CodiceProgetto'
+      'Costi diretti',
+      'Costi indiretti',
+      'Attivita economiche',
+      'Attivita non economiche',
+      'Codice progetto'
     ];
 
     return DataTable(
@@ -154,8 +124,6 @@ class _ModifyDataState extends State<ModifyData> {
 
   List<DataRow> getRows(List<Conto> conti) => conti.map((Conto conto) {
         final cells = [
-          conto.codiceConto,
-          conto.descrizioneConto,
           conto.dataOperazione,
           conto.COD,
           conto.descrizioneOperazione,
@@ -163,7 +131,6 @@ class _ModifyDataState extends State<ModifyData> {
           conto.dataDocumento,
           conto.numeroFattura,
           conto.importo,
-          conto.saldo,
           conto.contropartita,
           conto.costiDiretti,
           conto.costiIndiretti,
@@ -175,7 +142,7 @@ class _ModifyDataState extends State<ModifyData> {
         return DataRow(
           cells: Utils.modelBuilder(cells, (index, cell) {
             switch (index) {
-              case 11:
+              case 8:
                 print(conto.importo.toString()+" "+conto.costiDiretti.toString()+" "+conto.costiIndiretti.toString()+" "
                     +conto.attivitaEconomiche.toString()+" "+conto.attivitaNonEconomiche.toString());
 
@@ -199,7 +166,7 @@ class _ModifyDataState extends State<ModifyData> {
                     },
                   ),
                 ));
-              case 12:
+              case 9:
                 return DataCell(Center(
                   child: Checkbox(
                     value: conto.costiIndiretti,
@@ -214,7 +181,7 @@ class _ModifyDataState extends State<ModifyData> {
                     },
                   ),
                 ));
-              case 13:
+              case 10:
                 return DataCell(Center(
                   child: Checkbox(
                     value: conto.attivitaEconomiche,
@@ -229,7 +196,7 @@ class _ModifyDataState extends State<ModifyData> {
                     },
                   ),
                 ));
-              case 14:
+              case 11:
                 return DataCell(Center(
                   child: Checkbox(
                     value: conto.attivitaNonEconomiche,
@@ -245,7 +212,7 @@ class _ModifyDataState extends State<ModifyData> {
                   ),
                 ));
             }
-            final showEditIcon = index == 15;
+            final showEditIcon = index == 12;
             return DataCell(Text('$cell'), showEditIcon: showEditIcon,
                 onTap: () {
               editCodiceProgetto(conto);
