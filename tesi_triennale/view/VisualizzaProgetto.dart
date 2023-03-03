@@ -22,8 +22,9 @@ class VisualizzaProgetto extends StatelessWidget{
           ),
           actions: <Widget>[
             ElevatedButton(
-                onPressed: (){
-                  evaluate(p.nomeProgetto);
+                onPressed: () async {
+                  await evaluate(p.nomeProgetto);
+                  Navigator.of(context).pop(true);
                 },
                 child: const Text('Calcola costi')
             )
@@ -102,35 +103,41 @@ class VisualizzaProgetto extends StatelessWidget{
 
   num getSum(Iterable<dynamic> iterable) {
     n = 0;
-    iterable.forEach((element) {
+    for (var element in iterable) {
       n = n + num.parse(element) ;
-    });
+    }
     return n;
   }
 
   evaluate(String nomeProgetto) async {
     num s;
-    for (var element in p.costiDiretti.keys) {
+    for (var categoria in p.costiDiretti.keys) {
       s = 0;
-      await FirebaseFirestore.instance.collection('categorie').doc(element).get().then(
-              (value) {
-                (value.get('Conti') as List<dynamic>).forEach((element) async {
-                  await FirebaseFirestore.instance.collection('${element.toString()}/lineeConto').get().then(
+      await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
+              (cat) async {
+                for (var element in (cat.get('Conti') as List<dynamic>)){
+                  DocumentReference d = element as DocumentReference;
+                  await FirebaseFirestore.instance.collection('conti/${d.id}/lineeConto').get().then(
                           (value) => value.docs.forEach(
                                   (linea) {
-                                    if(linea.get('Codice progetto').toString() == nomeProgetto && linea.get('Costi Diretti') == true){
-                                      print('valore linea ${linea.get('Importo')}');
-                                      s = s + num.parse(linea.get('Importo'));
-                                      print('importo: $s');
+                                    if(linea.get('Codice progetto').toString() == nomeProgetto && linea.get('Costi Diretti') == 'true'){
+                                      s = s + num.parse(linea.get('Importo').toString());
                                     }
                                   }
                           )
                   );
-                });
+                }
               }
       );
-      p.costiDiretti.update(element, (value) => s.toString());
-      print(p.costiDiretti[element]);
+      p.costiDiretti.update(categoria, (value) => s.toString());
+      print('tot $categoria: ${p.costiDiretti[categoria]}');
     }
+    final json = {
+      'Anno' : p.anno,
+      'Valore' : p.valore,
+      'Costi Diretti' : p.costiDiretti,
+      'Costi Indiretti' : p.costiIndiretti
+    };
+    await FirebaseFirestore.instance.collection('progetti').doc(nomeProgetto).set(json);
   }
 }
