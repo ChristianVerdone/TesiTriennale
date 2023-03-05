@@ -45,7 +45,7 @@ List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData
     costiDiretti:
     item['Costi Diretti'].toString() == "" ? false : item['Costi Diretti'],
     costiIndiretti:
-    item['Costi Indiretti'].toString() == "" ? false : item['Costi Diretti'],
+    item['Costi Indiretti'].toString() == "" ? false : item['Costi Indiretti'],
     attivitaEconomiche:
     item['Attività economiche'].toString() == "" ? false : item['Costi Diretti'],
     attivitaNonEconomiche: item['Attività non economiche'].toString() == ""

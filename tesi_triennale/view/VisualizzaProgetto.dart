@@ -120,7 +120,7 @@ class VisualizzaProgetto extends StatelessWidget{
                   await FirebaseFirestore.instance.collection('conti/${d.id}/lineeConto').get().then(
                           (value) => value.docs.forEach(
                                   (linea) {
-                                    if(linea.get('Codice progetto').toString() == nomeProgetto && linea.get('Costi Diretti') == 'true'){
+                                    if(linea.get('Codice progetto').toString() == nomeProgetto && linea.get('Costi Diretti') == true){
                                       s = s + num.parse(linea.get('Importo').toString());
                                     }
                                   }

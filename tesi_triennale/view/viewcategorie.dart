@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'ViewContiCat.dart';
 
@@ -16,7 +17,7 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
     super.initState();
   }
 
-  List<String> cat = [ 'Materie Prime', 'Servizi', 'God beni terzi', 'Ammortamenti', 'Oneri diversi', 'Personale'];
+  List<String> cat = [];
 
   @override
   void dispose() {
@@ -36,24 +37,34 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
           children: [
             Expanded(
                 child: FutureBuilder(
+                  future: getCat(),
                     builder: (context, snapshot){
-                      return ListView.builder(
-                          itemCount: cat.length,
-                          itemBuilder: (context, index){
-                            return ListTile(
-                              title:  TextButton(
-                                onPressed: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => ViewContiCatPage(idCat: cat.elementAt(index))));
-                              },
-                              child: Text(cat.elementAt(index))
-                              ),
-                            );
-                          });
-                    })
-            )
-          ],
+                    return ListView.builder(
+                        itemCount: cat.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: TextButton(
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) => ViewContiCatPage(idCat: cat.elementAt(index))));
+                                },
+                                child: Text(cat.elementAt(index))
+                            ),
+                          );
+                        }
+                    );
+                  }
+                )
+            )],
         ),
       ),
     );
   }
+
+  getCat() async {
+    await FirebaseFirestore.instance.collection('categorie').get().then(
+        (value) => value.docs.forEach((categ) => cat.add(categ.id))
+    );
+  }
+
 }

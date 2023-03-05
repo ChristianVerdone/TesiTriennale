@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import '../ModifyData.dart';
+import '../model/Conto.dart';
+import '../utils.dart';
 
 class ViewContiCatPage extends StatelessWidget{
 
+  List<Conto> contiM = [];
   String idCat;
   List<String> lines = [];
   ViewContiCatPage({super.key, required this.idCat});
@@ -116,6 +119,8 @@ class ViewContiCatPage extends StatelessWidget{
           )
       );
     }
+    contiM = convertMapToObject(csvData);
+    valuateTot();
   }
 
   Future findConti(String idcat) async {
@@ -127,6 +132,28 @@ class ViewContiCatPage extends StatelessWidget{
               }
             }
         )
+    );
+  }
+
+  Future<void> valuateTot() async {
+    num totIn = 0;
+    for(var linea in contiM){
+      if(linea.costiIndiretti == true){
+        totIn = totIn + num.parse(linea.importo);
+      }
+    }
+    DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(idCat);
+    d.get().then(
+            (cat) {
+              if(cat.get('Totale Costi Indiretti') != totIn.toString()){
+                final json = {
+                  'Conti' : cat.get('Conti'),
+                  'Totale Costi Diretti': '0',
+                  'Totale Costi Indiretti': totIn.toString()
+                };
+                d.set(json);
+              }
+            }
     );
   }
 }
