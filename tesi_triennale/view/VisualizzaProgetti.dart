@@ -21,7 +21,8 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
   void dispose() {
     super.dispose();
   }
-  num totProgetti = 0;
+  num totProgettiE = 0;
+  num totProgettinE = 0;
   List<String> progetti = [];
 
   @override
@@ -63,7 +64,12 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
               if(!(progetti.contains(progetto.reference.id))){
                 progetti.add(progetto.reference.id);
               }
-              perc = (num.parse(progetto.get('Valore').toString()) / totProgetti) * 100;
+              if(progetto.get('isEconomico')){
+                perc = (num.parse(progetto.get('Valore').toString()) / totProgettiE) * 100;
+              }
+              else{
+                perc = (num.parse(progetto.get('Valore').toString()) / totProgettinE) * 100;
+              }
               final json = {
                 'Anno' : progetto.get('Anno'),
                 'Valore' : progetto.get('Valore'),
@@ -73,6 +79,7 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
                 'Percentuale' : perc.toString()
               };
               progetto.reference.set(json);
+              perc = 0;
             }
         )
     );
@@ -82,7 +89,12 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
     await FirebaseFirestore.instance.collection('progetti').get().then(
             (snap) => snap.docs.forEach(
                 (progetto) {
-              totProgetti = totProgetti + num.parse(progetto.get('Valore').toString());
+                  if(progetto.get('isEconomico')){
+                    totProgettiE = totProgettiE + num.parse(progetto.get('Valore').toString());
+                  }
+                  else{
+                    totProgettinE = totProgettinE + num.parse(progetto.get('Valore').toString());
+                  }
             }
         )
     );

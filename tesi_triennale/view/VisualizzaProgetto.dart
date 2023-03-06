@@ -133,6 +133,31 @@ class VisualizzaProgetto extends StatelessWidget{
       p.costiDiretti.update(categoria, (value) => s.toString());
       print('tot $categoria: ${p.costiDiretti[categoria]}');
     }
+    num totCostiIndAE = 0;
+    num totCostiIndAnE = 0;
+    await FirebaseFirestore.instance.collection('categorie').get().then(
+            (snap) => snap.docs.forEach(
+                    (cat) {
+                      totCostiIndAE = totCostiIndAE + num.parse(cat.get('Totale Costi Indiretti A E').toString());
+                      totCostiIndAnE = totCostiIndAnE + num.parse(cat.get('Totale Costi Indiretti A nE').toString());
+                    }
+            )
+    );
+    for (var categoria in p.costiIndiretti.keys) {
+      s = 0;
+      await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
+              (cat) {
+                if(p.isEconomico){
+                  s = num.parse(p.perc.toString()) / 100 * totCostiIndAE * num.parse(cat.get('Percentuale CI A E').toString()) / 100;
+                }
+                else{
+                  s = num.parse(p.perc.toString()) / 100 * totCostiIndAnE * num.parse(cat.get('Percentuale CI A nE').toString()) / 100;
+                }
+              }
+      );
+      p.costiIndiretti.update(categoria, (value) => s.toString());
+      print('tot $categoria: ${p.costiIndiretti[categoria]}');
+    }
     final json = {
       'Anno' : p.anno,
       'Valore' : p.valore,
@@ -142,6 +167,5 @@ class VisualizzaProgetto extends StatelessWidget{
       'Percentuale' : p.perc
     };
     await FirebaseFirestore.instance.collection('progetti').doc(nomeProgetto).set(json);
-
   }
 }
