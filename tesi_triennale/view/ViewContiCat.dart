@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
@@ -121,6 +123,7 @@ class ViewContiCatPage extends StatelessWidget{
     }
     contiM = convertMapToObject(csvData);
     valuateTot();
+    valuatePerc();
   }
 
   Future findConti(String idcat) async {
@@ -136,24 +139,80 @@ class ViewContiCatPage extends StatelessWidget{
   }
 
   Future<void> valuateTot() async {
-    num totIn = 0;
+    num totInnE = 0;
+    num totInE = 0;
+    num totDnE = 0;
+    num totDE = 0;
     for(var linea in contiM){
-      if(linea.costiIndiretti == true){
-        totIn = totIn + num.parse(linea.importo);
+      print('${linea.codiceConto} ${linea.costiIndiretti} ${linea.attivitaNonEconomiche}');
+      if(linea.costiIndiretti){
+        if(linea.attivitaNonEconomiche) {
+          totInnE = totInnE + num.parse(linea.importo);
+        }
+        if(linea.attivitaEconomiche){
+          totInE = totInE + num.parse(linea.importo);
+        }
+      }
+      if(linea.costiDiretti){
+        if(linea.attivitaNonEconomiche) {
+          totDnE = totDnE + num.parse(linea.importo);
+        }
+        if(linea.attivitaEconomiche){
+          totDE = totDE + num.parse(linea.importo);
+        }
       }
     }
     DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(idCat);
     d.get().then(
             (cat) {
-              if(cat.get('Totale Costi Indiretti') != totIn.toString()){
+              print('voglio salvare');
                 final json = {
                   'Conti' : cat.get('Conti'),
-                  'Totale Costi Diretti': '0',
-                  'Totale Costi Indiretti': totIn.toString()
+                  'Totale Costi Diretti A E' : totDE.toString(),
+                  'Totale Costi Diretti A nE' : totDnE.toString(),
+                  'Totale Costi Indiretti A E' : totInE.toString(),
+                  'Totale Costi Indiretti A nE' : totInnE.toString(),
+                  'Percentuale CI A E' : cat.get('Percentuale CI A E'),
+                  'Percentuale CI A nE' : cat.get('Percentuale CI A nE')
                 };
                 d.set(json);
-              }
             }
+    );
+  }
+
+  Future<void> valuatePerc() async {
+    num percCIAE = 0;
+    num percCIAnE = 0;
+    num totCIAE = 0;
+    num totCIAnE = 0;
+    await FirebaseFirestore.instance.collection('categorie').get().then(
+            (snapshot) => snapshot.docs.forEach(
+                    (cat) {
+                      totCIAE = totCIAE + num.parse(cat.get('Totale Costi Indiretti A E').toString());
+                      totCIAnE = totCIAnE + num.parse(cat.get('Totale Costi Indiretti A nE').toString());
+                    }
+            )
+    );
+    CollectionReference c =  FirebaseFirestore.instance.collection('categorie');
+        c.get().then(
+            (snapshot) => snapshot.docs.forEach(
+                (cat) {
+              percCIAE = 0;
+              percCIAnE = 0;
+              percCIAE = (num.parse(cat.get('Totale Costi Indiretti A E')) / totCIAE) * 100;
+              percCIAnE  = (num.parse(cat.get('Totale Costi Indiretti A nE')) / totCIAnE) * 100;
+              final json = {
+                'Conti' : cat.get('Conti'),
+                'Totale Costi Diretti A E' : cat.get('Totale Costi Diretti A E'),
+                'Totale Costi Diretti A nE' : cat.get('Totale Costi Diretti A nE'),
+                'Totale Costi Indiretti A E' : cat.get('Totale Costi Indiretti A E'),
+                'Totale Costi Indiretti A nE' : cat.get('Totale Costi Indiretti A E'),
+                'Percentuale CI A E' : percCIAE.toString(),
+                'Percentuale CI A nE' : percCIAnE.toString()
+              };
+              c.doc(cat.id).set(json);
+            }
+        )
     );
   }
 }

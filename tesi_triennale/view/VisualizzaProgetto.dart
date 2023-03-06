@@ -139,5 +139,13 @@ class VisualizzaProgetto extends StatelessWidget{
       'Costi Indiretti' : p.costiIndiretti
     };
     await FirebaseFirestore.instance.collection('progetti').doc(nomeProgetto).set(json);
+    num totInd = 0;
+    for (var categoria in p.costiIndiretti.keys){
+      await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
+              (cat) {
+                totInd = totInd + num.parse(cat.get('Totale Costi Indiretti'));
+              }
+      );
+    }
   }
 }

@@ -1,8 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/services.dart';
-
 import 'model/Conto.dart';
+
 class Utils{
   static List<T> modelBuilder<M, T>(
       List<M> models, T Function(int index, M model) builder )=>
@@ -11,10 +10,6 @@ class Utils{
       .map<int, T>((index, model) => MapEntry(index, builder(index, model)))
       .values
       .toList();
-
-
-
-
 }
 const platform = MethodChannel('mychannel');
 
@@ -47,9 +42,9 @@ List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData
     costiIndiretti:
     item['Costi Indiretti'].toString() == "" ? false : item['Costi Indiretti'],
     attivitaEconomiche:
-    item['Attività economiche'].toString() == "" ? false : item['Costi Diretti'],
+    item['Attività economiche'].toString() == "" ? false : item['Attività economiche'],
     attivitaNonEconomiche: item['Attività non economiche'].toString() == ""
         ? false
-        : item['Costi Diretti'],
+        : item['Attività non economiche'],
     codiceProgetto: item['Codice progetto']))
     .toList();

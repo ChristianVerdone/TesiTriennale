@@ -164,12 +164,23 @@
       <workItem from="1677764632920" duration="9927000" />
       <workItem from="1677776954169" duration="1934000" />
       <workItem from="1677781252570" duration="802000" />
-      <workItem from="1677859153743" duration="15842000" />
+      <workItem from="1677859153743" duration="25895000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="Dart">
+          <url>file://$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart</url>
+          <line>167</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
