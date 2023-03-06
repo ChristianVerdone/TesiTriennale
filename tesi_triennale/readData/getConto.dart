@@ -1,32 +1,27 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../Widget/ScrollableWidget.dart';
-import '../utils.dart';
 import '../view/VisualizzaTabConto.dart';
 
 class GetConto extends StatelessWidget{
 
   String idConto;
-  List<ShortConto> collection = [];
-
+  String descrizione = '';
+  
   GetConto({super.key, required this.idConto});
 
   @override
   Widget build(BuildContext context) {
-    getCodDesc(idConto);
     CollectionReference lineeConto = FirebaseFirestore.instance.collection('conti');
+    lineeConto.doc(idConto).get().then((value) => descrizione = value.get('Descrizione conto'));
     return FutureBuilder<DocumentSnapshot>(
         future: lineeConto.doc(idConto).get(),
         builder: ((context, snapshot){
           if(snapshot.connectionState == ConnectionState.done){
             return TextButton(
                 onPressed: (){
-                  for(ShortConto c in collection)
-                    if(c.codiceConto == idConto)
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaConto(idConto: c.codiceConto, descrizioneConto: c.descrizioneConto)));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaConto(idConto: idConto, descrizioneConto: descrizione)));
                 },
-                child: Text(idConto)
+                child: Text(idConto+'    -    '+descrizione)
             );
           }
           return const Center(
@@ -36,6 +31,7 @@ class GetConto extends StatelessWidget{
     );
   }
 
+  /*
   Future getCodDesc(String idConto) async{
     final CollectionReference lineeConto = FirebaseFirestore.instance.collection('conti');
     final QuerySnapshot querySnapshot = await lineeConto.get();
@@ -54,53 +50,5 @@ class GetConto extends StatelessWidget{
 
   }
 
-  Widget buildDataTable() {
-    final columns = [
-      'Codice conto',
-      'Descrizione conto'
-    ];
-
-    return DataTable(
-      columns: getColumns(columns),
-      rows: getRows(collection),
-    );
-  }
-
-  List<DataColumn> getColumns(List<String> columns) {
-    return columns
-        .map(
-          (item) => DataColumn(
-        label: Text(
-          item.toString(),
-        ),
-      ),
-    )
-        .toList();
-  }
-
-  List<DataRow> getRows(List<ShortConto> collection) => collection.map((ShortConto conto) {
-    final cells = [
-      conto.codiceConto,
-      conto.descrizioneConto,
-    ];
-
-    return DataRow(
-      cells: Utils.modelBuilder(cells, (index, cell) {
-        return DataCell(
-          Text('$cell'),
-        );
-      }),
-    );
-  }).toList();
-
-}
-
-class ShortConto{
-  final String codiceConto;
-  final String descrizioneConto;
-
-  const ShortConto({
-    required this.codiceConto,
-    required this.descrizioneConto,
-  });
+   */
 }
