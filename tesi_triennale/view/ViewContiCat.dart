@@ -122,8 +122,8 @@ class ViewContiCatPage extends StatelessWidget{
       );
     }
     contiM = convertMapToObject(csvData);
-    valuateTot();
-    valuatePerc();
+    await valuateTot();
+    await valuatePerc();
   }
 
   Future findConti(String idcat) async {
@@ -144,7 +144,6 @@ class ViewContiCatPage extends StatelessWidget{
     num totDnE = 0;
     num totDE = 0;
     for(var linea in contiM){
-      print('${linea.codiceConto} ${linea.costiIndiretti} ${linea.attivitaNonEconomiche}');
       if(linea.costiIndiretti){
         if(linea.attivitaNonEconomiche) {
           totInnE = totInnE + num.parse(linea.importo);
@@ -165,13 +164,12 @@ class ViewContiCatPage extends StatelessWidget{
     DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(idCat);
     d.get().then(
             (cat) {
-              print('voglio salvare');
                 final json = {
                   'Conti' : cat.get('Conti'),
-                  'Totale Costi Diretti A E' : totDE.toString(),
-                  'Totale Costi Diretti A nE' : totDnE.toString(),
-                  'Totale Costi Indiretti A E' : totInE.toString(),
-                  'Totale Costi Indiretti A nE' : totInnE.toString(),
+                  'Totale Costi Diretti A E' : totDE,
+                  'Totale Costi Diretti A nE' : totDnE,
+                  'Totale Costi Indiretti A E' : totInE,
+                  'Totale Costi Indiretti A nE' : totInnE,
                   'Percentuale CI A E' : cat.get('Percentuale CI A E'),
                   'Percentuale CI A nE' : cat.get('Percentuale CI A nE')
                 };
@@ -197,16 +195,20 @@ class ViewContiCatPage extends StatelessWidget{
         c.get().then(
             (snapshot) => snapshot.docs.forEach(
                 (cat) {
+                  var sTotCIAE = cat.get('Totale Costi Indiretti A E').toString();
+                  var sTotCIAnE = cat.get('Totale Costi Indiretti A nE').toString();
               percCIAE = 0;
               percCIAnE = 0;
-              percCIAE = (num.parse(cat.get('Totale Costi Indiretti A E')) / totCIAE) * 100;
-              percCIAnE  = (num.parse(cat.get('Totale Costi Indiretti A nE')) / totCIAnE) * 100;
+              percCIAE = (num.parse(sTotCIAE) / totCIAE) * 100;
+              percCIAnE  = (num.parse(sTotCIAnE) / totCIAnE) * 100;
+              var sTotCDAE = cat.get('Totale Costi Diretti A E').toString();
+              var sTotCDAnE = cat.get('Totale Costi Diretti A nE').toString();
               final json = {
                 'Conti' : cat.get('Conti'),
-                'Totale Costi Diretti A E' : cat.get('Totale Costi Diretti A E'),
-                'Totale Costi Diretti A nE' : cat.get('Totale Costi Diretti A nE'),
-                'Totale Costi Indiretti A E' : cat.get('Totale Costi Indiretti A E'),
-                'Totale Costi Indiretti A nE' : cat.get('Totale Costi Indiretti A E'),
+                'Totale Costi Diretti A E' : sTotCDAE,
+                'Totale Costi Diretti A nE' : sTotCDAnE,
+                'Totale Costi Indiretti A E' : sTotCIAE,
+                'Totale Costi Indiretti A nE' : sTotCIAnE,
                 'Percentuale CI A E' : percCIAE.toString(),
                 'Percentuale CI A nE' : percCIAnE.toString()
               };
