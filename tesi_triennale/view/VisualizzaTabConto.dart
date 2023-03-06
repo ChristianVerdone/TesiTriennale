@@ -12,7 +12,8 @@ class VisualizzaConto extends StatefulWidget {
   String idConto;
   String descrizioneConto;
 
-  VisualizzaConto({super.key, required this.idConto, required this.descrizioneConto});
+  VisualizzaConto(
+      {super.key, required this.idConto, required this.descrizioneConto});
 
   State<VisualizzaConto> createState() => _VisualizzaConto();
 }
@@ -27,40 +28,62 @@ class _VisualizzaConto extends State<VisualizzaConto> {
     super.initState();
   }
 
-  @override
-  Widget build(BuildContext context){
+  String refresh = '';
+  void reload(){
+    setState(() {
+      //csvData.clear();
+      //conti.clear();
+      //lines.clear();
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => VisualizzaConto(idConto: widget.idConto, descrizioneConto: widget.descrizioneConto),
+        ),
+      );
+    });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           systemOverlayStyle: const SystemUiOverlayStyle(
             // Status bar color
             statusBarColor: Colors.white,
             // Status bar brightness (optional)
-            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+            statusBarIconBrightness:
+                Brightness.dark, // For Android (dark icons)
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
           centerTitle: true,
-          title: Text(widget.idConto+'   '+widget.descrizioneConto,
-              style: TextStyle(color: Colors.white,
-                fontSize: 20.0, )
-          ),
+          title: Text(widget.idConto + '   ' + widget.descrizioneConto,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+              )),
           actions: <Widget>[
             ElevatedButton(
               child: const Text('Modifica'),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>  ModifyData(csvData: csvData, lines: lines)));
+              onPressed: () async{
+                String refresh = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ModifyData(csvData: csvData, lines: lines)));
+                if(refresh == 'refresh'){
+                  reload();
+                }
               },
             ),
           ],
         ),
-      body: FutureBuilder(future: getLines(widget.idConto),
-      builder: (context, snapshot){
-        return ScrollableWidget(child: buildDataTable());
-      })
-    );
+        body: FutureBuilder(
+            future: getLines(widget.idConto),
+            builder: (context, snapshot) {
+              return ScrollableWidget(child: buildDataTable());
+            }));
   }
 
-   Widget buildDataTable() {
+  Widget buildDataTable() {
     final columns = [
       'Data operazione',
       'COD',
@@ -87,44 +110,78 @@ class _VisualizzaConto extends State<VisualizzaConto> {
     return columns
         .map(
           (item) => DataColumn(
-        label: Text(
-          item.toString(),
-        ),
-      ),
-    )
+            label: Text(
+              item.toString(),
+            ),
+          ),
+        )
         .toList();
   }
 
   List<DataRow> getRows(List<Conto> conti) => conti.map((Conto conto) {
-    final cells = [
-      conto.dataOperazione,
-      conto.COD,
-      conto.descrizioneOperazione,
-      conto.numeroDocumento,
-      conto.dataDocumento,
-      conto.numeroFattura,
-      conto.importo,
-      conto.contropartita,
-      conto.costiDiretti,
-      conto.costiIndiretti,
-      conto.attivitaEconomiche,
-      conto.attivitaNonEconomiche,
-      conto.codiceProgetto
-    ];
+        final cells = [
+          conto.dataOperazione,
+          conto.COD,
+          conto.descrizioneOperazione,
+          conto.numeroDocumento,
+          conto.dataDocumento,
+          conto.numeroFattura,
+          conto.importo,
+          conto.contropartita,
+          conto.costiDiretti,
+          conto.costiIndiretti,
+          conto.attivitaEconomiche,
+          conto.attivitaNonEconomiche,
+          conto.codiceProgetto
+        ];
 
-    return DataRow(
-      cells: Utils.modelBuilder(cells, (index, cell) {
-        return DataCell(
-          Text('$cell'),
+        return DataRow(
+          cells: Utils.modelBuilder(cells, (index, cell) {
+
+            if (index == 8) {
+              switch (conto.costiDiretti) {
+                case true:
+                  return DataCell(Center(child: Icon(Icons.check)));
+                case false:
+                  return DataCell(Center(child: Icon(Icons.clear)));
+              }
+            }
+            if (index == 9) {
+              switch (conto.costiIndiretti) {
+                case true:
+                  return DataCell(Center(child: Icon(Icons.check)));
+                case false:
+                  return DataCell(Center(child: Icon(Icons.clear)));
+              }
+            }
+            if (index == 10) {
+              switch (conto.attivitaEconomiche) {
+                case true:
+                  return DataCell(Center(child: Icon(Icons.check)));
+                case false:
+                  return DataCell(Center(child: Icon(Icons.clear)));
+              }
+            }
+            if (index == 11) {
+              switch (conto.attivitaNonEconomiche) {
+                case true:
+                  return DataCell(Center(child: Icon(Icons.check)));
+                case false:
+                  return DataCell(Center(child: Icon(Icons.clear)));
+              }
+            }
+            return DataCell(
+              Text('$cell'),
+            );
+          }),
         );
-      }),
-    );
-  }).toList();
+      }).toList();
 
-  Future getLines(String idConto) async{
-    await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
-            (snapshot) => snapshot.docs.forEach(
-                (linea) {
+  Future getLines(String idConto) async {
+    await FirebaseFirestore.instance
+        .collection('conti/$idConto/lineeConto')
+        .get()
+        .then((snapshot) => snapshot.docs.forEach((linea) {
               //print(linea.reference);
               Map<String, dynamic> c = {
                 'Codice Conto': linea.get('Codice Conto'),
@@ -147,9 +204,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
               lines.add(linea.id);
               csvData.add(c);
               //print(csvData);
-            }
-        )
-    );
+            }));
     conti = convertMapToObject(csvData);
   }
 }

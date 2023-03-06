@@ -43,7 +43,7 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Dati dal database'),
+        title: const Text('Conti'),
         actions: <Widget>[
           ElevatedButton(
             child: const Text('Mostra Categorie'),
