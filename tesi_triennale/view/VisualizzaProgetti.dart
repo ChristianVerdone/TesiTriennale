@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../readData/GetProgetto.dart';
@@ -19,11 +21,12 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
   void dispose() {
     super.dispose();
   }
-
+  num totProgetti = 0;
   List<String> progetti = [];
 
   @override
   Widget build(BuildContext context) {
+    valuatetot();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -53,12 +56,33 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
   }
 
   Future getProgetti() async{
+    num perc = 0;
     await FirebaseFirestore.instance.collection('progetti').get().then(
             (snapshot) => snapshot.docs.forEach(
                 (progetto) {
               if(!(progetti.contains(progetto.reference.id))){
                 progetti.add(progetto.reference.id);
               }
+              perc = (num.parse(progetto.get('Valore').toString()) / totProgetti) * 100;
+              final json = {
+                'Anno' : progetto.get('Anno'),
+                'Valore' : progetto.get('Valore'),
+                'Costi Diretti' : progetto.get('Costi Diretti'),
+                'Costi Indiretti' : progetto.get('Costi Indiretti'),
+                'isEconomico' : progetto.get('isEconomico'),
+                'Percentuale' : perc.toString()
+              };
+              progetto.reference.set(json);
+            }
+        )
+    );
+  }
+
+  Future<void> valuatetot() async {
+    await FirebaseFirestore.instance.collection('progetti').get().then(
+            (snap) => snap.docs.forEach(
+                (progetto) {
+              totProgetti = totProgetti + num.parse(progetto.get('Valore').toString());
             }
         )
     );

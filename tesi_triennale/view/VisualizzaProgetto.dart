@@ -44,6 +44,7 @@ class VisualizzaProgetto extends StatelessWidget{
                   children: [
                     Text('Anno: ${p.anno}'),
                     Text('Valore: ${p.valore}'),
+                    Text('isEconomico: ${p.isEconomico.toString()}'),
                     const SizedBox(
                       height: 20,
                     ),
@@ -136,16 +137,11 @@ class VisualizzaProgetto extends StatelessWidget{
       'Anno' : p.anno,
       'Valore' : p.valore,
       'Costi Diretti' : p.costiDiretti,
-      'Costi Indiretti' : p.costiIndiretti
+      'Costi Indiretti' : p.costiIndiretti,
+      'isEconomico' : p.isEconomico,
+      'Percentuale' : p.perc
     };
     await FirebaseFirestore.instance.collection('progetti').doc(nomeProgetto).set(json);
-    num totInd = 0;
-    for (var categoria in p.costiIndiretti.keys){
-      await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
-              (cat) {
-                totInd = totInd + num.parse(cat.get('Totale Costi Indiretti'));
-              }
-      );
-    }
+
   }
 }

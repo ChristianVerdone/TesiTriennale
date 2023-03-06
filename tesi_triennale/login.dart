@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget{
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Layout basic',
+      title: 'Software di gestione dei costi',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const Login(),
     );
