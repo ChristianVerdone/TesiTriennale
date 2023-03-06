@@ -10,10 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/readfile.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/readfile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/utils.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetto.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/view/viewcategorie.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/viewcategorie.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,6 +23,13 @@
   </component>
   <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
     <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Dart File" />
+      </list>
+    </option>
   </component>
   <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
     <envs>
@@ -67,7 +74,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15234375&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;dart.settings&quot;,
@@ -150,22 +157,19 @@
       <workItem from="1676992117272" duration="9832000" />
       <workItem from="1677082254235" duration="39043000" />
       <workItem from="1677574214161" duration="6320000" />
+      <workItem from="1677581910439" duration="1054000" />
+      <workItem from="1677583385100" duration="6284000" />
+      <workItem from="1677620690599" duration="2765000" />
+      <workItem from="1677682243956" duration="8935000" />
+      <workItem from="1677764632920" duration="9927000" />
+      <workItem from="1677776954169" duration="1934000" />
+      <workItem from="1677781252570" duration="802000" />
+      <workItem from="1677859153743" duration="15842000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart</url>
-          <line>83</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

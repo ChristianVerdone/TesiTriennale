@@ -10,7 +10,7 @@ class GetConto extends StatelessWidget{
   String idConto;
   List<ShortConto> collection = [];
 
-  GetConto({required this.idConto});
+  GetConto({super.key, required this.idConto});
 
   @override
   Widget build(BuildContext context) {

@@ -16,7 +16,7 @@ class Utils{
 
 
 }
-const platform = const MethodChannel('mychannel');
+const platform = MethodChannel('mychannel');
 
 Future<int?> myDartFunction(int arg) async {
   try {

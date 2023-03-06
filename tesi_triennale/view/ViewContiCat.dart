@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import '../ModifyData.dart';
+import '../model/Conto.dart';
+import '../utils.dart';
 
 class ViewContiCatPage extends StatelessWidget{
 
+  List<Conto> contiM = [];
   String idCat;
   List<String> lines = [];
   ViewContiCatPage({super.key, required this.idCat});
@@ -85,12 +88,10 @@ class ViewContiCatPage extends StatelessWidget{
   }
 
   Future getLinesConto() async {
-    print('get lines');
-    findConti(idCat);
+    await findConti(idCat);
     for (var idC in conti) {
       DocumentReference s = idC as DocumentReference;
-      print(s.id);
-     await FirebaseFirestore.instance.collection('${s.id}/lineeConto').get().then(
+     await FirebaseFirestore.instance.collection('conti/${s.id}/lineeConto').get().then(
               (snapshot) => snapshot.docs.forEach(
                   (linea) {
                 Map<String, dynamic> c = {
@@ -118,6 +119,8 @@ class ViewContiCatPage extends StatelessWidget{
           )
       );
     }
+    contiM = convertMapToObject(csvData);
+    valuateTot();
   }
 
   Future findConti(String idcat) async {
@@ -126,11 +129,31 @@ class ViewContiCatPage extends StatelessWidget{
                 (cat) {
               if(cat.id == idcat){
                 conti = cat.get('Conti') as List<dynamic>;
-                print(conti.first);
               }
             }
         )
     );
-    print('finito find');
+  }
+
+  Future<void> valuateTot() async {
+    num totIn = 0;
+    for(var linea in contiM){
+      if(linea.costiIndiretti == true){
+        totIn = totIn + num.parse(linea.importo);
+      }
+    }
+    DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(idCat);
+    d.get().then(
+            (cat) {
+              if(cat.get('Totale Costi Indiretti') != totIn.toString()){
+                final json = {
+                  'Conti' : cat.get('Conti'),
+                  'Totale Costi Diretti': '0',
+                  'Totale Costi Indiretti': totIn.toString()
+                };
+                d.set(json);
+              }
+            }
+    );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
+import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 
 class ShowFile extends StatelessWidget {
   final List<List<dynamic>> csvData;
