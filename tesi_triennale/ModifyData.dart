@@ -5,7 +5,6 @@ import 'Widget/ScrollableWidget.dart';
 import 'Widget/showTextDialog.dart';
 import 'model/Conto.dart';
 import 'utils.dart';
-import 'view/VisualizzaTabConto.dart';
 
 class ModifyData extends StatefulWidget {
   final List<String> lines;

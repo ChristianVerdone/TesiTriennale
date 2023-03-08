@@ -15,6 +15,7 @@ class VisualizzaConto extends StatefulWidget {
   VisualizzaConto(
       {super.key, required this.idConto, required this.descrizioneConto});
 
+  @override
   State<VisualizzaConto> createState() => _VisualizzaConto();
 }
 
@@ -31,9 +32,6 @@ class _VisualizzaConto extends State<VisualizzaConto> {
   String refresh = '';
   void reload(){
     setState(() {
-      //csvData.clear();
-      //conti.clear();
-      //lines.clear();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => VisualizzaConto(idConto: widget.idConto, descrizioneConto: widget.descrizioneConto),
@@ -141,33 +139,33 @@ class _VisualizzaConto extends State<VisualizzaConto> {
             if (index == 8) {
               switch (conto.costiDiretti) {
                 case true:
-                  return DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(child: Icon(Icons.check)));
                 case false:
-                  return DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(child: Icon(Icons.clear)));
               }
             }
             if (index == 9) {
               switch (conto.costiIndiretti) {
                 case true:
-                  return DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(child: Icon(Icons.check)));
                 case false:
-                  return DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(child: Icon(Icons.clear)));
               }
             }
             if (index == 10) {
               switch (conto.attivitaEconomiche) {
                 case true:
-                  return DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(child: Icon(Icons.check)));
                 case false:
-                  return DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(child: Icon(Icons.clear)));
               }
             }
             if (index == 11) {
               switch (conto.attivitaNonEconomiche) {
                 case true:
-                  return DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(child: Icon(Icons.check)));
                 case false:
-                  return DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(child: Icon(Icons.clear)));
               }
             }
             return DataCell(
