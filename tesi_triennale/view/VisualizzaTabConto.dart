@@ -24,17 +24,35 @@ class _VisualizzaConto extends State<VisualizzaConto> {
   List<String> lines = [];
   List<Map<String, dynamic>> csvData = [];
 
+  final columns = [
+    'Data operazione',
+    'COD',
+    'Descrizione operazione',
+    'Numero documento',
+    'Data documento',
+    'Numero fattura',
+    'Importo',
+    'Contropartita',
+    'Costi diretti',
+    'Costi indiretti',
+    'Attivita economiche',
+    'Attivita non economiche',
+    'Codice progetto'
+  ];
+
   @override
   void initState() {
     super.initState();
   }
 
   String refresh = '';
-  void reload(){
+  void reload() {
     setState(() {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => VisualizzaConto(idConto: widget.idConto, descrizioneConto: widget.descrizioneConto),
+          builder: (context) => VisualizzaConto(
+              idConto: widget.idConto,
+              descrizioneConto: widget.descrizioneConto),
         ),
       );
     });
@@ -61,13 +79,14 @@ class _VisualizzaConto extends State<VisualizzaConto> {
           actions: <Widget>[
             ElevatedButton(
               child: const Text('Modifica'),
-              onPressed: () async{
+              onPressed: () async {
                 String refresh = await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
+                            //FixedHeaderDataTable(columns: columns, rows: rows)));
                             ModifyData(csvData: csvData, lines: lines)));
-                if(refresh == 'refresh'){
+                if (refresh == 'refresh') {
                   reload();
                 }
               },
@@ -82,22 +101,6 @@ class _VisualizzaConto extends State<VisualizzaConto> {
   }
 
   Widget buildDataTable() {
-    final columns = [
-      'Data operazione',
-      'COD',
-      'Descrizione operazione',
-      'Numero documento',
-      'Data documento',
-      'NumeroFattura',
-      'Importo',
-      'Contropartita',
-      'Costi diretti',
-      'Costi indiretti',
-      'Attivita economiche',
-      'Attivita non economiche',
-      'Codice progetto'
-    ];
-
     return DataTable(
       columns: getColumns(columns),
       rows: getRows(conti),
@@ -135,45 +138,78 @@ class _VisualizzaConto extends State<VisualizzaConto> {
 
         return DataRow(
           cells: Utils.modelBuilder(cells, (index, cell) {
-
             if (index == 8) {
               switch (conto.costiDiretti) {
                 case true:
-                  return const DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Costi diretti', child: Icon(Icons.check))));
                 case false:
-                  return const DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Costi diretti', child: Icon(Icons.clear))));
               }
             }
             if (index == 9) {
               switch (conto.costiIndiretti) {
                 case true:
-                  return const DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Costi indiretti', child: Icon(Icons.check))));
                 case false:
-                  return const DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Costi indiretti', child: Icon(Icons.clear))));
               }
             }
             if (index == 10) {
               switch (conto.attivitaEconomiche) {
                 case true:
-                  return const DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Attività economiche', child: Icon(Icons.check))));
                 case false:
-                  return const DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Attività economiche', child: Icon(Icons.clear))));
               }
             }
             if (index == 11) {
               switch (conto.attivitaNonEconomiche) {
                 case true:
-                  return const DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Attività non economiche', child: Icon(Icons.check))));
                 case false:
-                  return const DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Attività non economiche', child: Icon(Icons.clear))));
               }
             }
-            return DataCell(
-              Text('$cell'),
-            );
+            return DataCell(Tooltip(
+              message: testo(index),
+              child: Text(
+                '$cell',
+              ),
+            ));
           }),
         );
       }).toList();
+
+  String testo(int i) {
+    String testo = '';
+    if (i == 0) return columns[i];
+    if (i == 1) return columns[i];
+    if (i == 2) return columns[i];
+    if (i == 3) return columns[i];
+    if (i == 4) return columns[i];
+    if (i == 5) return columns[i];
+    if (i == 6) return columns[i];
+    if (i == 7) return columns[i];
+    if (i == 12) return columns[i];
+
+    return testo;
+  }
 
   Future getLines(String idConto) async {
     await FirebaseFirestore.instance

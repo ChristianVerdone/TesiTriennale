@@ -35,9 +35,17 @@ class Login extends StatefulWidget{
 }
 
 class _loginState extends State<Login>{
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    auth.setLanguageCode('it');
+  }
+
   @override
   Widget build(BuildContext context) => StreamBuilder<User?>(
-    stream: FirebaseAuth.instance.authStateChanges(),
+    stream: auth.authStateChanges(),
       builder: (context, snapshot){
         if(snapshot.hasData){
           //signed in
