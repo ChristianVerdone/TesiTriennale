@@ -11,10 +11,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/utils.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetti.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetti.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/viewcategorie.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/viewcategorie.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaTabConto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaTabConto.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,7 +164,11 @@
       <workItem from="1677764632920" duration="9927000" />
       <workItem from="1677776954169" duration="1934000" />
       <workItem from="1677781252570" duration="802000" />
-      <workItem from="1677859153743" duration="15842000" />
+      <workItem from="1677859153743" duration="39282000" />
+      <workItem from="1678199406704" duration="4709000" />
+      <workItem from="1678290327318" duration="2964000" />
+      <workItem from="1678295272687" duration="7569000" />
+      <workItem from="1678356671679" duration="4507000" />
     </task>
     <servers />
   </component>

@@ -29,7 +29,7 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Dati dal database'),
+        title: const Text('Categorie'),
       ),
       body: Center(
         child: Column(

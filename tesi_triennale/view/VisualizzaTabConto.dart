@@ -45,8 +45,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
     super.initState();
   }
 
-  String refresh = '';
-  void reload() {
+  void reload(){
     setState(() {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

@@ -4,16 +4,15 @@ class Progetto{
   final dynamic valore;
   final Map<String, dynamic> costiDiretti;
   final Map<String, dynamic> costiIndiretti;
+  final bool isEconomico;
+  final dynamic perc;
 
   const Progetto.prog({required this.nomeProgetto,
     required this.anno,
     required this.valore,
     required this.costiDiretti,
-    required this.costiIndiretti
+    required this.costiIndiretti,
+    required this.isEconomico,
+    required this.perc
   });
-
-  const Progetto.empty(this.nomeProgetto,
-      this.anno, this.valore,
-      this.costiDiretti,
-      this.costiIndiretti);
 }
