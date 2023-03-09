@@ -23,6 +23,25 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   List<Map<String, dynamic>> csvData = [];
   List<dynamic> conti = [];
 
+  final columns = [
+    'Codice conto',
+    'Descrizione conto',
+    'Data operazione',
+    'COD',
+    'Descrizione operazione',
+    'Numero documento',
+    'Data documento',
+    'Numero fattura',
+    'Importo',
+    'Saldo',
+    'Contropartita',
+    'Costi diretti',
+    'Costi indiretti',
+    'Attivita economiche',
+    'Attivita non economiche',
+    'CodiceProgetto'
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -143,41 +162,78 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
             if (index == 11) {
               switch (conto.costiDiretti) {
                 case true:
-                  return const DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Costi diretti', child: Icon(Icons.check))));
                 case false:
-                  return const DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Costi diretti', child: Icon(Icons.clear))));
               }
             }
             if (index == 12) {
               switch (conto.costiIndiretti) {
                 case true:
-                  return const DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Costi indiretti', child: Icon(Icons.check))));
                 case false:
-                  return const DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Costi indiretti', child: Icon(Icons.clear))));
               }
             }
             if (index == 13) {
               switch (conto.attivitaEconomiche) {
                 case true:
-                  return const DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Attività economiche', child: Icon(Icons.check))));
                 case false:
-                  return const DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Attività economiche', child: Icon(Icons.clear))));
               }
             }
             if (index == 14) {
               switch (conto.attivitaNonEconomiche) {
                 case true:
-                  return const DataCell(Center(child: Icon(Icons.check)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Attività non economiche', child: Icon(Icons.check))));
                 case false:
-                  return const DataCell(Center(child: Icon(Icons.clear)));
+                  return const DataCell(Center(
+                      child: Tooltip(
+                          message: 'Attività non economiche', child: Icon(Icons.clear))));
               }
             }
-            return DataCell(
-              Text('$cell'),
-            );
+            return DataCell(Tooltip(
+              message: testo(index),
+              child: Text(
+                '$cell',
+              ),
+            ));
           }),
         );
-      }).toList();
+  }).toList();
+
+  String testo(int i) {
+    String testo = '';
+    if (i == 0) return columns[i];
+    if (i == 1) return columns[i];
+    if (i == 2) return columns[i];
+    if (i == 3) return columns[i];
+    if (i == 4) return columns[i];
+    if (i == 5) return columns[i];
+    if (i == 6) return columns[i];
+    if (i == 7) return columns[i];
+    if (i == 8) return columns[i];
+    if (i == 9) return columns[i];
+    if (i == 10) return columns[i];
+    if (i == 15) return columns[i];
+
+    return testo;
+  }
 
   Future getLinesConto() async {
     await findConti(widget.idCat);
