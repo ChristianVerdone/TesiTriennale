@@ -156,7 +156,6 @@ class VisualizzaProgetto extends StatelessWidget{
               }
       );
       p.costiIndiretti.update(categoria, (value) => s.toString());
-      print('tot $categoria: ${p.costiIndiretti[categoria]}');
     }
     final json = {
       'Anno' : p.anno,

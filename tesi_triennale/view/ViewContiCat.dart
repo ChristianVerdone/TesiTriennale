@@ -12,7 +12,7 @@ class ViewContiCatPage extends StatefulWidget {
   String idCat;
 
   ViewContiCatPage({super.key, required this.idCat});
-
+  String getidCat() => idCat;
   @override
   State<ViewContiCatPage> createState() => _ViewContiCatPage();
 }
@@ -227,7 +227,10 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
             }));
   }
 
+  num totIndiretti = 0;
+
   Future<void> valuateTot() async {
+    totIndiretti = 0;
     num totInnE = 0;
     num totInE = 0;
     num totDnE = 0;
@@ -240,6 +243,9 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
         if(linea.attivitaEconomiche){
           totInE = totInE + num.parse(linea.importo);
         }
+        if(!linea.attivitaNonEconomiche && !linea.attivitaEconomiche){
+          totIndiretti = totIndiretti + num.parse(linea.importo);
+        }
       }
       if(linea.costiDiretti){
         if(linea.attivitaNonEconomiche) {
@@ -250,19 +256,16 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
         }
       }
     }
-    DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(idCat);
+    DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(widget.idCat);
     d.get().then(
             (cat) {
                 final json = {
-                  'Conti' : cat.get('Conti'),
                   'Totale Costi Diretti A E' : totDE,
                   'Totale Costi Diretti A nE' : totDnE,
                   'Totale Costi Indiretti A E' : totInE,
                   'Totale Costi Indiretti A nE' : totInnE,
-                  'Percentuale CI A E' : cat.get('Percentuale CI A E'),
-                  'Percentuale CI A nE' : cat.get('Percentuale CI A nE')
                 };
-                d.set(json);
+                d.update(json);
             }
     );
   }
@@ -272,38 +275,66 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     num percCIAnE = 0;
     num totCIAE = 0;
     num totCIAnE = 0;
+    num totCDae = 0;
+    num totCDane = 0;
     await FirebaseFirestore.instance.collection('categorie').get().then(
             (snapshot) => snapshot.docs.forEach(
                     (cat) {
                       totCIAE = totCIAE + num.parse(cat.get('Totale Costi Indiretti A E').toString());
                       totCIAnE = totCIAnE + num.parse(cat.get('Totale Costi Indiretti A nE').toString());
+                      totCDae = totCDae + num.parse(cat.get('Totale Costi Diretti A E').toString());
+                      totCDane = totCDane + num.parse(cat.get('Totale Costi Diretti A nE').toString());
                     }
             )
     );
+    var percCDae = 100 * totCDae / (totCDae + totCDane);
+    var percCDane = 100 * totCDane / (totCDae + totCDane);
     CollectionReference c =  FirebaseFirestore.instance.collection('categorie');
-        c.get().then(
+    c.get().then(
             (snapshot) => snapshot.docs.forEach(
                 (cat) {
-                  var sTotCIAE = cat.get('Totale Costi Indiretti A E').toString();
-                  var sTotCIAnE = cat.get('Totale Costi Indiretti A nE').toString();
-              percCIAE = 0;
-              percCIAnE = 0;
-              percCIAE = (num.parse(sTotCIAE) / totCIAE) * 100;
-              percCIAnE  = (num.parse(sTotCIAnE) / totCIAnE) * 100;
-              var sTotCDAE = cat.get('Totale Costi Diretti A E').toString();
-              var sTotCDAnE = cat.get('Totale Costi Diretti A nE').toString();
-              final json = {
-                'Conti' : cat.get('Conti'),
-                'Totale Costi Diretti A E' : sTotCDAE,
-                'Totale Costi Diretti A nE' : sTotCDAnE,
-                'Totale Costi Indiretti A E' : sTotCIAE,
-                'Totale Costi Indiretti A nE' : sTotCIAnE,
-                'Percentuale CI A E' : percCIAE.toString(),
-                'Percentuale CI A nE' : percCIAnE.toString()
-              };
-              c.doc(cat.id).set(json);
+                  if(cat.id == widget.idCat){
+                    var sTotCIAE = num.parse(cat.get('Totale Costi Indiretti A E').toString());
+                    var sTotCIAnE = num.parse(cat.get('Totale Costi Indiretti A nE').toString());
+                    var sAE = (totIndiretti * percCDae / 100);
+                    var sAnE = (totIndiretti * percCDane / 100);
+                    sTotCIAE = sTotCIAE + sAE;
+                    sTotCIAnE = sTotCIAnE + sAnE;
+                    final json = {
+                      'Totale Costi Indiretti A E' : sTotCIAE.toString(),
+                      'Totale Costi Indiretti A nE' : sTotCIAnE,
+                    };
+                    c.doc(cat.id).update(json);
+                  }
+                }
+            )
+    );
+    totCIAE = 0;
+    totCIAnE = 0;
+    await FirebaseFirestore.instance.collection('categorie').get().then(
+            (snapshot) => snapshot.docs.forEach(
+                (cat) {
+              totCIAE = totCIAE + num.parse(cat.get('Totale Costi Indiretti A E').toString());
+              totCIAnE = totCIAnE + num.parse(cat.get('Totale Costi Indiretti A nE').toString());
             }
         )
+    );
+    c.get().then(
+            (snapshot) => snapshot.docs.forEach(
+              (cat) {
+                var sTotCIAE = cat.get('Totale Costi Indiretti A E').toString();
+                var sTotCIAnE = cat.get('Totale Costi Indiretti A nE').toString();
+                percCIAE = 0;
+                percCIAnE = 0;
+                percCIAE = (num.parse(sTotCIAE)/totCIAE) * 100;
+                percCIAnE = (num.parse(sTotCIAnE)/totCIAnE) * 100;
+                final json = {
+                  'Percentuale CI A E' : percCIAE.toString(),
+                  'Percentuale CI A nE' : percCIAnE.toString()
+                };
+                c.doc(cat.id).update(json);
+              }
+            )
     );
   }
 }

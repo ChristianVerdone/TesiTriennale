@@ -29,7 +29,6 @@ class _VisualizzaConto extends State<VisualizzaConto> {
     super.initState();
   }
 
-  String refresh = '';
   void reload(){
     setState(() {
       Navigator.of(context).pushReplacement(

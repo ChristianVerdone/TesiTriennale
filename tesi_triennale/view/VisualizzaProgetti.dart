@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../readData/GetProgetto.dart';
+import 'insertProgetto.dart';
 
 class VisualizzaProg extends StatefulWidget { //seconda page di caricamento di dati dal database
   const VisualizzaProg({super.key});
@@ -15,6 +16,17 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
   @override
   void initState() {
     super.initState();
+  }
+
+  String refresh = '';
+  void reload(){
+    setState(() {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const VisualizzaProg(),
+        ),
+      );
+    });
   }
 
   @override
@@ -32,6 +44,16 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Progetti'),
+          actions: <Widget>[
+            ElevatedButton(
+                onPressed: () async {
+                  String refresh = await Navigator.push(context, MaterialPageRoute(builder: (context) => insertProgetto()));
+                  if(refresh == 'refresh'){
+                    reload();
+                  }
+                },
+                child: const Icon(Icons.add))
+          ]
       ),
       body: Center(
         child: Column(
