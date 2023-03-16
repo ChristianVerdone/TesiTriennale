@@ -131,7 +131,6 @@ class VisualizzaProgetto extends StatelessWidget{
               }
       );
       p.costiDiretti.update(categoria, (value) => s.toString());
-      print('tot $categoria: ${p.costiDiretti[categoria]}');
     }
     num totCostiIndAE = 0;
     num totCostiIndAnE = 0;

@@ -306,13 +306,8 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
         }
       }
     }
-    print(totIndiretti);
-    if(totDE == 0 && totDnE == 0){
       totInE = totIndiretti * 0.2;
       totInnE = totIndiretti * 0.8;
-    }
-    print(totInE);
-    print(totInnE);
     DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(widget.idCat);
     final json = {
       'Totale Costi Diretti A E' : totDE,
@@ -341,8 +336,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
             }
         )
     );
-    print(totCIAE);
-    print(totCIAnE);
     c.get().then(
             (snapshot) => snapshot.docs.forEach(
               (cat) {
@@ -350,8 +343,8 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
                 var sTotCIAnE = cat.get('Totale Costi Indiretti A nE').toString();
                 percCIAE = 0;
                 percCIAnE = 0;
-                percCIAE = (num.parse(sTotCIAE)/totCIAE) * 100;
-                percCIAnE = (num.parse(sTotCIAnE)/totCIAnE) * 100;
+                percCIAE = 100 * (num.parse(sTotCIAE)/totCIAE);
+                percCIAnE = 100 * (num.parse(sTotCIAnE)/totCIAnE);
                 final json = {
                   'Percentuale CI A E' : percCIAE.toString(),
                   'Percentuale CI A nE' : percCIAnE.toString()
