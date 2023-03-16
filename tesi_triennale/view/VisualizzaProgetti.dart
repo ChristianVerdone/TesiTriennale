@@ -92,14 +92,9 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
                 perc = (num.parse(progetto.get('Valore').toString()) / totProgettinE) * 100;
               }
               final json = {
-                'Anno' : progetto.get('Anno'),
-                'Valore' : progetto.get('Valore'),
-                'Costi Diretti' : progetto.get('Costi Diretti'),
-                'Costi Indiretti' : progetto.get('Costi Indiretti'),
-                'isEconomico' : progetto.get('isEconomico'),
-                'Percentuale' : perc.toString()
+                'Percentuale' : perc.toString(),
               };
-              progetto.reference.set(json);
+              progetto.reference.update(json);
               perc = 0;
             }
         )

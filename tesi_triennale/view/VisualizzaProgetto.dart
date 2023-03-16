@@ -42,9 +42,8 @@ class VisualizzaProgetto extends StatelessWidget{
             return Center(
                 child: Column(
                   children: [
-                    Text('Anno: ${p.anno}'),
-                    Text('Valore: ${p.valore}'),
-                    Text('isEconomico: ${p.isEconomico.toString()}'),
+                    Text('Anno: ${p.anno} Valore: ${p.valore} isEconomico: ${p.isEconomico.toString()} Contributo di competenza: ${p.contributo}',
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -142,7 +141,6 @@ class VisualizzaProgetto extends StatelessWidget{
                     }
             )
     );
-    print(totCostiIndAnE);
     for (var categoria in p.costiIndiretti.keys) {
       s = 0;
       await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
@@ -158,13 +156,9 @@ class VisualizzaProgetto extends StatelessWidget{
       p.costiIndiretti.update(categoria, (value) => s.toString());
     }
     final json = {
-      'Anno' : p.anno,
-      'Valore' : p.valore,
       'Costi Diretti' : p.costiDiretti,
       'Costi Indiretti' : p.costiIndiretti,
-      'isEconomico' : p.isEconomico,
-      'Percentuale' : p.perc
     };
-    await FirebaseFirestore.instance.collection('progetti').doc(nomeProgetto).set(json);
+    await FirebaseFirestore.instance.collection('progetti').doc(nomeProgetto).update(json);
   }
 }
