@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../readData/GetProgetto.dart';
@@ -12,6 +10,7 @@ class VisualizzaProg extends StatefulWidget { //seconda page di caricamento di d
 }
 
 class _VisualizzaProgState extends State<VisualizzaProg> {
+
 
   @override
   void initState() {

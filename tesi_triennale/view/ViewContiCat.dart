@@ -293,12 +293,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     num totDE = 0;
     for(var linea in contiM){
       if(linea.costiIndiretti){
-        if(linea.attivitaNonEconomiche) {
-          totInnE = totInnE + num.parse(linea.importo);
-        }
-        if(linea.attivitaEconomiche){
-          totInE = totInE + num.parse(linea.importo);
-        }
         if(!linea.attivitaNonEconomiche && !linea.attivitaEconomiche){
           totIndiretti = totIndiretti + num.parse(linea.importo);
         }
@@ -312,18 +306,21 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
         }
       }
     }
+    print(totIndiretti);
+    if(totDE == 0 && totDnE == 0){
+      totInE = totIndiretti * 0.2;
+      totInnE = totIndiretti * 0.8;
+    }
+    print(totInE);
+    print(totInnE);
     DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(widget.idCat);
-    d.get().then(
-            (cat) {
-                final json = {
-                  'Totale Costi Diretti A E' : totDE,
-                  'Totale Costi Diretti A nE' : totDnE,
-                  'Totale Costi Indiretti A E' : totInE,
-                  'Totale Costi Indiretti A nE' : totInnE,
-                };
-                d.update(json);
-            }
-    );
+    final json = {
+      'Totale Costi Diretti A E' : totDE,
+      'Totale Costi Diretti A nE' : totDnE,
+      'Totale Costi Indiretti A E' : totInE,
+      'Totale Costi Indiretti A nE' : totInnE,
+    };
+    d.update(json);
   }
 
   Future<void> valuatePerc() async {
@@ -360,7 +357,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
                       'Totale Costi Indiretti A E' : sTotCIAE.toString(),
                       'Totale Costi Indiretti A nE' : sTotCIAnE,
                     };
-                    c.doc(cat.id).update(json);
+                    //c.doc(cat.id).update(json);
                   }
                 }
             )

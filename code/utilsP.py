@@ -1,5 +1,3 @@
-from builtins import set
-import openpyxl
 import xlsxwriter
 
 
@@ -25,47 +23,64 @@ class ItemConto:
         self.attivNonEconom = None
         self.CodProg = None
 
-
     #Getter
     def getCodiceConto(self):
         return self.codConto
+
     def getDescrizioneConto(self):
         return self.descrConto
+
     def getDataOperazione(self):
         return self.dataOp
+
     def getCodice(self):
         return self.COD
+
     def getDescrizioneOperazione(self):
         return self.descrOperazione
+
     def getNumeroDocumento(self):
         return self.numDoc
+
     def getDataDocumento(self):
         return self.dataDoc
+
     def getNumFattura(self):
         return self.numFattura
+
     def getImporto(self):
         return self.importo
+
     def getSaldo(self):
         return self.saldo
+
     def getContropartita(self):
         return self.contropartita
+
     def getCosti_Diretti(self):
         return self.costiDir
+
     def getCosti_Indiretti(self):
         return self.costiIndir
+
     def getAttivita_Economiche(self):
         return self.attivEconom
+
     def getAttivita_Non_Economiche(self):
         return self.attivNonEconom
 
     def setCosti_Diretti(self, bool):
         self.costiDir = bool
+
     def setCosti_Indiretti(self, bool):
         self.costiIndir = bool
+
     def setAttivita_Economiche(self, bool):
         self.attivEconom = bool
+
     def setAttivita_Non_Economiche(self, bool):
         self.attivNonEconom = bool
+
     def getCodiceProgetto(self):
         return self.CodProg
     """
@@ -100,11 +115,11 @@ def writeNewFileseparati(listItem):
     j=0
     temp = None
     for i in range(len(listItem)):
-        if (temp == None):
+        if temp == None:
             temp = listItem[i].getCodiceConto()
             caricamento(outSheet,listItem, i, j)
             j += 1
-        if(listItem[i].getCodiceConto() == temp):
+        if listItem[i].getCodiceConto() == temp:
             caricamento(outSheet, listItem, i, j)
             j += 1
         else:
@@ -114,6 +129,7 @@ def writeNewFileseparati(listItem):
             j += 1
             temp = listItem[i].getCodiceConto()
     outWorkbook.close()
+
 
 def caricamento(outSheet,listItem, i, j):
     outSheet.write(j + 1, 0, listItem[i].getCodiceConto())
@@ -127,6 +143,7 @@ def caricamento(outSheet,listItem, i, j):
     outSheet.write(j + 1, 8, listItem[i].getImporto())
     outSheet.write(j + 1, 9, listItem[i].getSaldo())
     outSheet.write(j + 1, 10, listItem[i].getContropartita())
+
 
 def writeNewFile(listItem):
     outWorkbook = xlsxwriter.Workbook("out.xlsx")
