@@ -330,38 +330,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     num totCIAnE = 0;
     num totCDae = 0;
     num totCDane = 0;
-    await FirebaseFirestore.instance.collection('categorie').get().then(
-            (snapshot) => snapshot.docs.forEach(
-                    (cat) {
-                      totCIAE = totCIAE + num.parse(cat.get('Totale Costi Indiretti A E').toString());
-                      totCIAnE = totCIAnE + num.parse(cat.get('Totale Costi Indiretti A nE').toString());
-                      totCDae = totCDae + num.parse(cat.get('Totale Costi Diretti A E').toString());
-                      totCDane = totCDane + num.parse(cat.get('Totale Costi Diretti A nE').toString());
-                    }
-            )
-    );
-    var percCDae = 100 * totCDae / (totCDae + totCDane);
-    var percCDane = 100 * totCDane / (totCDae + totCDane);
     CollectionReference c =  FirebaseFirestore.instance.collection('categorie');
-    c.get().then(
-            (snapshot) => snapshot.docs.forEach(
-                (cat) {
-                  if(cat.id == widget.idCat){
-                    var sTotCIAE = num.parse(cat.get('Totale Costi Indiretti A E').toString());
-                    var sTotCIAnE = num.parse(cat.get('Totale Costi Indiretti A nE').toString());
-                    var sAE = (totIndiretti * percCDae / 100);
-                    var sAnE = (totIndiretti * percCDane / 100);
-                    sTotCIAE = sTotCIAE + sAE;
-                    sTotCIAnE = sTotCIAnE + sAnE;
-                    final json = {
-                      'Totale Costi Indiretti A E' : sTotCIAE.toString(),
-                      'Totale Costi Indiretti A nE' : sTotCIAnE,
-                    };
-                    //c.doc(cat.id).update(json);
-                  }
-                }
-            )
-    );
     totCIAE = 0;
     totCIAnE = 0;
     await FirebaseFirestore.instance.collection('categorie').get().then(
@@ -372,6 +341,8 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
             }
         )
     );
+    print(totCIAE);
+    print(totCIAnE);
     c.get().then(
             (snapshot) => snapshot.docs.forEach(
               (cat) {

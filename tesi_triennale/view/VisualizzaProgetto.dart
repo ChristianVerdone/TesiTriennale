@@ -143,6 +143,7 @@ class VisualizzaProgetto extends StatelessWidget{
                     }
             )
     );
+    print(totCostiIndAnE);
     for (var categoria in p.costiIndiretti.keys) {
       s = 0;
       await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(

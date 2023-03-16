@@ -11,11 +11,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/utilsP.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/utilsP.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/main.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetti.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetti.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/insertProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/insertProgetto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetto.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,7 +172,7 @@
       <workItem from="1678879364291" duration="595000" />
       <workItem from="1678891009624" duration="2805000" />
       <workItem from="1678911822679" duration="1088000" />
-      <workItem from="1678976212827" duration="6824000" />
+      <workItem from="1678976212827" duration="8829000" />
     </task>
     <servers />
   </component>
