@@ -21,7 +21,7 @@ class GetProgetto extends StatelessWidget{
                   await progettiRef.doc(idProg).get().then((value) {
                     p = Progetto.prog(nomeProgetto: idProg, anno: value.get('Anno'), valore: value.get('Valore'),
                         costiDiretti: value.get('Costi Diretti'), costiIndiretti: value.get('Costi Indiretti'),
-                        isEconomico: value.get('isEconomico'), perc: value.get('Percentuale'));
+                        isEconomico: value.get('isEconomico'), perc: value.get('Percentuale'), contributo: value.get('Contributo Competenza'));
                   });
                   Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaProgetto(p: p)));
                 },

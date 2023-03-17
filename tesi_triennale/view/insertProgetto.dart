@@ -16,6 +16,8 @@ class insertProgetto extends StatelessWidget{
     'Servizi' : '0'
   };
   String percentuale = '0';
+  String contributo = '';
+
   insertProgetto({super.key});
 
   @override
@@ -37,16 +39,16 @@ class insertProgetto extends StatelessWidget{
           actions: <Widget>[
             ElevatedButton(
                 onPressed: () async {
-                  CollectionReference c = FirebaseFirestore.instance.collection('progetti');
                   final json = {
                     'Anno' : anno,
                     'Valore' : valore,
                     'Costi Diretti' : staticMap,
                     'Costi Indiretti' : staticMap,
                     'isEconomico' : isEconomico,
-                    'Percentuale' : percentuale
+                    'Percentuale' : percentuale,
+                    'Contributo Competenza' : contributo
                   };
-                  c.doc(nomeProgetto).set(json);
+                  setFunction(json);
                   Navigator.pop(context, 'refresh');
                 },
                 child: const Text('Salva'))
@@ -62,13 +64,13 @@ class insertProgetto extends StatelessWidget{
                 hintText: 'Inserisci il nome Progetto',
               ),
               validator: (value) {
-                if (value != null) {
+                if (value == null) {
                   return 'Per favore inserisci il nome';
                 }
                 return null;
               },
-              onSaved: (value) {
-               nomeProgetto = value!;
+              onFieldSubmitted: (value){
+                nomeProgetto = value!;
               },
             ),
             const SizedBox(
@@ -82,12 +84,12 @@ class insertProgetto extends StatelessWidget{
                 FilteringTextInputFormatter.digitsOnly
               ],
               validator: (value) {
-                if (value != null) {
+                if (value == null) {
                   return 'Per favore inserisci anno';
                 }
                 return null;
               },
-              onSaved: (value) {
+              onFieldSubmitted: (value) {
                 anno = value!;
               },
             ),
@@ -96,18 +98,38 @@ class insertProgetto extends StatelessWidget{
             ),
             TextFormField(
               decoration: const InputDecoration(
-                hintText: 'Inserisci il Valore: €',
+                hintText: 'Inserisci il Valore: euro',
               ),
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
               ],
               validator: (value) {
-                if (value != null) {
+                if (value == null) {
                   return 'Per favore inserisci il Valore';
                 }
                 return null;
               },
-              onSaved: (value) {
+              onFieldSubmitted: (value) {
+                valore = value!;
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              decoration: const InputDecoration(
+                hintText: 'Inserisci il Contributo di Competenza dello stesso anno: euro',
+              ),
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.allow(RegExp(r'^\-?\d*$'))
+              ],
+              validator: (value) {
+                if (value == null) {
+                  return 'Per favore inserisci il Valore';
+                }
+                return null;
+              },
+              onFieldSubmitted: (value) {
                 valore = value!;
               },
             ),
@@ -128,6 +150,10 @@ class insertProgetto extends StatelessWidget{
           ],
         )
     );
+  }
+
+  Future<void> setFunction(Map<String, Object> json) async {
+    await FirebaseFirestore.instance.collection('progetti').doc(nomeProgetto).set(json);
   }
 
 }

@@ -100,12 +100,25 @@ class _homePageState extends State<HomePage>{
     }
   }
   Future<void> handleTimeout2() async {
-    csvData = await processCsvFromFile();
+    if(i==1) {
+      csvData = await processCsvFromFile();
+    }
   }
 
   void handleTimeout3(){
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ShowFile(csvData: csvData!)));
+    if(i==1) {
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ShowFile(csvData: csvData!)));
+    }
+    else{
+        setState(() {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const HomePage(),
+            ),
+          );
+        });
+    }
   }
 
   late int i;
@@ -179,10 +192,10 @@ class _homePageState extends State<HomePage>{
           'Importo' : line[8],
           'Saldo' : line[9],
           'Contropartita' : line[10],
-          'Costi Diretti' : line[11],
-          'Costi Indiretti' : line[12],
-          'Attività economiche' : line[13],
-          'Attività non economiche' : line[14],
+          'Costi Diretti' : false,
+          'Costi Indiretti' : true,
+          'Attività economiche' : false,
+          'Attività non economiche' : false,
           'Codice progetto' : line[15]
         };
         String iS = i.toString();
