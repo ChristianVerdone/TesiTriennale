@@ -28,6 +28,15 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
       appBar: AppBar(
         centerTitle: true,
         title: const Text('Categorie'),
+        actions: <Widget>[
+          SizedBox(width: 16),
+          IconButton(
+              onPressed: (){
+                Navigator.popUntil(context, ModalRoute.withName('/'));
+              },
+              icon: const Icon(Icons.home)),
+          SizedBox(width: 16),
+        ],
       ),
       body: Center(
         child: Column(
@@ -35,23 +44,23 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
           children: [
             Expanded(
                 child: FutureBuilder(
-                  future: getCat(),
+                    future: getCat(),
                     builder: (context, snapshot){
-                    return ListView.builder(
-                        itemCount: cat.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: TextButton(
-                                onPressed: () {
-                                  Navigator.push(context, MaterialPageRoute(
-                                      builder: (context) => ViewContiCatPage(idCat: cat.elementAt(index))));
-                                },
-                                child: Text(cat.elementAt(index))
-                            ),
-                          );
-                        }
-                    );
-                  }
+                      return ListView.builder(
+                          itemCount: cat.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: TextButton(
+                                  onPressed: () {
+                                    Navigator.push(context, MaterialPageRoute(
+                                        builder: (context) => ViewContiCatPage(idCat: cat.elementAt(index))));
+                                  },
+                                  child: Text(cat.elementAt(index))
+                              ),
+                            );
+                          }
+                      );
+                    }
                 )
             )],
         ),
@@ -61,7 +70,7 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
 
   getCat() async {
     await FirebaseFirestore.instance.collection('categorie').get().then(
-        (value) => value.docs.forEach((categ) => cat.add(categ.id))
+            (value) => value.docs.forEach((categ) => cat.add(categ.id))
     );
   }
 }

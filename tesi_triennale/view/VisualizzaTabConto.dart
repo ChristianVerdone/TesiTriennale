@@ -65,7 +65,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
             statusBarColor: Colors.white,
             // Status bar brightness (optional)
             statusBarIconBrightness:
-                Brightness.dark, // For Android (dark icons)
+            Brightness.dark, // For Android (dark icons)
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
           centerTitle: true,
@@ -82,13 +82,34 @@ class _VisualizzaConto extends State<VisualizzaConto> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            //FixedHeaderDataTable(columns: columns, rows: rows)));
-                            ModifyData(csvData: csvData, lines: lines)));
+                        //FixedHeaderDataTable(columns: columns, rows: rows)));
+                        ModifyData(csvData: csvData, lines: lines)));
                 if (refresh == 'refresh') {
                   reload();
                 }
               },
             ),
+            SizedBox(width: 16),
+            FloatingActionButton(
+              onPressed: () {
+                Printing.layoutPdf(onLayout: (pageFormat) {
+                  final doc = pw.Document();
+                  doc.addPage(pw.Page(
+                    build: (context) => Center(
+                      child: Text('Hello, World!'),
+                    ),
+                  ));
+                  return doc.save();
+                });
+              },
+              child: Icon(Icons.print),
+            ),
+            IconButton(
+                onPressed: (){
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                },
+                icon: const Icon(Icons.home)),
+            SizedBox(width: 16),
           ],
         ),
         body: FutureBuilder(
@@ -109,90 +130,90 @@ class _VisualizzaConto extends State<VisualizzaConto> {
     return columns
         .map(
           (item) => DataColumn(
-            label: Text(
-              item.toString(),
-            ),
-          ),
-        )
+        label: Text(
+          item.toString(),
+        ),
+      ),
+    )
         .toList();
   }
 
   List<DataRow> getRows(List<Conto> conti) => conti.map((Conto conto) {
-        final cells = [
-          conto.dataOperazione,
-          conto.COD,
-          conto.descrizioneOperazione,
-          conto.numeroDocumento,
-          conto.dataDocumento,
-          conto.numeroFattura,
-          conto.importo,
-          conto.contropartita,
-          conto.costiDiretti,
-          conto.costiIndiretti,
-          conto.attivitaEconomiche,
-          conto.attivitaNonEconomiche,
-          conto.codiceProgetto
-        ];
+    final cells = [
+      conto.dataOperazione,
+      conto.COD,
+      conto.descrizioneOperazione,
+      conto.numeroDocumento,
+      conto.dataDocumento,
+      conto.numeroFattura,
+      conto.importo,
+      conto.contropartita,
+      conto.costiDiretti,
+      conto.costiIndiretti,
+      conto.attivitaEconomiche,
+      conto.attivitaNonEconomiche,
+      conto.codiceProgetto
+    ];
 
-        return DataRow(
-          cells: Utils.modelBuilder(cells, (index, cell) {
-            if (index == 8) {
-              switch (conto.costiDiretti) {
-                case true:
-                  return const DataCell(Center(
-                      child: Tooltip(
-                          message: 'Costi diretti', child: Icon(Icons.check))));
-                case false:
-                  return const DataCell(Center(
-                      child: Tooltip(
-                          message: 'Costi diretti', child: Icon(Icons.clear))));
-              }
-            }
-            if (index == 9) {
-              switch (conto.costiIndiretti) {
-                case true:
-                  return const DataCell(Center(
-                      child: Tooltip(
-                          message: 'Costi indiretti', child: Icon(Icons.check))));
-                case false:
-                  return const DataCell(Center(
-                      child: Tooltip(
-                          message: 'Costi indiretti', child: Icon(Icons.clear))));
-              }
-            }
-            if (index == 10) {
-              switch (conto.attivitaEconomiche) {
-                case true:
-                  return const DataCell(Center(
-                      child: Tooltip(
-                          message: 'Attività economiche', child: Icon(Icons.check))));
-                case false:
-                  return const DataCell(Center(
-                      child: Tooltip(
-                          message: 'Attività economiche', child: Icon(Icons.clear))));
-              }
-            }
-            if (index == 11) {
-              switch (conto.attivitaNonEconomiche) {
-                case true:
-                  return const DataCell(Center(
-                      child: Tooltip(
-                          message: 'Attività non economiche', child: Icon(Icons.check))));
-                case false:
-                  return const DataCell(Center(
-                      child: Tooltip(
-                          message: 'Attività non economiche', child: Icon(Icons.clear))));
-              }
-            }
-            return DataCell(Tooltip(
-              message: testo(index),
-              child: Text(
-                '$cell',
-              ),
-            ));
-          }),
-        );
-      }).toList();
+    return DataRow(
+      cells: Utils.modelBuilder(cells, (index, cell) {
+        if (index == 8) {
+          switch (conto.costiDiretti) {
+            case true:
+              return const DataCell(Center(
+                  child: Tooltip(
+                      message: 'Costi diretti', child: Icon(Icons.check))));
+            case false:
+              return const DataCell(Center(
+                  child: Tooltip(
+                      message: 'Costi diretti', child: Icon(Icons.clear))));
+          }
+        }
+        if (index == 9) {
+          switch (conto.costiIndiretti) {
+            case true:
+              return const DataCell(Center(
+                  child: Tooltip(
+                      message: 'Costi indiretti', child: Icon(Icons.check))));
+            case false:
+              return const DataCell(Center(
+                  child: Tooltip(
+                      message: 'Costi indiretti', child: Icon(Icons.clear))));
+          }
+        }
+        if (index == 10) {
+          switch (conto.attivitaEconomiche) {
+            case true:
+              return const DataCell(Center(
+                  child: Tooltip(
+                      message: 'Attività economiche', child: Icon(Icons.check))));
+            case false:
+              return const DataCell(Center(
+                  child: Tooltip(
+                      message: 'Attività economiche', child: Icon(Icons.clear))));
+          }
+        }
+        if (index == 11) {
+          switch (conto.attivitaNonEconomiche) {
+            case true:
+              return const DataCell(Center(
+                  child: Tooltip(
+                      message: 'Attività non economiche', child: Icon(Icons.check))));
+            case false:
+              return const DataCell(Center(
+                  child: Tooltip(
+                      message: 'Attività non economiche', child: Icon(Icons.clear))));
+          }
+        }
+        return DataCell(Tooltip(
+          message: testo(index),
+          child: Text(
+            '$cell',
+          ),
+        ));
+      }),
+    );
+  }).toList();
 
   String testo(int i) {
     String testo = '';
@@ -214,29 +235,29 @@ class _VisualizzaConto extends State<VisualizzaConto> {
         .collection('conti/$idConto/lineeConto')
         .get()
         .then((snapshot) => snapshot.docs.forEach((linea) {
-              //print(linea.reference);
-              Map<String, dynamic> c = {
-                'Codice Conto': linea.get('Codice Conto'),
-                'Descrizione conto': linea.get('Descrizione conto'),
-                'Data operazione': linea.get('Data operazione'),
-                'COD': linea.get('COD'),
-                'Descrizione operazione': linea.get('Descrizione operazione'),
-                'Numero documento': linea.get('Numero documento'),
-                'Data documento': linea.get('Data documento'),
-                'Numero Fattura': linea.get('Numero Fattura'),
-                'Importo': linea.get('Importo'),
-                'Saldo': linea.get('Saldo'),
-                'Contropartita': linea.get('Contropartita'),
-                'Costi Diretti': linea.get('Costi Diretti'),
-                'Costi Indiretti': linea.get('Costi Indiretti'),
-                'Attività economiche': linea.get('Attività economiche'),
-                'Attività non economiche': linea.get('Attività non economiche'),
-                'Codice progetto': linea.get('Codice progetto')
-              };
-              lines.add(linea.id);
-              csvData.add(c);
-              //print(csvData);
-            }));
+      //print(linea.reference);
+      Map<String, dynamic> c = {
+        'Codice Conto': linea.get('Codice Conto'),
+        'Descrizione conto': linea.get('Descrizione conto'),
+        'Data operazione': linea.get('Data operazione'),
+        'COD': linea.get('COD'),
+        'Descrizione operazione': linea.get('Descrizione operazione'),
+        'Numero documento': linea.get('Numero documento'),
+        'Data documento': linea.get('Data documento'),
+        'Numero Fattura': linea.get('Numero Fattura'),
+        'Importo': linea.get('Importo'),
+        'Saldo': linea.get('Saldo'),
+        'Contropartita': linea.get('Contropartita'),
+        'Costi Diretti': linea.get('Costi Diretti'),
+        'Costi Indiretti': linea.get('Costi Indiretti'),
+        'Attività economiche': linea.get('Attività economiche'),
+        'Attività non economiche': linea.get('Attività non economiche'),
+        'Codice progetto': linea.get('Codice progetto')
+      };
+      lines.add(linea.id);
+      csvData.add(c);
+      //print(csvData);
+    }));
     conti = convertMapToObject(csvData);
   }
 }

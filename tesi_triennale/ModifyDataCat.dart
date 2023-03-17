@@ -6,19 +6,21 @@ import 'Widget/showTextDialog.dart';
 import 'model/Conto.dart';
 import 'utils.dart';
 
-class ModifyData extends StatefulWidget {
+class ModifyDataCat extends StatefulWidget {
   final List<String> lines;
   final List<Map<String, dynamic>> csvData;
 
-  const ModifyData({super.key, required this.csvData, required this.lines});
+  const ModifyDataCat({super.key, required this.csvData, required this.lines});
   @override
-  State<ModifyData> createState() => _ModifyDataState();
+  State<ModifyDataCat> createState() => _ModifyDataCatState();
 }
 
-class _ModifyDataState extends State<ModifyData> {
+class _ModifyDataCatState extends State<ModifyDataCat> {
   List<Conto> conti = [];
 
   final columns = [
+    'Codice conto',
+    'Descrizione conto',
     'Data operazione',
     'COD',
     'Descrizione operazione',
@@ -26,12 +28,13 @@ class _ModifyDataState extends State<ModifyData> {
     'Data documento',
     'Numero fattura',
     'Importo',
+    'Saldo',
     'Contropartita',
     'Costi diretti',
     'Costi indiretti',
     'Attivita economiche',
     'Attivita non economiche',
-    'Codice progetto'
+    'CodiceProgetto'
   ];
 
   @override
@@ -52,7 +55,7 @@ class _ModifyDataState extends State<ModifyData> {
         statusBarBrightness: Brightness.light, // For iOS (dark icons)
       ),
       centerTitle: true,
-      title:  Text(conti[0].codiceConto,
+      title: const Text('Modifica',
           style: TextStyle(
             color: Colors.white,
             fontSize: 20.0,
@@ -129,6 +132,8 @@ class _ModifyDataState extends State<ModifyData> {
 
   List<DataRow> getRows(List<Conto> conti) => conti.map((Conto conto) {
     final cells = [
+      conto.codiceConto,
+      conto.descrizioneConto,
       conto.dataOperazione,
       conto.COD,
       conto.descrizioneOperazione,
@@ -136,6 +141,7 @@ class _ModifyDataState extends State<ModifyData> {
       conto.dataDocumento,
       conto.numeroFattura,
       conto.importo,
+      conto.saldo,
       conto.contropartita,
       conto.costiDiretti,
       conto.costiIndiretti,
@@ -144,29 +150,10 @@ class _ModifyDataState extends State<ModifyData> {
       conto.codiceProgetto
     ];
 
-    /*
-    child: Checkbox(
-                key: GlobalKey(),
-                value: conto.costiDiretti,
-                onChanged: (bool? value) {
-                  if(conto.costiDiretti == true) {
-                    editCostiDiretti(conto, value);
-                  }
-                  if (conto.costiIndiretti == true && conto.costiDiretti == false) {
-                    editCostiIndiretti(conto, false);
-                    editCostiDiretti(conto, value);
-                  }
-                  if(conto.costiDiretti == false && conto.costiIndiretti == false) {
-                    editCostiDiretti(conto, value);
-                  }
-                },
-              ),
-     */
-
     return DataRow(
       cells: Utils.modelBuilder(cells, (index, cell) {
         switch (index) {
-          case 8:
+          case 11:
             return DataCell(Center(
               child: Tooltip(
                 message: 'Costi diretti',
@@ -190,7 +177,7 @@ class _ModifyDataState extends State<ModifyData> {
                 ),
               ),
             ));
-          case 9:
+          case 12:
             return DataCell(Center(
               child: Tooltip(
                   message: 'Costi indiretti',
@@ -208,7 +195,7 @@ class _ModifyDataState extends State<ModifyData> {
                     },
                   )),
             ));
-          case 10:
+          case 13:
             return DataCell(Center(
               child: Tooltip(
                   message: 'Attività economiche',
@@ -226,7 +213,7 @@ class _ModifyDataState extends State<ModifyData> {
                     },
                   )),
             ));
-          case 11:
+          case 14:
             return DataCell(Center(
               child: Tooltip(
                   message: 'Attività non economiche',
@@ -244,8 +231,8 @@ class _ModifyDataState extends State<ModifyData> {
                     },
                   )),
             ));
-          case 12:
-            final showEditIcon = index == 12;
+          case 15:
+            final showEditIcon = index == 15;
             return DataCell(
                 Tooltip(
                   message: 'Codice progetto',
@@ -275,7 +262,10 @@ class _ModifyDataState extends State<ModifyData> {
     if (i == 5) return columns[i];
     if (i == 6) return columns[i];
     if (i == 7) return columns[i];
-    if (i == 12) return columns[i];
+    if (i == 8) return columns[i];
+    if (i == 9) return columns[i];
+    if (i == 10) return columns[i];
+    if (i == 15) return columns[i];
 
     return testo;
   }
