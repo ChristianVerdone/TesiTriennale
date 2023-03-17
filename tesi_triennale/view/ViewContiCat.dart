@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
 import '../ModifyData.dart';
+import '../ModifyDataCat.dart';
 import '../Widget/ScrollableWidget.dart';
 import '../model/Conto.dart';
 import '../utils.dart';
@@ -84,12 +85,19 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            ModifyData(csvData: csvData, lines: lines)));
+                            ModifyDataCat(csvData: csvData, lines: lines)));
                 if (refresh == 'refresh') {
                   reload();
                 }
               },
             ),
+            SizedBox(width: 16),
+            IconButton(
+                onPressed: (){
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                },
+                icon: const Icon(Icons.home)),
+            SizedBox(width: 16),
           ],
         ),
         body: FutureBuilder(
@@ -100,25 +108,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   Widget buildDataTable() {
-    final columns = [
-      'CodiceConto',
-      'DescrizioneConto',
-      'DataOperazione',
-      'COD',
-      'DescrizioneOperazione',
-      'NumeroDocumento',
-      'DataDocumento',
-      'NumeroFattura',
-      'Importo',
-      'Saldo',
-      'Contropartita',
-      'CostiDiretti',
-      'CostiIndiretti',
-      'AttivitaEconomiche',
-      'AttivitaNonEconomiche',
-      'CodiceProgetto'
-    ];
-
     return DataTable(
       columns: getColumns(columns),
       rows: getRows(contiM),
