@@ -121,7 +121,7 @@ class insertProgetto extends StatelessWidget{
                 hintText: 'Inserisci il Contributo di Competenza dello stesso anno: euro',
               ),
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(RegExp(r'^\-?\d*$'))
+                FilteringTextInputFormatter.allow(RegExp(r'^\-?\d*\.?\d*$'))
               ],
               validator: (value) {
                 if (value == null) {

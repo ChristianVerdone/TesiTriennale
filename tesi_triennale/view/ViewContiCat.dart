@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
-import '../ModifyData.dart';
 import '../ModifyDataCat.dart';
 import '../Widget/ScrollableWidget.dart';
 import '../model/Conto.dart';
@@ -91,13 +88,13 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
                 }
               },
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             IconButton(
                 onPressed: (){
                   Navigator.popUntil(context, ModalRoute.withName('/'));
                 },
                 icon: const Icon(Icons.home)),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
           ],
         ),
         body: FutureBuilder(
@@ -280,6 +277,9 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     num totInE = 0;
     num totDnE = 0;
     num totDE = 0;
+    num totD = 0;
+    num percDE = 0;
+    num percDnE = 0;
     for(var linea in contiM){
       if(linea.costiIndiretti){
         if(!linea.attivitaNonEconomiche && !linea.attivitaEconomiche){
@@ -295,8 +295,17 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
         }
       }
     }
+    if(totDnE != 0 && totDE != 0){
+      totD = totDE + totDnE;
+      percDE = 100 * totDE/totD;
+      percDnE = 100 * totDnE/totD;
+      totInE = totIndiretti * percDE / 100;
+      totInnE = totIndiretti * percDnE / 100;
+    }
+    else{
       totInE = totIndiretti * 0.2;
       totInnE = totIndiretti * 0.8;
+    }
     DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(widget.idCat);
     final json = {
       'Totale Costi Diretti A E' : totDE,
@@ -312,8 +321,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     num percCIAnE = 0;
     num totCIAE = 0;
     num totCIAnE = 0;
-    num totCDae = 0;
-    num totCDane = 0;
     CollectionReference c =  FirebaseFirestore.instance.collection('categorie');
     totCIAE = 0;
     totCIAnE = 0;
