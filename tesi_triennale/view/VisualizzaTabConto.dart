@@ -92,15 +92,15 @@ class _VisualizzaConto extends State<VisualizzaConto> {
             SizedBox(width: 16),
             FloatingActionButton(
               onPressed: () {
-                Printing.layoutPdf(onLayout: (pageFormat) {
-                  final doc = pw.Document();
-                  doc.addPage(pw.Page(
-                    build: (context) => Center(
-                      child: Text('Hello, World!'),
-                    ),
-                  ));
-                  return doc.save();
-                });
+               // Printing.layoutPdf(onLayout: (pageFormat) {
+               //   final doc = pw.Document();
+               //   doc.addPage(pw.Page(
+                //    build: (context) => Center(
+                 //     child: Text('Hello, World!'),
+               //     ),
+               //   ));
+              //    return doc.save();
+              //  });
               },
               child: Icon(Icons.print),
             ),

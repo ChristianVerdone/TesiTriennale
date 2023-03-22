@@ -21,6 +21,27 @@ class VisualizzaProgetto extends StatelessWidget{
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
           actions: <Widget>[
+            const SizedBox(width: 16),
+            FloatingActionButton(
+              onPressed: () {
+                // Printing.layoutPdf(onLayout: (pageFormat) {
+                //   final doc = pw.Document();
+                //   doc.addPage(pw.Page(
+                //    build: (context) => Center(
+                //     child: Text('Hello, World!'),
+                //     ),
+                //   ));
+                //    return doc.save();
+                //  });
+              },
+              child: Icon(Icons.print),
+            ),
+            IconButton(
+                onPressed: (){
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                },
+                icon: const Icon(Icons.home)),
+            const SizedBox(width: 16),
             ElevatedButton(
                 onPressed: () async {
                   await evaluate(p.nomeProgetto);
@@ -129,7 +150,7 @@ class VisualizzaProgetto extends StatelessWidget{
                 }
               }
       );
-      p.costiDiretti.update(categoria, (value) => s.toString());
+      p.costiDiretti.update(categoria, (value) => s.toStringAsFixed(2));
     }
     num totCostiIndAE = 0;
     num totCostiIndAnE = 0;
@@ -153,7 +174,7 @@ class VisualizzaProgetto extends StatelessWidget{
                 }
               }
       );
-      p.costiIndiretti.update(categoria, (value) => s.toString());
+      p.costiIndiretti.update(categoria, (value) => s.toStringAsFixed(2));
     }
     final json = {
       'Costi Diretti' : p.costiDiretti,

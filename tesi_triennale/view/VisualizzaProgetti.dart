@@ -51,7 +51,29 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
                     reload();
                   }
                 },
-                child: const Icon(Icons.add))
+                child: const Icon(Icons.add)
+            ),
+            const SizedBox(width: 16),
+            FloatingActionButton(
+              onPressed: () {
+                // Printing.layoutPdf(onLayout: (pageFormat) {
+                //   final doc = pw.Document();
+                //   doc.addPage(pw.Page(
+                //    build: (context) => Center(
+                //     child: Text('Hello, World!'),
+                //     ),
+                //   ));
+                //    return doc.save();
+                //  });
+              },
+              child: Icon(Icons.print),
+            ),
+            IconButton(
+                onPressed: (){
+                  Navigator.popUntil(context, ModalRoute.withName('/'));
+                },
+                icon: const Icon(Icons.home)),
+            const SizedBox(width: 16),
           ]
       ),
       body: Center(
@@ -92,7 +114,7 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
                 perc = (num.parse(progetto.get('Valore').toString()) / totProgettinE) * 100;
               }
               final json = {
-                'Percentuale' : perc.toString(),
+                'Percentuale' : perc.toStringAsFixed(2),
               };
               progetto.reference.update(json);
               perc = 0;

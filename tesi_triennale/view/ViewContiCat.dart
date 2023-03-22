@@ -342,8 +342,8 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
                 percCIAE = 100 * (num.parse(sTotCIAE)/totCIAE);
                 percCIAnE = 100 * (num.parse(sTotCIAnE)/totCIAnE);
                 final json = {
-                  'Percentuale CI A E' : percCIAE.toString(),
-                  'Percentuale CI A nE' : percCIAnE.toString()
+                  'Percentuale CI A E' : percCIAE.toStringAsFixed(2),
+                  'Percentuale CI A nE' : percCIAnE.toStringAsFixed(2)
                 };
                 c.doc(cat.id).update(json);
               }
