@@ -22,8 +22,8 @@ class VisualizzaProgetto extends StatelessWidget{
           ),
           actions: <Widget>[
             const SizedBox(width: 16),
-            FloatingActionButton(
-              onPressed: () {
+           // FloatingActionButton(
+            //  onPressed: () {
                 // Printing.layoutPdf(onLayout: (pageFormat) {
                 //   final doc = pw.Document();
                 //   doc.addPage(pw.Page(
@@ -33,9 +33,9 @@ class VisualizzaProgetto extends StatelessWidget{
                 //   ));
                 //    return doc.save();
                 //  });
-              },
-              child: Icon(Icons.print),
-            ),
+           //   },
+            //  child: Icon(Icons.print),
+           // ),
             IconButton(
                 onPressed: (){
                   Navigator.popUntil(context, ModalRoute.withName('/'));

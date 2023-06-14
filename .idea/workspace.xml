@@ -10,11 +10,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ViewContiCat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugins.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/model/Conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/model/Conto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/view/ShowDatabase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/ShowDatabase.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetti.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetti.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaProgetto.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaTabConto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/view/VisualizzaTabConto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugins.cmake" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +78,8 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Christian&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/TesiTriennale/tesi_triennale&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -77,7 +90,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15234375&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.ide.settings.new.ui&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -120,11 +133,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python.readfile" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -182,6 +190,15 @@
       <workItem from="1679420392728" duration="4000" />
       <workItem from="1679497506447" duration="2289000" />
       <workItem from="1679500981070" duration="1369000" />
+      <workItem from="1679590133624" duration="2028000" />
+      <workItem from="1685953197685" duration="768000" />
+      <workItem from="1685955250994" duration="355000" />
+      <workItem from="1685955637466" duration="37000" />
+      <workItem from="1685955687906" duration="96000" />
+      <workItem from="1685955817327" duration="19894000" />
+      <workItem from="1686324076688" duration="1342000" />
+      <workItem from="1686326521021" duration="19708000" />
+      <workItem from="1686734587737" duration="4847000" />
     </task>
     <servers />
   </component>

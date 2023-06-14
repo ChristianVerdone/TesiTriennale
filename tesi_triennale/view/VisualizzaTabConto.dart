@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show SystemUiOverlayStyle;
+import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import '../ModifyData.dart';
 import '../Widget/ScrollableWidget.dart';
 import '../model/Conto.dart';
 import '../utils.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class VisualizzaConto extends StatefulWidget {
   String idConto;
@@ -34,8 +37,8 @@ class _VisualizzaConto extends State<VisualizzaConto> {
     'Contropartita',
     'Costi diretti',
     'Costi indiretti',
-    'Attivita economiche',
-    'Attivita non economiche',
+    'Attività economiche',
+    'Attività non economiche',
     'Codice progetto'
   ];
 
@@ -92,15 +95,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
             SizedBox(width: 16),
             FloatingActionButton(
               onPressed: () {
-               // Printing.layoutPdf(onLayout: (pageFormat) {
-               //   final doc = pw.Document();
-               //   doc.addPage(pw.Page(
-                //    build: (context) => Center(
-                 //     child: Text('Hello, World!'),
-               //     ),
-               //   ));
-              //    return doc.save();
-              //  });
+                Printing.layoutPdf(onLayout: (format) => _generatePdfContent());
               },
               child: Icon(Icons.print),
             ),
@@ -117,6 +112,61 @@ class _VisualizzaConto extends State<VisualizzaConto> {
             builder: (context, snapshot) {
               return ScrollableWidget(child: buildDataTable());
             }));
+  }
+
+  FutureOr<Uint8List> _generatePdfContent() async{
+    final pdf = pw.Document();
+    var tableData = _makeListConti();
+    final table = pw.TableHelper.fromTextArray(
+      data: tableData,
+      cellAlignment: pw.Alignment.centerLeft,
+      cellPadding: const pw.EdgeInsets.all(5),
+      headerDecoration: const pw.BoxDecoration(
+        borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
+        color: PdfColors.grey,
+      ),
+      cellStyle: pw.TextStyle(fontSize: 8,font: pw.Font.timesItalic()),
+      headerStyle: pw.TextStyle(fontSize: 8, font: pw.Font.timesItalic())
+    );
+
+    pdf.addPage(pw.Page(
+      orientation: pw.PageOrientation.landscape,
+      margin: const pw.EdgeInsets.all(3),
+      build: (pw.Context context) {
+        return pw.Container(
+          child: table,
+        );
+      },
+    ));
+
+    return pdf.save();
+  }
+
+  List<List<dynamic>> _makeListConti() {
+    List<List<dynamic>> list = [];
+    final columns = [
+      'Codice Conto',
+      'Descrizione conto',
+      'Data operazione',
+      'COD',
+      'Descrizione operazione',
+      'Numero documento',
+      'Data documento',
+      'Numero fattura',
+      'Importo',
+      'Saldo',
+      'Contropartita',
+      'Costi diretti',
+      'Costi indiretti',
+      'Attività economiche',
+      'Attività non economiche',
+      'Codice progetto'
+    ];
+    list.add(columns);
+    for (var conto in conti) {
+      list.add(conto.toList());
+    }
+    return list;
   }
 
   Widget buildDataTable() {

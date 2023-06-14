@@ -7,10 +7,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
+import 'model/Conto.dart';
+import 'utils.dart';
 import 'view/ShowDatabase.dart';
 import 'view/ShowFile.dart';
 import 'view/VisualizzaProgetti.dart';
-
 
 class HomePage extends StatefulWidget{
   const HomePage({Key? key}) : super(key: key);
@@ -19,6 +20,8 @@ class HomePage extends StatefulWidget{
 }
 
 class _homePageState extends State<HomePage>{
+  List<Conto> conti = [];
+  List<Map<String, dynamic>> csvData2 = [];
   List<List<dynamic>>? csvData;
   String? filePath;
   Timer scheduleTimeout([int milliseconds = 10000]) =>
@@ -27,6 +30,7 @@ class _homePageState extends State<HomePage>{
       Timer(Duration(milliseconds: milliseconds), handleTimeout2);
   Timer scheduleTimeout3([int milliseconds = 10000]) =>
       Timer(Duration(milliseconds: milliseconds), handleTimeout3);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +38,7 @@ class _homePageState extends State<HomePage>{
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
-              onPressed: () => FirebaseAuth.instance.signOut() )
+              onPressed: () => FirebaseAuth.instance.signOut() ),
           ],
           systemOverlayStyle: const SystemUiOverlayStyle(
             // Status bar color
@@ -71,7 +75,7 @@ class _homePageState extends State<HomePage>{
               child: ElevatedButton(
                 child: const Text('Visualizza Conti'),
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaPage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaPage()));
                 },
               ),
             ),
@@ -94,11 +98,47 @@ class _homePageState extends State<HomePage>{
     );
   }
 
+  Future getAll() async{
+    await FirebaseFirestore.instance.collection('conti/').get().then((snapshot) => snapshot.docs.forEach((conto) {
+      getLines(conto.id);
+    }));
+    conti = convertMapToObject(csvData2);
+  }
+
+  Future getLines(String idConto) async {
+    await FirebaseFirestore.instance
+        .collection('conti/$idConto/lineeConto')
+        .get()
+        .then((snapshot) => snapshot.docs.forEach((linea) {
+      //print(linea.reference);
+      Map<String, dynamic> c = {
+        'Codice Conto': linea.get('Codice Conto'),
+        'Descrizione conto': linea.get('Descrizione conto'),
+        'Data operazione': linea.get('Data operazione'),
+        'COD': linea.get('COD'),
+        'Descrizione operazione': linea.get('Descrizione operazione'),
+        'Numero documento': linea.get('Numero documento'),
+        'Data documento': linea.get('Data documento'),
+        'Numero Fattura': linea.get('Numero Fattura'),
+        'Importo': linea.get('Importo'),
+        'Saldo': linea.get('Saldo'),
+        'Contropartita': linea.get('Contropartita'),
+        'Costi Diretti': linea.get('Costi Diretti'),
+        'Costi Indiretti': linea.get('Costi Indiretti'),
+        'Attività economiche': linea.get('Attività economiche'),
+        'Attività non economiche': linea.get('Attività non economiche'),
+        'Codice progetto': linea.get('Codice progetto')
+      };
+      csvData2.add(c);
+    }));
+  }
+
   Future<void> handleTimeout() async {  // callback function
     if(i == 1) {
       fetchHello();
     }
   }
+
   Future<void> handleTimeout2() async {
     if(i==1) {
       csvData = await processCsvFromFile();

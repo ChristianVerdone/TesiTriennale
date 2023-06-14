@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../readData/GetProgetto.dart';
-import 'insertProgetto.dart';
+import '../view/insertProgetto.dart';
 
 class VisualizzaProg extends StatefulWidget { //seconda page di caricamento di dati dal database
   const VisualizzaProg({super.key});
@@ -46,7 +46,7 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
           actions: <Widget>[
             ElevatedButton(
                 onPressed: () async {
-                  String refresh = await Navigator.push(context, MaterialPageRoute(builder: (context) => insertProgetto()));
+                  String refresh = await Navigator.push(context, MaterialPageRoute(builder: (context) => insertProgetto() ));
                   if(refresh == 'refresh'){
                     reload();
                   }

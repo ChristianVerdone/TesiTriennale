@@ -145,4 +145,10 @@ class Conto {
   }
 
  */
+
+   List<dynamic> toList(){
+    return [codiceConto, descrizioneConto, dataOperazione, COD, descrizioneOperazione,
+      numeroDocumento, dataDocumento, numeroFattura, importo, saldo, contropartita, costiDiretti,
+      costiIndiretti, attivitaEconomiche, attivitaNonEconomiche, codiceProgetto];
+  }
 }
