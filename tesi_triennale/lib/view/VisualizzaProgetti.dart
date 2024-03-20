@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../readData/GetProgetto.dart';
-import '../view/insertProgetto.dart';
+import 'insert_progetto.dart';
 
 class VisualizzaProg extends StatefulWidget { //seconda page di caricamento di dati dal database
   const VisualizzaProg({super.key});
@@ -66,7 +66,7 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
                 //    return doc.save();
                 //  });
               },
-              child: Icon(Icons.print),
+              child: const Icon(Icons.print),
             ),
             IconButton(
                 onPressed: (){

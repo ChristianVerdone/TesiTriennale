@@ -1,7 +1,11 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../ModifyProgetto.dart';
 import '../model/Progetto.dart';
+import 'package:printing/printing.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class VisualizzaProgetto extends StatelessWidget{
 
@@ -22,20 +26,28 @@ class VisualizzaProgetto extends StatelessWidget{
           ),
           actions: <Widget>[
             const SizedBox(width: 16),
-           // FloatingActionButton(
-            //  onPressed: () {
-                // Printing.layoutPdf(onLayout: (pageFormat) {
-                //   final doc = pw.Document();
-                //   doc.addPage(pw.Page(
-                //    build: (context) => Center(
-                //     child: Text('Hello, World!'),
-                //     ),
-                //   ));
-                //    return doc.save();
-                //  });
-           //   },
-            //  child: Icon(Icons.print),
-           // ),
+            IconButton(
+                onPressed: (){
+
+                },
+                icon: const Icon(Icons.remove)),
+            ElevatedButton(
+              child: const Text('Modifica'),
+              onPressed: () async {
+                String refresh = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                        //FixedHeaderDataTable(columns: columns, rows: rows)));
+                        ModifyProgetto(progetto: p)));
+              },
+            ),
+            IconButton(
+                onPressed: () {
+                  Printing.layoutPdf(onLayout: (format) => _generatePdfContent());
+                },
+                icon: const Icon(Icons.print),
+            ),
             IconButton(
                 onPressed: (){
                   Navigator.popUntil(context, ModalRoute.withName('/'));
@@ -63,7 +75,8 @@ class VisualizzaProgetto extends StatelessWidget{
             return Center(
                 child: Column(
                   children: [
-                    Text('Anno: ${p.anno} Valore: ${p.valore} isEconomico: ${p.isEconomico.toString()} Contributo di competenza: ${p.contributo}',
+                    Text('| Anno: ${p.anno} | Valore: ${p.valore} | isEconomico: ${p.isEconomico.toString()} | '
+                        'Contributo di competenza: ${p.contributo} |',
                     ),
                     const SizedBox(
                       height: 20,
@@ -112,6 +125,53 @@ class VisualizzaProgetto extends StatelessWidget{
           },
         )
     );
+  }
+
+  FutureOr<Uint8List> _generatePdfContent() async{
+    final pdf = pw.Document();
+
+    pdf.addPage(pw.Page(
+      margin: const pw.EdgeInsets.all(3),
+      build: (pw.Context context) {
+        return pw.Center(
+           child: pw.Column(
+          children: [
+            pw.Text('${p.nomeProgetto}'),
+            pw.Text('Anno: ${p.anno} | Valore: ${p.valore} | isEconomico: ${p.isEconomico.toString()} | '
+                'Contributo di competenza: ${p.contributo}',
+            ),
+            pw.SizedBox(
+              height: 10
+            ),
+            pw.Text('Costi Diretti:', textAlign: pw.TextAlign.left),
+            pw.ListView.builder(
+                  itemCount: p.costiDiretti.length,
+                  itemBuilder: (context, index){
+                    return pw.Container(
+                      child: pw.Text('${p.costiDiretti.keys.elementAt(index)}: ${p.costiDiretti.values.elementAt(index)}'),
+                    );
+                  }
+              ),
+            pw.Text('Totale:${n = getSum(p.costiDiretti.values)}'),
+            pw.SizedBox(
+              height: 10,
+            ),
+            pw.Text('Costi Indiretti:', textAlign: pw.TextAlign.left),
+            pw.ListView.builder(
+                    itemCount: p.costiIndiretti.length,
+                    itemBuilder: (context, index){
+                      return pw.Container(
+                        child: pw.Text('${p.costiIndiretti.keys.elementAt(index)}: ${p.costiIndiretti.values.elementAt(index)}'),
+                      );
+                    }
+                ),
+            pw.Text('Totale:${n = getSum(p.costiIndiretti.values)}'),
+          ],
+        ));
+      },
+    ));
+
+    return pdf.save();
   }
 
    getCat() async {

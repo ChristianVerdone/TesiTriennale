@@ -21,7 +21,7 @@ class GetConto extends StatelessWidget{
                 onPressed: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaConto(idConto: idConto, descrizioneConto: descrizione)));
                 },
-                child: Text(idConto+'    -    '+descrizione)
+                child: Text('$idConto    -    $descrizione')
             );
           }
           return const Center(

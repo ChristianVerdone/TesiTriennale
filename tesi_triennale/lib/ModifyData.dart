@@ -53,7 +53,7 @@ class _ModifyDataState extends State<ModifyData> {
       ),
       centerTitle: true,
       title:  Text(conti[0].codiceConto,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 20.0,
           )),
@@ -96,13 +96,13 @@ class _ModifyDataState extends State<ModifyData> {
             Navigator.pop(context, 'refresh');
           },
         ),
-        SizedBox(width: 16),
+        const SizedBox(width: 16),
         IconButton(
             onPressed: (){
               Navigator.popUntil(context, ModalRoute.withName('/'));
             },
             icon: const Icon(Icons.home)),
-        SizedBox(width: 16),
+        const SizedBox(width: 16),
       ],
     ),
     body: ScrollableWidget(child: buildDataTable()),
@@ -198,13 +198,15 @@ class _ModifyDataState extends State<ModifyData> {
                     key: GlobalKey(),
                     value: conto.costiIndiretti,
                     onChanged: (bool? value) {
-                      if (conto.costiIndiretti == true)
+                      if (conto.costiIndiretti == true) {
                         editCostiIndiretti(conto, value);
+                      }
                       if (conto.costiDiretti == true) {
                         editCostiDiretti(conto, false);
                         editCostiIndiretti(conto, value);
-                      } else
+                      } else {
                         editCostiIndiretti(conto, value);
+                      }
                     },
                   )),
             ));
@@ -216,13 +218,15 @@ class _ModifyDataState extends State<ModifyData> {
                     key: GlobalKey(),
                     value: conto.attivitaEconomiche,
                     onChanged: (bool? value) {
-                      if (conto.attivitaEconomiche == true)
+                      if (conto.attivitaEconomiche == true) {
                         editAttivitaEconomiche(conto, value);
+                      }
                       if (conto.attivitaNonEconomiche == true) {
                         editAttivitaNonEconomiche(conto, false);
                         editAttivitaEconomiche(conto, value);
-                      } else
+                      } else {
                         editAttivitaEconomiche(conto, value);
+                      }
                     },
                   )),
             ));
@@ -234,13 +238,15 @@ class _ModifyDataState extends State<ModifyData> {
                     key: GlobalKey(),
                     value: conto.attivitaNonEconomiche,
                     onChanged: (bool? value) {
-                      if (conto.attivitaNonEconomiche == true)
+                      if (conto.attivitaNonEconomiche == true) {
                         editAttivitaNonEconomiche(conto, value);
+                      }
                       if (conto.attivitaEconomiche == true) {
                         editAttivitaEconomiche(conto, false);
                         editAttivitaNonEconomiche(conto, value);
-                      } else
+                      } else {
                         editAttivitaNonEconomiche(conto, value);
+                      }
                     },
                   )),
             ));

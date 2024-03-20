@@ -29,13 +29,13 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
         centerTitle: true,
         title: const Text('Categorie'),
         actions: <Widget>[
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           IconButton(
               onPressed: (){
                 Navigator.popUntil(context, ModalRoute.withName('/'));
               },
               icon: const Icon(Icons.home)),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
         ],
       ),
       body: Center(

@@ -9,9 +9,9 @@ import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
 import 'model/Conto.dart';
 import 'utils.dart';
-import 'view/ShowDatabase.dart';
 import 'view/ShowFile.dart';
 import 'view/VisualizzaProgetti.dart';
+import 'view/show_database.dart';
 
 class HomePage extends StatefulWidget{
   const HomePage({Key? key}) : super(key: key);
@@ -42,14 +42,14 @@ class _homePageState extends State<HomePage>{
           ],
           systemOverlayStyle: const SystemUiOverlayStyle(
             // Status bar color
-            statusBarColor: Colors.white,
+            statusBarColor: Colors.blue,
             // Status bar brightness (optional)
             statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
           centerTitle: true,
           title: const Text("Home",
-              style: TextStyle(color: Colors.white,
+              style: TextStyle(color: Colors.black,
                 fontSize: 20.0, )
           ),
         ),
@@ -167,7 +167,7 @@ class _homePageState extends State<HomePage>{
     Map<String, String> headers = {
       "Content-Type": "text/plain",
     };
-    final response = await http.get(Uri.parse('http://127.0.0.1:5000/ciao'), headers: headers);
+    final response = await http.get(Uri.parse('http://127.0.0.1:5000/'), headers: headers);
     if(response.statusCode == 200){
       setState(() {});
     }

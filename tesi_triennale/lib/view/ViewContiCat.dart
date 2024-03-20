@@ -303,8 +303,8 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
       totInnE = totIndiretti * percDnE / 100;
     }
     else{
-      totInE = totIndiretti * 0.2;
-      totInnE = totIndiretti * 0.8;
+      totInE = totIndiretti * 0.1;
+      totInnE = totIndiretti * 0.9;
     }
     DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(widget.idCat);
     final json = {

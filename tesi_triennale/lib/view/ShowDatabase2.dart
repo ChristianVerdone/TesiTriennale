@@ -58,7 +58,6 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
 
   fullcsv(List<dynamic> contiref) async {
     for (var ref in contiRef) {
-      print(ref);
       getLines(ref);
     }
     conti = convertMapToObject(csvData2);
@@ -89,7 +88,6 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
         'Attività non economiche': linea.get('Attività non economiche'),
         'Codice progetto': linea.get('Codice progetto')
       };
-      print(c);
       csvData2.add(c);
       print(csvData2);
     }));
@@ -149,38 +147,77 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
   FutureOr<Uint8List> _generatePdfContent() async{
     final pdf = pw.Document();
     var tableData = _makeListConti();
-    final table = pw.TableHelper.fromTextArray(
-      data: tableData,
-      cellAlignment: pw.Alignment.centerLeft,
-      cellPadding: const pw.EdgeInsets.all(5),
-      headerDecoration: const pw.BoxDecoration(
-        borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
-        color: PdfColors.grey,
-      ),
-      cellAlignments: {
-        0: pw.Alignment.centerLeft,
-        1: pw.Alignment.center,
-        2: pw.Alignment.centerRight,
-      },
-    );
 
-    pdf.addPage(pw.Page(
-      build: (pw.Context context) {
-        return pw.Container(
-          child: table,
-        );
-      },
-    ));
+    final contentPerPage = 15; // Numero massimo di righe per pagina
+    final totalPageCount = (tableData.length / contentPerPage).ceil();
+
+    for (int pageIndex = 0; pageIndex < totalPageCount; pageIndex++) {
+      final startIndex = pageIndex * contentPerPage;
+      final endIndex = (pageIndex + 1) * contentPerPage;
+
+      final currentPageData = tableData.sublist(startIndex,
+          endIndex > tableData.length ? tableData.length : endIndex);
+
+      final table = pw.TableHelper.fromTextArray(
+          data: currentPageData,
+          cellAlignment: pw.Alignment.centerLeft,
+          cellPadding: const pw.EdgeInsets.all(5),
+          headerDecoration: const pw.BoxDecoration(
+            borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
+            color: PdfColors.grey,
+          ),
+          cellStyle: pw.TextStyle(fontSize: 8,font: pw.Font.courier()),
+          headerStyle: pw.TextStyle(fontSize: 8, font: pw.Font.courier())
+      );
+
+      pw.Page p = pw.Page(
+        orientation: pw.PageOrientation.landscape,
+        margin: const pw.EdgeInsets.all(3),
+        build: (pw.Context context) {
+          return pw.Center(
+              child: pw.Container(
+                child: table,
+              )
+          );
+        },
+      );
+
+      pdf.addPage(p, index: pageIndex,);
+    }
 
     return pdf.save();
   }
 
   List<List<dynamic>> _makeListConti() {
     List<List<dynamic>> list = [];
-    
+    final columns = [
+      'Codice Conto',
+      'Descrizione conto',
+      'Data operazione',
+      'COD',
+      'Descrizione operazione',
+      'Numero documento',
+      'Data documento',
+      'Numero fattura',
+      'Importo',
+      'Saldo',
+      'Contropartita',
+      'Costi diretti',
+      'Costi indiretti',
+      'Attività economiche',
+      'Attività non economiche',
+      'Codice progetto'
+    ];
     list.add(columns);
+    int i = 0;
     for (var conto in conti) {
-      list.add(conto.toList());
+      if(i/14 >= 1){
+        list.add(conto.toList());
+        list.add(columns);
+      }
+      else{
+        list.add(conto.toList());
+      }
     }
     return list;
   }

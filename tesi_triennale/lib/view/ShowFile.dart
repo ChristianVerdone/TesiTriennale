@@ -22,7 +22,7 @@ class ShowFile extends StatelessWidget {
         ),
         centerTitle: true,
         title: const Text("Visualizzazione file caricato",
-            style: TextStyle(color: Colors.white,
+            style: TextStyle(color: Colors.black,
               fontSize: 20.0, )
         ),
       ),

@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -70,7 +71,7 @@ class insertProgetto extends StatelessWidget{
                 return null;
               },
               onFieldSubmitted: (value){
-                nomeProgetto = value!;
+                nomeProgetto = value;
               },
             ),
             const SizedBox(
@@ -90,7 +91,7 @@ class insertProgetto extends StatelessWidget{
                 return null;
               },
               onFieldSubmitted: (value) {
-                anno = value!;
+                anno = value;
               },
             ),
             const SizedBox(
@@ -110,7 +111,7 @@ class insertProgetto extends StatelessWidget{
                 return null;
               },
               onFieldSubmitted: (value) {
-                valore = value!;
+                valore = value;
               },
             ),
             const SizedBox(
@@ -120,9 +121,7 @@ class insertProgetto extends StatelessWidget{
               decoration: const InputDecoration(
                 hintText: 'Inserisci il Contributo di Competenza dello stesso anno: euro',
               ),
-              inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.allow(RegExp(r'^\-?\d*\.?\d*$'))
-              ],
+              inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*$'))],
               validator: (value) {
                 if (value == null) {
                   return 'Per favore inserisci il Valore';
@@ -130,7 +129,7 @@ class insertProgetto extends StatelessWidget{
                 return null;
               },
               onFieldSubmitted: (value) {
-                valore = value!;
+                valore = value;
               },
             ),
             const SizedBox(

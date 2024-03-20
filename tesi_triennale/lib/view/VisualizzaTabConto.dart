@@ -72,7 +72,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
             statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
           centerTitle: true,
-          title: Text(widget.idConto + '   ' + widget.descrizioneConto,
+          title: Text('${widget.idConto}   ${widget.descrizioneConto}',
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 20.0,
@@ -92,19 +92,19 @@ class _VisualizzaConto extends State<VisualizzaConto> {
                 }
               },
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             FloatingActionButton(
               onPressed: () {
                 Printing.layoutPdf(onLayout: (format) => _generatePdfContent());
               },
-              child: Icon(Icons.print),
+              child: const Icon(Icons.print),
             ),
             IconButton(
                 onPressed: (){
                   Navigator.popUntil(context, ModalRoute.withName('/'));
                 },
                 icon: const Icon(Icons.home)),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
           ],
         ),
         body: FutureBuilder(
@@ -117,27 +117,43 @@ class _VisualizzaConto extends State<VisualizzaConto> {
   FutureOr<Uint8List> _generatePdfContent() async{
     final pdf = pw.Document();
     var tableData = _makeListConti();
-    final table = pw.TableHelper.fromTextArray(
-      data: tableData,
-      cellAlignment: pw.Alignment.centerLeft,
-      cellPadding: const pw.EdgeInsets.all(5),
-      headerDecoration: const pw.BoxDecoration(
-        borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
-        color: PdfColors.grey,
-      ),
-      cellStyle: pw.TextStyle(fontSize: 8,font: pw.Font.timesItalic()),
-      headerStyle: pw.TextStyle(fontSize: 8, font: pw.Font.timesItalic())
-    );
 
-    pdf.addPage(pw.Page(
-      orientation: pw.PageOrientation.landscape,
-      margin: const pw.EdgeInsets.all(3),
-      build: (pw.Context context) {
-        return pw.Container(
-          child: table,
-        );
-      },
-    ));
+    const contentPerPage = 15; // Numero massimo di righe per pagina
+    final totalPageCount = (tableData.length / contentPerPage).ceil();
+
+    for (int pageIndex = 0; pageIndex < totalPageCount; pageIndex++) {
+      final startIndex = pageIndex * contentPerPage;
+      final endIndex = (pageIndex + 1) * contentPerPage;
+
+      final currentPageData = tableData.sublist(startIndex,
+          endIndex > tableData.length ? tableData.length : endIndex);
+
+      final table = pw.TableHelper.fromTextArray(
+        data: currentPageData,
+          cellAlignment: pw.Alignment.centerLeft,
+          cellPadding: const pw.EdgeInsets.all(5),
+          headerDecoration: const pw.BoxDecoration(
+            borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
+            color: PdfColors.grey,
+          ),
+          cellStyle: pw.TextStyle(fontSize: 8,font: pw.Font.timesItalic()),
+          headerStyle: pw.TextStyle(fontSize: 8, font: pw.Font.timesItalic())
+      );
+
+      pw.Page p = pw.Page(
+        orientation: pw.PageOrientation.landscape,
+        margin: const pw.EdgeInsets.all(3),
+        build: (pw.Context context) {
+          return pw.Center(
+              child: pw.Container(
+                  child: table,
+              )
+          );
+        },
+      );
+
+      pdf.addPage(p, index: pageIndex,);
+    }
 
     return pdf.save();
   }
@@ -163,8 +179,15 @@ class _VisualizzaConto extends State<VisualizzaConto> {
       'Codice progetto'
     ];
     list.add(columns);
+    int i = 0;
     for (var conto in conti) {
-      list.add(conto.toList());
+      if(i/14 >= 1){
+        list.add(conto.toList());
+        list.add(columns);
+      }
+      else{
+        list.add(conto.toList());
+      }
     }
     return list;
   }
