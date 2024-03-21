@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../model/Progetto.dart';
-import '../view/VisualizzaProgetto.dart';
+import 'Progetto.dart';
+import 'VisualizzaProgetto.dart';
 
 class GetProgetto extends StatelessWidget{
 

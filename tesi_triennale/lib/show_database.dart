@@ -1,11 +1,12 @@
 
+import 'dart:async';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
-import '../model/Conto.dart';
-import '../readData/getConto.dart';
-import '../utils.dart';
+import 'Conto.dart';
+import 'getConto.dart';
+import 'utils.dart';
 import 'viewcategorie.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;

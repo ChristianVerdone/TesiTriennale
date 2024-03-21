@@ -7,11 +7,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
-import 'model/Conto.dart';
+import 'Conto.dart';
 import 'utils.dart';
-import 'view/ShowFile.dart';
-import 'view/VisualizzaProgetti.dart';
-import 'view/show_database.dart';
+import 'ShowFile.dart';
+import 'VisualizzaProgetti.dart';
+import 'show_database.dart';
 
 class HomePage extends StatefulWidget{
   const HomePage({Key? key}) : super(key: key);

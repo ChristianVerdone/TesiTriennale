@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../view/VisualizzaTabConto.dart';
+import 'VisualizzaTabConto.dart';
 
 class GetConto extends StatelessWidget{
 

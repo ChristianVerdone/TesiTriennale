@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'model/Conto.dart';
+import 'Conto.dart';
 
 class Utils{
   static List<T> modelBuilder<M, T>(

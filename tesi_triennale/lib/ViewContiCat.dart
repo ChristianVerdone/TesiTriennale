@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
-import '../ModifyDataCat.dart';
-import '../Widget/ScrollableWidget.dart';
-import '../model/Conto.dart';
-import '../utils.dart';
+import 'ModifyDataCat.dart';
+import 'ScrollableWidget.dart';
+import 'Conto.dart';
+import 'utils.dart';
 
 class ViewContiCatPage extends StatefulWidget {
   String idCat;

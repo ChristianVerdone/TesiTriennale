@@ -1,21 +1,21 @@
+import openpyxl
 import xlsxwriter
 
 
 class ItemConto:
-    def __init__(self, codConto, descrConto, dataOp, COD, descrOperazione, numDoc,
-                dataDoc, numFattura, importo, saldo, contropartita):
+    def __init__(self, codConto, descrConto, dataOp, descrOperazione, numDoc, dataDoc, importo, contropartita):
         self.codConto = codConto
         self.descrConto = descrConto
         self.dataOp = dataOp
-        self.COD = COD
+        # self.COD = COD
         self.descrOperazione = descrOperazione
         self.numDoc = numDoc
         self.dataDoc = dataDoc
-        self.numFattura = numFattura
-        #self.dare = dare
-        #self.avere = avere
+        # self.numFattura = numFattura
+        # self.dare = dare
+        # self.avere = avere
         self.importo = importo
-        self.saldo = saldo
+        # self.saldo = saldo
         self.contropartita = contropartita
         self.costiDir = None
         self.costiIndir = None
@@ -23,7 +23,7 @@ class ItemConto:
         self.attivNonEconom = None
         self.CodProg = None
 
-    #Getter
+    # Getter
     def getCodiceConto(self):
         return self.codConto
 
@@ -83,12 +83,17 @@ class ItemConto:
 
     def getCodiceProgetto(self):
         return self.CodProg
+
     """
     def getAvere(self):
         return self.avere
     def getDare(self):
         return self.dare
     """
+
+
+def toList(obj):
+    return [attr for attr in dir(obj) if not callable(getattr(obj, attr)) and not attr.startswith("__")]
 
 
 def writeNewFileseparati(listItem):
@@ -112,12 +117,12 @@ def writeNewFileseparati(listItem):
     outSheet.write(0, 14, "Attività non economiche")
     outSheet.write(0, 15, "Codice progetto")
 
-    j=0
+    j = 0
     temp = None
     for i in range(len(listItem)):
-        if temp == None:
+        if temp is None:
             temp = listItem[i].getCodiceConto()
-            caricamento(outSheet,listItem, i, j)
+            caricamento(outSheet, listItem, i, j)
             j += 1
         if listItem[i].getCodiceConto() == temp:
             caricamento(outSheet, listItem, i, j)
@@ -131,7 +136,7 @@ def writeNewFileseparati(listItem):
     outWorkbook.close()
 
 
-def caricamento(outSheet,listItem, i, j):
+def caricamento(outSheet, listItem, i, j):
     outSheet.write(j + 1, 0, listItem[i].getCodiceConto())
     outSheet.write(j + 1, 1, listItem[i].getDescrizioneConto())
     outSheet.write(j + 1, 2, listItem[i].getDataOperazione())
@@ -146,36 +151,45 @@ def caricamento(outSheet,listItem, i, j):
 
 
 def writeNewFile(listItem):
-    outWorkbook = xlsxwriter.Workbook("out.xlsx")
+    outWorkbook = openpyxl.load_workbook("out.xlsx")
+    # outWorkbook = xlsxwriter.Workbook("out.xlsx")
 
-    outSheet = outWorkbook.add_worksheet()
+    outSheet = outWorkbook.active
 
+    colonne = ["Codice Conto", "Descrizione conto", "Data operazione", "Descrizione operazione", "Numero documento", "Data documento", "Importo", "Contropartita",
+            "Costi Diretti", "Costi Indiretti", "Attività economiche", "Attività non economiche", "Codice progetto"]
+    '''
     outSheet.write(0, 0, "Codice Conto")
     outSheet.write(0, 1, "Descrizione conto")
     outSheet.write(0, 2, "Data operazione")
-    outSheet.write(0, 3, "COD")
-    outSheet.write(0, 4, "Descrizione operazione")
-    outSheet.write(0, 5, "Numero documento")
-    outSheet.write(0, 6, "Data documento")
-    outSheet.write(0, 7, "Numero Fattura")
-    outSheet.write(0, 8, "Importo")
-    outSheet.write(0, 9, "Saldo")
-    outSheet.write(0, 10, "Contropartita")
-    outSheet.write(0, 11, "Costi Diretti")
-    outSheet.write(0, 12, "Costi Indiretti")
-    outSheet.write(0, 13, "Attività economiche")
-    outSheet.write(0, 14, "Attività non economiche")
-    outSheet.write(0, 15, "Codice progetto")
-
+    # outSheet.write(0, 3, "COD")
+    outSheet.write(0, 3, "Descrizione operazione")
+    outSheet.write(0, 4, "Numero documento")
+    outSheet.write(0, 5, "Data documento")
+    # outSheet.write(0, 7, "Numero Fattura")
+    outSheet.write(0, 6, "Importo")
+    # outSheet.write(0, 9, "Saldo")
+    outSheet.write(0, 7, "Contropartita")
+    outSheet.write(0, 8, "Costi Diretti")
+    outSheet.write(0, 9, "Costi Indiretti")
+    outSheet.write(0, 10, "Attività economiche")
+    outSheet.write(0, 11, "Attività non economiche")
+    outSheet.write(0, 12, "Codice progetto")
+    '''
+    outSheet.append(colonne)
+    '''
     for i in range(len(listItem)):
         outSheet.write(i + 1, 0, listItem[i].getCodiceConto())
         outSheet.write(i + 1, 1, listItem[i].getDescrizioneConto())
         outSheet.write(i + 1, 2, listItem[i].getDataOperazione())
-        outSheet.write(i + 1, 3, listItem[i].getCodice())
-        outSheet.write(i + 1, 4, listItem[i].getDescrizioneOperazione())
-        outSheet.write(i + 1, 5, listItem[i].getNumeroDocumento())
-        outSheet.write(i + 1, 6, listItem[i].getDataDocumento())
-        outSheet.write(i + 1, 7, listItem[i].getNumFattura())
-        outSheet.write(i + 1, 8, listItem[i].getImporto())
-        outSheet.write(i + 1, 9, listItem[i].getSaldo())
-        outSheet.write(i + 1, 10, listItem[i].getContropartita())
+        # outSheet.write(i + 1, 3, listItem[i].getCodice())
+        outSheet.write(i + 1, 3, listItem[i].getDescrizioneOperazione())
+        outSheet.write(i + 1, 4, listItem[i].getNumeroDocumento())
+        outSheet.write(i + 1, 5, listItem[i].getDataDocumento())
+        # outSheet.write(i + 1, 7, listItem[i].getNumFattura())
+        outSheet.write(i + 1, 6, listItem[i].getImporto())
+        # outSheet.write(i + 1, 9, listItem[i].getSaldo())
+        outSheet.write(i + 1, 7, listItem[i].getContropartita())
+    '''
+    for item in listItem:
+        outSheet.append(toList(item))

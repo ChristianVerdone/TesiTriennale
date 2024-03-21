@@ -30,7 +30,7 @@ def process():
             if sheet.cell_value(n, 0).__contains__('DATA'):
                 continue
         row = sheet.row_values(n, 0)
-        item = createItemConto(codConto, desConto, row, wb)
+        item = createItemConto(codConto, desConto, row)
         listItem.append(item)
 
     utilsP.writeNewFile(listItem)

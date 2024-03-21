@@ -2,7 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'model/Progetto.dart';
+import 'Progetto.dart';
 
 class ModifyProgetto extends StatefulWidget{
   final Progetto progetto;

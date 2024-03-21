@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'Widget/ScrollableWidget.dart';
-import 'Widget/showTextDialog.dart';
-import 'model/Conto.dart';
+import 'ScrollableWidget.dart';
+import 'showTextDialog.dart';
+import 'Conto.dart';
 import 'utils.dart';
 
 class ModifyData extends StatefulWidget {

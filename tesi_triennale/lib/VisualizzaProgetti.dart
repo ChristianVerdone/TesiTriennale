@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../readData/GetProgetto.dart';
-import 'insert_progetto.dart';
+import 'GetProgetto.dart';
+import 'insertProgetto.dart';
 
 class VisualizzaProg extends StatefulWidget { //seconda page di caricamento di dati dal database
   const VisualizzaProg({super.key});
