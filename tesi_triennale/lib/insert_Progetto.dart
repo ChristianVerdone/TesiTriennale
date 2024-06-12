@@ -1,25 +1,28 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class insertProgetto extends StatelessWidget{
-  String nomeProgetto = '';
-  String anno = '';
-  String valore = '';
-  bool isEconomico = false;
+class InsertProgetto extends StatefulWidget {
+  const InsertProgetto({super.key});
+  @override
+  _InsertProgettoState createState() => _InsertProgettoState();
+}
+
+class _InsertProgettoState extends State<InsertProgetto>{
+  final TextEditingController _nomeProgettoController = TextEditingController();
+  final TextEditingController _annoController = TextEditingController();
+  final TextEditingController _valoreController = TextEditingController();
+  final TextEditingController _contributoController = TextEditingController();
+  final bool _isEconomico = false;
   Map<String, dynamic> staticMap = {
     'Ammortamenti' : '0',
     'God beni terzi' : '0',
     'Materie Prime' : '0',
     'Oneri diversi' : '0',
     'Personale' : '0',
-    'Servizi' : '0'
-  };
+    'Servizi' : '0'};
   String percentuale = '0';
   String contributo = '';
-
-  insertProgetto({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,28 +31,15 @@ class insertProgetto extends StatelessWidget{
           systemOverlayStyle: const SystemUiOverlayStyle(
             // Status bar color
             statusBarColor: Colors.white,
-            // Status bar brightness (optional)
-            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-            statusBarBrightness: Brightness.light, // For iOS (dark icons)
+             // For iOS (dark icons)
           ),
           centerTitle: true,
-          title: const Text('Inserisci Progetto',
-              style: TextStyle(color: Colors.white,
-                fontSize: 20.0, )
-          ),
+          title: const Text('Inserisci Progetto', style: TextStyle(
+              color: Colors.white, fontSize: 20.0)),
           actions: <Widget>[
             ElevatedButton(
                 onPressed: () async {
-                  final json = {
-                    'Anno' : anno,
-                    'Valore' : valore,
-                    'Costi Diretti' : staticMap,
-                    'Costi Indiretti' : staticMap,
-                    'isEconomico' : isEconomico,
-                    'Percentuale' : percentuale,
-                    'Contributo Competenza' : contributo
-                  };
-                  setFunction(json);
+                  setFunction();
                   Navigator.pop(context, 'refresh');
                 },
                 child: const Text('Salva'))
@@ -57,13 +47,9 @@ class insertProgetto extends StatelessWidget{
         ),
         body: Column(
           children: [
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
-                hintText: 'Inserisci il nome Progetto',
-              ),
+            const SizedBox(height: 20),
+            TextFormField(decoration: const InputDecoration(
+              hintText: 'Inserisci il nome Progetto'),
               validator: (value) {
                 if (value == null) {
                   return 'Per favore inserisci il nome';
@@ -74,11 +60,8 @@ class insertProgetto extends StatelessWidget{
                 nomeProgetto = value;
               },
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            TextFormField(
-              decoration: const InputDecoration(
+            const SizedBox(height: 20),
+            TextFormField(decoration: const InputDecoration(
                 hintText: 'Inserisci anno',
               ),
               inputFormatters: <TextInputFormatter>[
@@ -151,8 +134,45 @@ class insertProgetto extends StatelessWidget{
     );
   }
 
-  Future<void> setFunction(Map<String, Object> json) async {
-    await FirebaseFirestore.instance.collection('progetti').doc(nomeProgetto).set(json);
+  Future<void> setFunction() async {
+    final json = {
+      'Anno' : _annoController.text,
+      'Valore' : _valoreController.text,
+      'Costi Diretti' : staticMap,
+      'Costi Indiretti' : staticMap,
+      'isEconomico' : _isEconomico,
+      'Percentuale' : percentuale,
+      'Contributo Competenza' : _contributoController.text
+    };
+    try {
+      await FirebaseFirestore.instance.collection('progetti').doc(_nomeProgettoController.text).set(json);
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
+  @override
+  void dispose() {
+    _nomeProgettoController.dispose();
+    _annoController.dispose();
+    _valoreController.dispose();
+    _contributoController.dispose();
+    super.dispose();
+  }
+
+  set nomeProgetto(String value) {
+    nomeProgetto = value;
+  }
+
+  set anno(String value) {
+    anno = value;
+  }
+
+  set valore(String value) {
+    valore = value;
+  }
+
+  set isEconomico(bool value) {
+    isEconomico = value;
+  }
 }

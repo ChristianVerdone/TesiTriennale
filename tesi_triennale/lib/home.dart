@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:html';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,14 +8,14 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'Conto.dart';
 import 'utils.dart';
-import 'ShowFile.dart';
-import 'VisualizzaProgetti.dart';
-import 'show_database.dart';
+import 'Visualizza_Progetti.dart';
+import 'show_Database.dart';
 
 class HomePage extends StatefulWidget{
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
   @override
   State<HomePage> createState() => _homePageState();
 }
@@ -24,12 +25,15 @@ class _homePageState extends State<HomePage>{
   List<Map<String, dynamic>> csvData2 = [];
   List<List<dynamic>>? csvData;
   String? filePath;
+  final String _loadingMessage = "Caricamento in corso...";
   Timer scheduleTimeout([int milliseconds = 10000]) =>
       Timer(Duration(milliseconds: milliseconds), handleTimeout);
   Timer scheduleTimeout2([int milliseconds = 10000]) =>
       Timer(Duration(milliseconds: milliseconds), handleTimeout2);
-  Timer scheduleTimeout3([int milliseconds = 10000]) =>
-      Timer(Duration(milliseconds: milliseconds), handleTimeout3);
+  bool _isFileErroredExists = false;
+  bool caricamento = false;
+  late int i;
+  var storageRef;
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +47,10 @@ class _homePageState extends State<HomePage>{
           systemOverlayStyle: const SystemUiOverlayStyle(
             // Status bar color
             statusBarColor: Colors.blue,
-            // Status bar brightness (optional)
-            statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-            statusBarBrightness: Brightness.light, // For iOS (dark icons)
           ),
           centerTitle: true,
           title: const Text("Home",
-              style: TextStyle(color: Colors.black,
-                fontSize: 20.0, )
+              style: TextStyle(color: Colors.black, fontSize: 20.0, )
           ),
         ),
         body: Column(
@@ -60,14 +60,44 @@ class _homePageState extends State<HomePage>{
               child: ElevatedButton(
                 child: const Text("Carica file"),
                 onPressed: () async {
-                    await _selectExcelFile().then((value) async {
-                      scheduleTimeout(20*1000);
-                      scheduleTimeout2(40*1000);
-                      scheduleTimeout3(80*1000);
-                    });
+                  _showLoadingDialog(context);
+                  await _selectExcelFile();
                 },
               ),
             ),
+            const SizedBox(
+              height: 30,
+            ),
+            if(_isFileErroredExists)
+              Center(
+                child: Column(
+                  children:[
+                    const Text('Il file errored è disponibile per il download',
+                      style: TextStyle(color: Colors.red, fontSize: 20.0,)
+                    ),
+                    ElevatedButton(
+                      child: const Text('Scarica file errored'),
+                      onPressed: () {
+                        downloadFile(storageRef.getDownloadURL().toString());
+                      },
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    const Text('Carica un nuovo file per aggiungere i dati mancanti al database',
+                      style: TextStyle(color: Colors.red, fontSize: 20.0,)
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        child: const Text('Carica file integrazione'),
+                        onPressed: () {
+                          _uploadAndProcessFile();
+                        },
+                      ),
+                    ),
+                  ]
+                )
+              ),
             const SizedBox(
               height: 30,
             ),
@@ -98,6 +128,78 @@ class _homePageState extends State<HomePage>{
     );
   }
 
+  Future<void> _uploadAndProcessFile() async {
+    // Apri il selettore di file
+    var uploadInput = FileUploadInputElement();
+    uploadInput.click();
+
+    uploadInput.onChange.listen((event) async {
+      final file = uploadInput.files!.first;
+      final reader = FileReader();
+
+      reader.readAsArrayBuffer(file);
+      reader.onLoadEnd.listen((event) async {
+        // Carica il file su Firebase
+        var storageRef = FirebaseStorage.instance.ref('fix.xlsx');
+        await storageRef.putData(reader.result as Uint8List);
+        final downloadUrl = await storageRef.getDownloadURL();
+
+        if (kDebugMode) {
+          print('File caricato su Firebase Storage: $downloadUrl');
+        }
+
+        // Invia una richiesta al server Flask per elaborare il file
+        Map<String, String> headers = {
+          "Content-Type": "text/plain",
+        };
+        final response = await http.get(
+            Uri.parse('http://127.0.0.1:5000/procFix'), headers: headers);
+
+        if (response.statusCode == 200) {
+          if (kDebugMode) {
+            print('File elaborato con successo');
+          }
+          await processCsvFromFix();
+        } else {
+          if (kDebugMode) {
+            print('Errore durante l\'elaborazione del file');
+          }
+        }
+      });
+    });
+  }
+
+  void _showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const CircularProgressIndicator(),
+                const SizedBox(width: 20),
+                Text(_loadingMessage),
+                ElevatedButton(
+                    onPressed: () {
+                      _hideLoadingDialog(context);
+                    },
+                    child: const Text('chiudi'))
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _hideLoadingDialog(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   Future getAll() async{
     await FirebaseFirestore.instance.collection('conti/').get().then((snapshot) => snapshot.docs.forEach((conto) {
       getLines(conto.id);
@@ -107,7 +209,7 @@ class _homePageState extends State<HomePage>{
 
   Future getLines(String idConto) async {
     await FirebaseFirestore.instance
-        .collection('conti/$idConto/lineeConto')
+        .collection('conti_dev/$idConto/lineeConto')
         .get()
         .then((snapshot) => snapshot.docs.forEach((linea) {
       //print(linea.reference);
@@ -119,7 +221,7 @@ class _homePageState extends State<HomePage>{
         'Descrizione operazione': linea.get('Descrizione operazione'),
         'Numero documento': linea.get('Numero documento'),
         'Data documento': linea.get('Data documento'),
-        'Numero Fattura': linea.get('Numero Fattura'),
+        //'Numero Fattura': linea.get('Numero Fattura'),
         'Importo': linea.get('Importo'),
         'Saldo': linea.get('Saldo'),
         'Contropartita': linea.get('Contropartita'),
@@ -143,33 +245,78 @@ class _homePageState extends State<HomePage>{
     if(i==1) {
       csvData = await processCsvFromFile();
     }
-  }
-
-  void handleTimeout3(){
-    if(i==1) {
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ShowFile(csvData: csvData!)));
-    }
     else{
-        setState(() {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const HomePage(),
-            ),
-          );
-        });
+      setState(() {
+        /*Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const HomePage(),
+          ),
+        );*/
+      });
     }
   }
 
-  late int i;
+  Future<bool> checkIfFileExists() async {
+    if (kDebugMode) {
+      print('checkIfFileExists');
+    }
+    storageRef = FirebaseStorage.instance.ref('errored.xlsx');
+    try {
+      await storageRef.getDownloadURL();
+      // Se non si verifica un errore, il file esiste
+      return true;
+    } catch (e) {
+      // Se si verifica un errore, il file non esiste
+      return false;
+    }
+  }
 
   void fetchHello() async {
     Map<String, String> headers = {
       "Content-Type": "text/plain",
     };
-    final response = await http.get(Uri.parse('http://127.0.0.1:5000/'), headers: headers);
-    if(response.statusCode == 200){
-      setState(() {});
+    final response = await http.get(
+        Uri.parse('http://127.0.0.1:5000/proc'), headers: headers);
+    if (response.statusCode == 200) {
+      if (kDebugMode) {
+        print('File elaborato con successo');
+      }
+      bool b = await checkIfFileExists();
+      setState(() {
+        _isFileErroredExists = b;
+      });
+      if(i==1) {
+        csvData = await processCsvFromFile();
+      }
+    }
+  }
+
+  void downloadFile(String url) async {
+    // Crea un riferimento al file in Firebase Storage
+    var storageRef = FirebaseStorage.instance.refFromURL(url);
+
+    // Ottieni l'URL di download del file
+    String? downloadUrl;
+    try {
+      downloadUrl = await storageRef.getDownloadURL();
+    } catch (e) {
+      if (kDebugMode) {
+        print('Errore durante il recupero dell\'URL di download: $e');
+      }
+      return;
+    }
+
+    if (kDebugMode) {
+      print('URL di download: $downloadUrl');
+    }
+
+    // Avvia il download del file aprendo l'URL nel browser
+    if (await canLaunchUrlString(downloadUrl)) {
+      await launchUrlString(downloadUrl);
+    } else {
+      if (kDebugMode) {
+        print('Impossibile avviare il download del file: $downloadUrl');
+      }
     }
   }
 
@@ -183,60 +330,82 @@ class _homePageState extends State<HomePage>{
       reader.readAsArrayBuffer(file);
       reader.onLoadEnd.listen((event) async {
         i=1;
-        var storageRef = FirebaseStorage.instance.ref('source.xls');
+        var storageRef = FirebaseStorage.instance.ref('source.xlsx');
         await storageRef.putData(reader.result as Uint8List);
         final downloadUrl = await storageRef.getDownloadURL();
-        print('File caricato su Firebase Storage: $downloadUrl''i: $i');
+        if(downloadUrl.isNotEmpty){
+          if(kDebugMode){
+            print('File caricato su Firebase Storage: $downloadUrl');
+          }
+          fetchHello();
+        }
       });
     });
   }
 
   Future<List<List<dynamic>>> processCsvFromFile() async {
+    if (kDebugMode) {
+      print('processCsvFromFile called');
+    }
     Uint8List? byteData;
     var storageRef = FirebaseStorage.instanceFor(bucket: 'tesitriennale-4d2f1.appspot.com').ref('file.csv');
-    await storageRef.getDownloadURL().then((value) => print(value));
+    await storageRef.getDownloadURL().then((value) => {
+      if(kDebugMode){
+        print(value)
+      }
+    });
     byteData = await storageRef.getData();
     String result2 = String.fromCharCodes(byteData as Iterable<int>);
     result2 = result2.replaceAll('ï»¿', '');
     List<List<dynamic>> data = const CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ',');
-    writedataFile(data);
+    await refreshData().then((value) => {
+      writedataFile(data)
+    });
     return data;
   }
 
   Future<int> writedataFile(List<List<dynamic>> data) async {
+    if (kDebugMode) {
+      print('writedataFile called');
+    }
     int i = 0;
     String temp = '';
     String s = 'line_00';
     String numConto = '';
+    bool refresh = false;
     for(final line in data){
       numConto = line[0];
       numConto.replaceAll('ï»¿', '');
-      if(numConto != 'Codice Conto'){
-        if(numConto != temp){
-          temp = numConto;
-          i = 0;
-          s = 'line_00';
+      if(numConto != temp){
+        temp = numConto;
+        i = 0;
+        s = 'line_00';
+        refresh = false;
+        if(numConto != 'Codice Conto') {
+          await FirebaseFirestore.instance.collection('conti_dev2022').doc(
+              numConto).set({
+            'Descrizione conto': line[1]
+          });
         }
-        await FirebaseFirestore.instance.collection('conti').doc(numConto).set({
-          'Descrizione conto' : line[1]
-        });
+      }
+      if(numConto != 'Codice Conto'){
         final json = {
           'Codice Conto' : numConto,
           'Descrizione conto' : line[1],
           'Data operazione' : line[2],
-          'COD' : line[3],
-          'Descrizione operazione' : line[4],
-          'Numero documento' : line[5],
-          'Data documento' : line[6],
-          'Numero Fattura' : line[7],
-          'Importo' : line[8],
-          'Saldo' : line[9],
-          'Contropartita' : line[10],
+          //'COD' : line[3],
+          'Descrizione operazione' : line[3],
+          'Numero documento' : line[4],
+          'Data documento' : line[5],
+          //'Numero Fattura' : line[7],
+          'Importo' : line[6],
+          'Saldo' : '',
+          'Contropartita' : line[7],
           'Costi Diretti' : false,
           'Costi Indiretti' : true,
           'Attività economiche' : false,
           'Attività non economiche' : false,
-          'Codice progetto' : line[15]
+          'Codice progetto' : ''
         };
         String iS = i.toString();
         if(i>9){
@@ -246,9 +415,88 @@ class _homePageState extends State<HomePage>{
           s = 'line_';
         }
         i++;
-        await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
+        await FirebaseFirestore.instance.collection('conti_dev2022').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
       }
     }
     return i;
+  }
+
+  processCsvFromFix() async {
+    Uint8List? byteData;
+    var storageRef = FirebaseStorage.instanceFor(bucket: 'tesitriennale-4d2f1.appspot.com').ref('fix.csv');
+    await storageRef.getDownloadURL().then((value) => {
+      if(kDebugMode){
+        print(value)
+      }
+    });
+    byteData = await storageRef.getData();
+    String result2 = String.fromCharCodes(byteData as Iterable<int>);
+    result2 = result2.replaceAll('ï»¿', '');
+    List<List<dynamic>> data = const CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ',');
+    writedataFileInt(data);
+    return data;
+  }
+
+  Future<void> writedataFileInt(List<List> data) async {
+    int i = 0;
+    String temp = '';
+    String s = 'line_00';
+    String numConto = '';
+    for(final line in data){
+      String numConto = line[0];
+      await getNumberOfDocuments(numConto).then((value) => {
+        i = value,
+        if(i>9){
+          s = 'line_0',
+          if(i>99){
+            s = 'line_',
+          }
+        }
+        else{
+          s = 'line_00',
+        }
+      });
+      i++;
+      if(numConto != 'Codice Conto'){
+        final json = {
+          'Codice Conto' : numConto,
+          'Descrizione conto' : line[1],
+          'Data operazione' : line[2],
+          //'COD' : line[3],
+          'Descrizione operazione' : line[3],
+          'Numero documento' : line[4],
+          'Data documento' : line[5],
+          //'Numero Fattura' : line[7],
+          'Importo' : line[6],
+          'Saldo' : '',
+          'Contropartita' : line[7],
+          'Costi Diretti' : false,
+          'Costi Indiretti' : true,
+          'Attività economiche' : false,
+          'Attività non economiche' : false,
+          'Codice progetto' : ''
+        };
+        String iS = i.toString();
+        await FirebaseFirestore.instance.collection('conti_dev').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
+      }
+    }
+  }
+
+  Future<int> getNumberOfDocuments(String num) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('conti_dev').doc(num).collection('lineeConto').get();
+    return querySnapshot.docs.length;
+  }
+
+  refreshData() async {
+    if (kDebugMode) {
+      print('refreshData called');
+    }
+    await FirebaseFirestore.instance.collection('conti_dev').get().then((snapshot) => snapshot.docs.forEach((conto) {
+      conto.reference.collection('lineeConto').get().then((value) => {
+        value.docs.forEach((linea) {
+          linea.reference.delete();
+        })
+      });
+    }));
   }
 }

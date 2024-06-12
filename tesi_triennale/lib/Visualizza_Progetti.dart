@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'GetProgetto.dart';
-import 'insertProgetto.dart';
+import 'Get_Progetto.dart';
+import 'insert_Progetto.dart';
 
 class VisualizzaProg extends StatefulWidget { //seconda page di caricamento di dati dal database
   const VisualizzaProg({super.key});
@@ -10,7 +10,6 @@ class VisualizzaProg extends StatefulWidget { //seconda page di caricamento di d
 }
 
 class _VisualizzaProgState extends State<VisualizzaProg> {
-
 
   @override
   void initState() {
@@ -21,9 +20,7 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
   void reload(){
     setState(() {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const VisualizzaProg(),
-        ),
+        MaterialPageRoute(builder: (context) => const VisualizzaProg(),),
       );
     });
   }
@@ -46,7 +43,7 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
           actions: <Widget>[
             ElevatedButton(
                 onPressed: () async {
-                  String refresh = await Navigator.push(context, MaterialPageRoute(builder: (context) => insertProgetto() ));
+                  String refresh = await Navigator.push(context, MaterialPageRoute(builder: (context) => const InsertProgetto() ));
                   if(refresh == 'refresh'){
                     reload();
                   }
@@ -104,20 +101,22 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
     await FirebaseFirestore.instance.collection('progetti').get().then(
             (snapshot) => snapshot.docs.forEach(
                 (progetto) {
-              if(!(progetti.contains(progetto.reference.id))){
-                progetti.add(progetto.reference.id);
-              }
-              if(progetto.get('isEconomico')){
-                perc = (num.parse(progetto.get('Valore').toString()) / totProgettiE) * 100;
-              }
-              else{
-                perc = (num.parse(progetto.get('Valore').toString()) / totProgettinE) * 100;
-              }
-              final json = {
-                'Percentuale' : perc.toStringAsFixed(2),
-              };
-              progetto.reference.update(json);
-              perc = 0;
+                  if(progetto.reference.id != 'DefaultProject'){
+                    if(!(progetti.contains(progetto.reference.id))){
+                      progetti.add(progetto.reference.id);
+                    }
+                    if(progetto.get('isEconomico')){
+                      perc = (num.parse(progetto.get('Valore').toString()) / totProgettiE) * 100;
+                    }
+                    else{
+                      perc = (num.parse(progetto.get('Valore').toString()) / totProgettinE) * 100;
+                    }
+                    final json = {
+                      'Percentuale' : perc.toStringAsFixed(2),
+                    };
+                    progetto.reference.update(json);
+                    perc = 0;
+                  }
             }
         )
     );
@@ -127,11 +126,13 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
     await FirebaseFirestore.instance.collection('progetti').get().then(
             (snap) => snap.docs.forEach(
                 (progetto) {
-                  if(progetto.get('isEconomico')){
-                    totProgettiE = totProgettiE + num.parse(progetto.get('Valore').toString());
-                  }
-                  else{
-                    totProgettinE = totProgettinE + num.parse(progetto.get('Valore').toString());
+                  if(progetto.reference.id != 'DefaultProject'){
+                    if(progetto.get('isEconomico')){
+                      totProgettiE = totProgettiE + num.parse(progetto.get('Valore').toString());
+                    }
+                    else{
+                      totProgettinE = totProgettinE + num.parse(progetto.get('Valore').toString());
+                    }
                   }
             }
         )

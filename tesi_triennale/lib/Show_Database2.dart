@@ -3,15 +3,12 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
-import '../model/Conto.dart';
-import '../readData/getConto.dart';
+import 'Conto.dart';
+import 'get_Conto.dart';
 import '../utils.dart';
-import 'viewcategorie.dart';
-import 'package:flutter/material.dart';
+import 'view_categorie.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import '../readData/getConto.dart';
-import 'viewcategorie.dart';
 
 class VisualizzaPage extends StatefulWidget { //seconda page di caricamento di dati dal database
   VisualizzaPage({super.key,});

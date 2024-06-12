@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'Conto.dart';
 
@@ -19,7 +20,9 @@ Future<int?> myDartFunction(int arg) async {
     final parsedResult = json.decode(result);
     return parsedResult['result'];
   } on PlatformException catch (e) {
-    print("Error: ${e.message}");
+    if (kDebugMode) {
+      print("Error: ${e.message}");
+    }
   }
   return null;
 }
@@ -29,7 +32,7 @@ List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData
     codiceConto: item['Codice Conto'],
     descrizioneConto: item['Descrizione conto'],
     dataOperazione: item['Data operazione'],
-    COD: item['COD'].toString(),
+    //COD: item['COD'].toString(),
     descrizioneOperazione: item['Descrizione operazione'],
     numeroDocumento: item['Numero documento'].toString(),
     dataDocumento: item['Data documento'],
@@ -37,14 +40,9 @@ List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData
     importo: item['Importo'].toString(),
     saldo: item['Saldo'].toString(),
     contropartita: item['Contropartita'],
-
     costiDiretti: item['Costi Diretti'].toString() == "" ? false : item['Costi Diretti'],
-
     costiIndiretti: item['Costi Indiretti'].toString() == "" ? false : item['Costi Indiretti'],
-
     attivitaEconomiche: item['Attività economiche'].toString() == "" ? false : item['Attività economiche'],
-
     attivitaNonEconomiche: item['Attività non economiche'].toString() == "" ? false : item['Attività non economiche'],
-
     codiceProgetto: item['Codice progetto']))
     .toList();

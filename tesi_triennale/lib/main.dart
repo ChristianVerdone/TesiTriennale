@@ -8,6 +8,7 @@ import 'firebase_options.dart';
 late final app ;
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
    app = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget{
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'UniGestional',
+      title: 'Gestore',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const Login(),
     );
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget{
 }
 
 class Login extends StatefulWidget{
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
   @override
   State<Login> createState() => _loginState();
 }

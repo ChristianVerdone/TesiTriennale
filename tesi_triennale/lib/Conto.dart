@@ -2,7 +2,7 @@ class Conto {
   final dynamic codiceConto;
   final dynamic descrizioneConto;
   final dynamic dataOperazione;
-  final dynamic COD;
+  //final dynamic COD;
   final dynamic descrizioneOperazione;
   final dynamic numeroDocumento;
   final dynamic dataDocumento;
@@ -20,7 +20,7 @@ class Conto {
       {required this.codiceConto,
       required this.descrizioneConto,
       required this.dataOperazione,
-      required this.COD,
+      //required this.COD,
       required this.descrizioneOperazione,
       required this.numeroDocumento,
       required this.dataDocumento,
@@ -38,7 +38,7 @@ class Conto {
     dynamic codiceConto,
     dynamic descrizioneConto,
     dynamic dataOperazione,
-    dynamic COD,
+    //dynamic COD,
     dynamic descrizioneOperazione,
     dynamic numeroDocumento,
     dynamic dataDocumento,
@@ -57,7 +57,7 @@ class Conto {
         codiceConto: codiceConto ?? this.codiceConto,
         descrizioneConto: descrizioneConto ?? this.descrizioneConto,
         dataOperazione: dataOperazione ?? this.dataOperazione,
-        COD: COD ?? this.COD,
+        //COD: COD ?? this.COD,
         descrizioneOperazione:
             descrizioneOperazione ?? this.descrizioneOperazione,
         numeroDocumento: numeroDocumento ?? this.numeroDocumento,
@@ -82,7 +82,7 @@ class Conto {
               codiceConto == other.codiceConto &&
               descrizioneConto == other.descrizioneConto &&
               dataOperazione == other.dataOperazione &&
-              COD == other.COD &&
+              //COD == other.COD &&
               descrizioneOperazione == other.descrizioneOperazione &&
               numeroDocumento == other.numeroDocumento &&
               dataDocumento == other.dataDocumento&&
@@ -97,7 +97,9 @@ class Conto {
               codiceProgetto == other.codiceProgetto;
 
   @override
-  int get hashCode => codiceConto.hashCode ^ descrizioneConto.hashCode ^ dataOperazione.hashCode ^ COD.hashCode ^ descrizioneOperazione.hashCode
+  int get hashCode => codiceConto.hashCode ^ descrizioneConto.hashCode ^ dataOperazione.hashCode ^
+                      //COD.hashCode ^
+                      descrizioneOperazione.hashCode
                     ^ numeroDocumento.hashCode ^ dataDocumento.hashCode ^ numeroFattura.hashCode ^ importo.hashCode ^ saldo.hashCode ^ contropartita.hashCode
                     ^ costiDiretti.hashCode ^ costiIndiretti.hashCode ^ attivitaEconomiche.hashCode ^ attivitaNonEconomiche.hashCode ^ codiceProgetto.hashCode;
 
@@ -105,7 +107,7 @@ class Conto {
     codiceConto: json['Codice Conto'],
     descrizioneConto: json['Descrizione conto'],
     dataOperazione: json['Data operazione'],
-    COD: json['COD'],
+    //COD: json['COD'],
     descrizioneOperazione: json['Descrizione operazione'],
     numeroDocumento: json['Numero documento'],
     dataDocumento: json['Data documento'],
@@ -147,8 +149,10 @@ class Conto {
  */
 
    List<dynamic> toList(){
-    return [codiceConto, descrizioneConto, dataOperazione, COD, descrizioneOperazione,
-      numeroDocumento, dataDocumento, numeroFattura, importo, saldo, contropartita, costiDiretti,
+    return [//codiceConto, descrizioneConto,
+      dataOperazione,
+      //COD,
+      descrizioneOperazione, numeroDocumento, dataDocumento, numeroFattura, importo, saldo, contropartita, costiDiretti,
       costiIndiretti, attivitaEconomiche, attivitaNonEconomiche, codiceProgetto];
   }
 }

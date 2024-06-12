@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'ViewContiCat.dart';
+import 'View_Conti_Cat.dart';
 
 class VisualizzaCatPage extends StatefulWidget { //seconda page di caricamento di dati dal database
   const VisualizzaCatPage({super.key});

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'ScrollableWidget.dart';
-import 'showTextDialog.dart';
+import 'Scrollable_Widget.dart';
+import 'show_Text_Dialog.dart';
 import 'Conto.dart';
 import 'utils.dart';
 
@@ -18,11 +18,12 @@ class ModifyDataCat extends StatefulWidget {
 class _ModifyDataCatState extends State<ModifyDataCat> {
   List<Conto> conti = [];
 
+  final ScrollController _controller = ScrollController();
   final columns = [
     'Codice conto',
     'Descrizione conto',
     'Data operazione',
-    'COD',
+    //'COD',
     'Descrizione operazione',
     'Numero documento',
     'Data documento',
@@ -74,7 +75,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                 'Codice Conto': conti[i].codiceConto,
                 'Descrizione conto': conti[i].descrizioneConto,
                 'Data operazione': conti[i].dataOperazione,
-                'COD': conti[i].COD,
+                //'COD': conti[i].COD,
                 'Descrizione operazione': conti[i].descrizioneOperazione,
                 'Numero documento': conti[i].numeroDocumento,
                 'Data documento': conti[i].dataDocumento,
@@ -108,7 +109,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
         const SizedBox(width: 16),
       ],
     ),
-    body: ScrollableWidget(child: buildDataTable()),
+    body: ScrollableWidget(controller: _controller, child: buildDataTable()),
   );
 
   Widget buildDataTable() {
@@ -135,7 +136,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
       conto.codiceConto,
       conto.descrizioneConto,
       conto.dataOperazione,
-      conto.COD,
+      //conto.COD,
       conto.descrizioneOperazione,
       conto.numeroDocumento,
       conto.dataDocumento,

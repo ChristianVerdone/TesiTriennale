@@ -10,35 +10,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/code/CERICT MASTR 2022.xls" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code/CERICT MASTR 2022.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/code/readFixedFile.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/code/readPdf.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/code/readWord.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/code/readfileNew.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/code/testAccess.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/code/.idea/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/errored.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/code/errored.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/out.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/code/out.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/readFileOffline.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/readFileOffline.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/readfile.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/readfile.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/code/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/utilsC.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/utilsC.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/code/utilsP.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/utilsP.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ModifyData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/ModifyData.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ModifyDataCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/ModifyDataCat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ModifyProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/ModifyProgetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/Widget/ScrollableWidget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/ScrollableWidget.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/Widget/showTextDialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/showTextDialog.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/Conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Conto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/GetProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Get_Progetto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ModifyData.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Modify_Data.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ModifyDataCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Modify_Data_Cat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ModifyProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Modify_Progetto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ScrollableWidget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Scrollable_Widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ShowDatabase2.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Show_Database2.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ShowFile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Show_File.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/ViewContiCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/View_Conti_Cat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/VisualizzaProgetti.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Visualizza_Progetti.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/VisualizzaProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Visualizza_Progetto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/VisualizzaTabConto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Visualizza_Tab_Conto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/getConto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/get_Conto.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/home.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/model/Conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Conto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/model/Progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/Progetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/readData/GetProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/GetProgetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/readData/getConto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/getConto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/insertProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/insert_Progetto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/showTextDialog.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/show_Text_Dialog.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/show_database.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/show_Database.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/ShowDatabase2.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/ShowDatabase2.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/ShowFile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/ShowFile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/ViewContiCat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/ViewContiCat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/VisualizzaProgetti.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/VisualizzaProgetti.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/VisualizzaProgetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/VisualizzaProgetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/VisualizzaTabConto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/VisualizzaTabConto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/insert_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/insert_progetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/show_database.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/show_database.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view/viewcategorie.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/viewcategorie.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/viewcategorie.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view_categorie.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugins.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/macos/Flutter/GeneratedPluginRegistrant.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugin_registrant.cc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugins.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugins.cmake" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,7 +89,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
@@ -92,6 +107,7 @@
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
     &quot;Flutter.login.dart.executor&quot;: &quot;Run&quot;,
     &quot;Flutter.main.dart.executor&quot;: &quot;Run&quot;,
+    &quot;OpenAPI/Swagger Code Generator.ci-cd.yaml.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
@@ -101,7 +117,7 @@
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/UNIVERSITA/ARCHITETTURE E SISTEMI SOFTWARE DISTRIBUITI/ArchitettureESistemiSoftwareDistribuiti/workspace_assd&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/chris/Desktop/ServiceCICD&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -110,7 +126,7 @@
     &quot;project.structure.last.edited&quot;: &quot;Global Libraries&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15234375&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.24913494&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;flutter.settings&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -154,10 +170,48 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="ci-cd.yaml" type="SwaggerCodegen" editBeforeRun="true" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
+      <option name="allowRunningInParallel" value="false" />
+      <option name="customTemplatesPath" value="" />
+      <option name="envs">
+        <map />
+      </option>
+      <option name="generateToPath" value="C:\Users\chris\Desktop\ServiceCICD" />
+      <option name="generationParameters">
+        <list />
+      </option>
+      <option name="generatorType" value="OPENAPI_GENERATOR_V6" />
+      <option name="jdkPath" value="C:\Users\chris\AppData\Local\Programs\IntelliJ IDEA Ultimate\jbr\bin\java.exe" />
+      <option name="language" value="java-vertx-web" />
+      <option name="passParentEnvs" value="true" />
+      <option name="programParameters" />
+      <option name="projectPathOnTarget" />
+      <option name="selectedOptions">
+        <list />
+      </option>
+      <option name="specificationPath" value="C:\Users\chris\Desktop\ci-cd.yaml" />
+      <option name="workingDirectory" value="C:\Users\chris\Desktop" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Flutter.main.dart" />
+      <item itemvalue="OpenAPI/Swagger Code Generator.ci-cd.yaml" />
       <item itemvalue="Python.readfile" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="OpenAPI/Swagger Code Generator.ci-cd.yaml" />
+        <item itemvalue="Python.readfile" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.17890.1" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.17890.1" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -239,7 +293,31 @@
       <workItem from="1708421021374" duration="11603000" />
       <workItem from="1708443768286" duration="5202000" />
       <workItem from="1710403336429" duration="77000" />
-      <workItem from="1711028488971" duration="1832000" />
+      <workItem from="1711028488971" duration="2118000" />
+      <workItem from="1711614501869" duration="47000" />
+      <workItem from="1716380264305" duration="609000" />
+      <workItem from="1716380957571" duration="2285000" />
+      <workItem from="1716383460785" duration="2686000" />
+      <workItem from="1716462252810" duration="7150000" />
+      <workItem from="1716545660143" duration="1828000" />
+      <workItem from="1716899611660" duration="1183000" />
+      <workItem from="1716900857754" duration="6409000" />
+      <workItem from="1716907862391" duration="3660000" />
+      <workItem from="1716985457021" duration="4682000" />
+      <workItem from="1717161440630" duration="3244000" />
+      <workItem from="1717417347179" duration="4312000" />
+      <workItem from="1717506149621" duration="6503000" />
+      <workItem from="1717526883602" duration="4001000" />
+      <workItem from="1717592485515" duration="339000" />
+      <workItem from="1717592858728" duration="2801000" />
+      <workItem from="1717763338823" duration="2907000" />
+      <workItem from="1718014022237" duration="4593000" />
+      <workItem from="1718022365004" duration="8646000" />
+      <workItem from="1718091335942" duration="1740000" />
+      <workItem from="1718095787747" duration="8785000" />
+      <workItem from="1718105014278" duration="2554000" />
+      <workItem from="1718117841355" duration="3903000" />
+      <workItem from="1718189628299" duration="942000" />
     </task>
     <servers />
   </component>

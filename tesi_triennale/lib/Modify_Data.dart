@@ -1,30 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'ScrollableWidget.dart';
-import 'showTextDialog.dart';
+import 'Scrollable_Widget.dart';
+import 'show_Text_Dialog.dart';
 import 'Conto.dart';
 import 'utils.dart';
 
 class ModifyData extends StatefulWidget {
   final List<String> lines;
   final List<Map<String, dynamic>> csvData;
+  final String codiceConto; // Add this line
 
-  const ModifyData({super.key, required this.csvData, required this.lines});
+  const ModifyData({
+    Key? key,
+    required this.csvData,
+    required this.lines,
+    required this.codiceConto, // And this line
+  }) : super(key: key);
   @override
   State<ModifyData> createState() => _ModifyDataState();
 }
 
 class _ModifyDataState extends State<ModifyData> {
   List<Conto> conti = [];
-
+  List<String> projects = [];
+  final _controller = ScrollController();
   final columns = [
     'Data operazione',
-    'COD',
+    //'COD',
     'Descrizione operazione',
     'Numero documento',
     'Data documento',
-    'Numero fattura',
+    //'Numero fattura',
     'Importo',
     'Contropartita',
     'Costi diretti',
@@ -38,6 +45,11 @@ class _ModifyDataState extends State<ModifyData> {
   void initState() {
     super.initState();
     conti = convertMapToObject(widget.csvData);
+    getProjects().then((projectList) {
+      setState(() {
+        projects = projectList;
+      });
+    });
   }
 
   @override
@@ -52,9 +64,9 @@ class _ModifyDataState extends State<ModifyData> {
         statusBarBrightness: Brightness.light, // For iOS (dark icons)
       ),
       centerTitle: true,
-      title:  Text(conti[0].codiceConto,
+      title:  Text(widget.codiceConto,
           style: const TextStyle(
-            color: Colors.white,
+            color: Colors.black,
             fontSize: 20.0,
           )),
       actions: <Widget>[
@@ -71,11 +83,11 @@ class _ModifyDataState extends State<ModifyData> {
                 'Codice Conto': conti[i].codiceConto,
                 'Descrizione conto': conti[i].descrizioneConto,
                 'Data operazione': conti[i].dataOperazione,
-                'COD': conti[i].COD,
+                //'COD': conti[i].COD,
                 'Descrizione operazione': conti[i].descrizioneOperazione,
                 'Numero documento': conti[i].numeroDocumento,
                 'Data documento': conti[i].dataDocumento,
-                'Numero Fattura': conti[i].numeroFattura,
+                //'Numero Fattura': conti[i].numeroFattura,
                 'Importo': conti[i].importo,
                 'Saldo': conti[i].saldo,
                 'Contropartita': conti[i].contropartita,
@@ -86,12 +98,7 @@ class _ModifyDataState extends State<ModifyData> {
                 'Codice progetto': conti[i].codiceProgetto
               };
 
-              await FirebaseFirestore.instance
-                  .collection('conti')
-                  .doc(idConto)
-                  .collection('lineeConto')
-                  .doc(linea)
-                  .set(json);
+              await FirebaseFirestore.instance.collection('conti_dev').doc(idConto).collection('lineeConto').doc(linea).set(json);
             }
             Navigator.pop(context, 'refresh');
           },
@@ -105,7 +112,7 @@ class _ModifyDataState extends State<ModifyData> {
         const SizedBox(width: 16),
       ],
     ),
-    body: ScrollableWidget(child: buildDataTable()),
+    body: ScrollableWidget(controller: _controller,child: buildDataTable()),
   );
 
   Widget buildDataTable() {
@@ -123,18 +130,17 @@ class _ModifyDataState extends State<ModifyData> {
           item.toString(),
         ),
       ),
-    )
-        .toList();
+    ).toList();
   }
 
   List<DataRow> getRows(List<Conto> conti) => conti.map((Conto conto) {
     final cells = [
       conto.dataOperazione,
-      conto.COD,
+      //conto.COD,
       conto.descrizioneOperazione,
       conto.numeroDocumento,
       conto.dataDocumento,
-      conto.numeroFattura,
+      //conto.numeroFattura,
       conto.importo,
       conto.contropartita,
       conto.costiDiretti,
@@ -143,30 +149,10 @@ class _ModifyDataState extends State<ModifyData> {
       conto.attivitaNonEconomiche,
       conto.codiceProgetto
     ];
-
-    /*
-    child: Checkbox(
-                key: GlobalKey(),
-                value: conto.costiDiretti,
-                onChanged: (bool? value) {
-                  if(conto.costiDiretti == true) {
-                    editCostiDiretti(conto, value);
-                  }
-                  if (conto.costiIndiretti == true && conto.costiDiretti == false) {
-                    editCostiIndiretti(conto, false);
-                    editCostiDiretti(conto, value);
-                  }
-                  if(conto.costiDiretti == false && conto.costiIndiretti == false) {
-                    editCostiDiretti(conto, value);
-                  }
-                },
-              ),
-     */
-
     return DataRow(
       cells: Utils.modelBuilder(cells, (index, cell) {
         switch (index) {
-          case 8:
+          case 6:
             return DataCell(Center(
               child: Tooltip(
                 message: 'Costi diretti',
@@ -190,7 +176,7 @@ class _ModifyDataState extends State<ModifyData> {
                 ),
               ),
             ));
-          case 9:
+          case 7:
             return DataCell(Center(
               child: Tooltip(
                   message: 'Costi indiretti',
@@ -210,7 +196,7 @@ class _ModifyDataState extends State<ModifyData> {
                     },
                   )),
             ));
-          case 10:
+          case 8:
             return DataCell(Center(
               child: Tooltip(
                   message: 'Attività economiche',
@@ -230,7 +216,7 @@ class _ModifyDataState extends State<ModifyData> {
                     },
                   )),
             ));
-          case 11:
+          case 9:
             return DataCell(Center(
               child: Tooltip(
                   message: 'Attività non economiche',
@@ -250,16 +236,17 @@ class _ModifyDataState extends State<ModifyData> {
                     },
                   )),
             ));
-          case 12:
-            final showEditIcon = index == 12;
+          case 10:
+            final showEditIcon = index == 10;
             return DataCell(
                 Tooltip(
                   message: 'Codice progetto',
                   child: Text('$cell'),
                 ),
                 showEditIcon: showEditIcon, onTap: () {
-              editCodiceProgetto(conto);
-            });
+                  editCodiceProgetto2(conto);
+                }
+            );
         }
         return DataCell(Tooltip(
           message: testo(index),
@@ -279,9 +266,9 @@ class _ModifyDataState extends State<ModifyData> {
     if (i == 3) return columns[i];
     if (i == 4) return columns[i];
     if (i == 5) return columns[i];
-    if (i == 6) return columns[i];
-    if (i == 7) return columns[i];
-    if (i == 12) return columns[i];
+    //if (i == 6) return columns[i];
+    //if (i == 7) return columns[i];
+    //if (i == 12) return columns[i];
 
     return testo;
   }
@@ -334,5 +321,60 @@ class _ModifyDataState extends State<ModifyData> {
           ? conto.copy(codiceProgetto: codiceProgetto)
           : conto;
     }).toList());
+  }
+
+  Future<List<String>> getProjects() async {
+    final projectsRef = FirebaseFirestore.instance.collection('progetti');
+    final snapshot = await projectsRef.get();
+    return snapshot.docs.map((doc) => doc.id).toList();
+  }
+
+  Future editCodiceProgetto2(Conto editConto) async {
+    String? selectedProject = 'DefaultProject';
+
+    selectedProject = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Modifica nome progetto'),
+              content: DropdownButton<String>(
+                value: selectedProject ?? editConto.codiceProgetto,
+                isExpanded: true,
+                items: projects.map((String project) {
+                  return DropdownMenuItem<String>(
+                    value: project,
+                    child: Text(project),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    selectedProject = newValue;
+                  });
+                },
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop(selectedProject);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+
+    if (selectedProject != null && selectedProject != 'DefaultProject') {
+      setState(() => conti = conti.map((conto) {
+        final isEditedConto = conto == editConto;
+        return isEditedConto
+            ? conto.copy(codiceProgetto: selectedProject)
+            : conto;
+      }).toList());
+    }
   }
 }

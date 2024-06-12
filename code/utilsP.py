@@ -1,3 +1,5 @@
+import os
+
 import openpyxl
 import xlsxwriter
 
@@ -44,10 +46,10 @@ class ItemConto:
 
     def getDataDocumento(self):
         return self.dataDoc
-
+    '''
     def getNumFattura(self):
         return self.numFattura
-
+'''
     def getImporto(self):
         return self.importo
 
@@ -93,7 +95,13 @@ class ItemConto:
 
 
 def toList(obj):
-    return [attr for attr in dir(obj) if not callable(getattr(obj, attr)) and not attr.startswith("__")]
+    """
+    Restituisce una lista dei valori degli attributi di un oggetto.
+    """
+    attribute_values = []
+    for i in obj.__dict__.values():
+        attribute_values.append(i)
+    return attribute_values
 
 
 def writeNewFileseparati(listItem):
@@ -151,8 +159,28 @@ def caricamento(outSheet, listItem, i, j):
 
 
 def writeNewFile(listItem):
-    outWorkbook = openpyxl.load_workbook("out.xlsx")
+    filename = "out.xlsx"
+
+    # Controlla se il file esiste
+    if os.path.isfile(filename):
+        # Rimuove il file
+        os.remove(filename)
+    else:
+        print(f"Il file {filename} non esiste")
+
+    outWorkbook = openpyxl.Workbook()
     # outWorkbook = xlsxwriter.Workbook("out.xlsx")
+
+    outSheet = outWorkbook.active
+
+    # Itera su tutte le righe e colonne e imposta il valore di ogni cella su None
+    for row in outSheet.iter_rows():
+        for cell in row:
+            cell.value = None
+
+    outWorkbook.save(filename)
+
+    outWorkbook = openpyxl.load_workbook(filename)
 
     outSheet = outWorkbook.active
 
@@ -192,4 +220,9 @@ def writeNewFile(listItem):
         outSheet.write(i + 1, 7, listItem[i].getContropartita())
     '''
     for item in listItem:
-        outSheet.append(toList(item))
+        values = toList(item)
+        # print(values)
+        outSheet.append(values)
+
+    outWorkbook.save(filename)
+    outWorkbook.close()

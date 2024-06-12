@@ -1,6 +1,7 @@
 from flask import Flask
-
+from readFixedFile import processFixFile
 from readfile import process
+from readfileNew import processNew, processNewFull
 
 from flask_cors import CORS, cross_origin
 
@@ -13,8 +14,20 @@ def hello(): return 'hello'
 
 @app.route('/ciao', methods=['GET'])
 @cross_origin()
-def hello2():
+def process():
     return process()
+
+
+@app.route('/proc', methods=['GET'])
+@cross_origin()
+def process_full():
+    return processNewFull()
+
+
+@app.route('/procFix', methods=['GET'])
+@cross_origin()
+def process_fix_file_route():
+    return processFixFile()
 
 
 if __name__ == '__main__':
