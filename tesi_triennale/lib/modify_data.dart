@@ -1,22 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'Scrollable_Widget.dart';
-import 'show_Text_Dialog.dart';
-import 'Conto.dart';
+import 'scrollable_widget.dart';
+import 'show_text_dialog.dart';
+import 'conto.dart';
 import 'utils.dart';
 
 class ModifyData extends StatefulWidget {
   final List<String> lines;
   final List<Map<String, dynamic>> csvData;
-  final String codiceConto; // Add this line
+  final String codiceConto;
 
   const ModifyData({
-    Key? key,
+    super.key,
     required this.csvData,
     required this.lines,
-    required this.codiceConto, // And this line
-  }) : super(key: key);
+    required this.codiceConto,
+  });
   @override
   State<ModifyData> createState() => _ModifyDataState();
 }
@@ -27,11 +28,9 @@ class _ModifyDataState extends State<ModifyData> {
   final _controller = ScrollController();
   final columns = [
     'Data operazione',
-    //'COD',
     'Descrizione operazione',
     'Numero documento',
     'Data documento',
-    //'Numero fattura',
     'Importo',
     'Contropartita',
     'Costi diretti',
@@ -56,59 +55,56 @@ class _ModifyDataState extends State<ModifyData> {
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
       systemOverlayStyle: const SystemUiOverlayStyle(
-        // Status bar color
         statusBarColor: Colors.white,
-        // Status bar brightness (optional)
         statusBarIconBrightness:
-        Brightness.dark, // For Android (dark icons)
-        statusBarBrightness: Brightness.light, // For iOS (dark icons)
+        Brightness.dark,
+        statusBarBrightness: Brightness.light,
       ),
       centerTitle: true,
       title:  Text(widget.codiceConto,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 20.0,
-          )),
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 20.0,
+        )),
       actions: <Widget>[
         ElevatedButton(
           child: const Text('Applica'),
           onPressed: () async {
             String linea;
-
             for (int i = 0; i < widget.lines.length; i++) {
               linea = widget.lines[i];
               String idConto = linea.substring(0, 8);
-
+              var conto = conti[i];
+              if (kDebugMode) {
+                print(conto.descrizioneConto);
+              }
               final json = {
-                'Codice Conto': conti[i].codiceConto,
-                'Descrizione conto': conti[i].descrizioneConto,
-                'Data operazione': conti[i].dataOperazione,
-                //'COD': conti[i].COD,
-                'Descrizione operazione': conti[i].descrizioneOperazione,
-                'Numero documento': conti[i].numeroDocumento,
-                'Data documento': conti[i].dataDocumento,
-                //'Numero Fattura': conti[i].numeroFattura,
-                'Importo': conti[i].importo,
-                'Saldo': conti[i].saldo,
-                'Contropartita': conti[i].contropartita,
-                'Costi Diretti': conti[i].costiDiretti,
-                'Costi Indiretti': conti[i].costiIndiretti,
-                'Attività economiche': conti[i].attivitaEconomiche,
-                'Attività non economiche': conti[i].attivitaNonEconomiche,
-                'Codice progetto': conti[i].codiceProgetto
+                'Codice Conto': widget.codiceConto,
+                'Descrizione conto': conto.descrizioneConto,
+                'Data operazione': conto.dataOperazione,
+                'Descrizione operazione': conto.descrizioneOperazione,
+                'Numero documento': conto.numeroDocumento,
+                'Data documento': conto.dataDocumento,
+                'Importo': conto.importo,
+                'Saldo': conto.saldo,
+                'Contropartita': conto.contropartita,
+                'Costi Diretti': conto.costiDiretti,
+                'Costi Indiretti': conto.costiIndiretti,
+                'Attività economiche': conto.attivitaEconomiche,
+                'Attività non economiche': conto.attivitaNonEconomiche,
+                'Codice progetto': conto.codiceProgetto
               };
-
-              await FirebaseFirestore.instance.collection('conti_dev').doc(idConto).collection('lineeConto').doc(linea).set(json);
+              await FirebaseFirestore.instance.collection('conti').doc(idConto).collection('lineeConto').doc(linea).set(json);
             }
             Navigator.pop(context, 'refresh');
           },
         ),
         const SizedBox(width: 16),
         IconButton(
-            onPressed: (){
-              Navigator.popUntil(context, ModalRoute.withName('/'));
-            },
-            icon: const Icon(Icons.home)),
+          onPressed: (){
+            Navigator.popUntil(context, ModalRoute.withName('/'));
+          },
+          icon: const Icon(Icons.home)),
         const SizedBox(width: 16),
       ],
     ),
@@ -123,9 +119,8 @@ class _ModifyDataState extends State<ModifyData> {
   }
 
   List<DataColumn> getColumns(List<String> columns) {
-    return columns
-        .map(
-          (item) => DataColumn(
+    return columns.map(
+      (item) => DataColumn(
         label: Text(
           item.toString(),
         ),
@@ -136,11 +131,9 @@ class _ModifyDataState extends State<ModifyData> {
   List<DataRow> getRows(List<Conto> conti) => conti.map((Conto conto) {
     final cells = [
       conto.dataOperazione,
-      //conto.COD,
       conto.descrizioneOperazione,
       conto.numeroDocumento,
       conto.dataDocumento,
-      //conto.numeroFattura,
       conto.importo,
       conto.contropartita,
       conto.costiDiretti,
@@ -163,13 +156,11 @@ class _ModifyDataState extends State<ModifyData> {
                     if (conto.costiDiretti == true) {
                       editCostiDiretti(conto, value);
                     }
-                    if (conto.costiIndiretti == true &&
-                        conto.costiDiretti == false) {
+                    if (conto.costiIndiretti == true && conto.costiDiretti == false) {
                       editCostiIndiretti(conto, false);
                       editCostiDiretti(conto, value);
                     }
-                    if (conto.costiDiretti == false &&
-                        conto.costiIndiretti == false) {
+                    if (conto.costiDiretti == false && conto.costiIndiretti == false) {
                       editCostiDiretti(conto, value);
                     }
                   },
@@ -179,73 +170,73 @@ class _ModifyDataState extends State<ModifyData> {
           case 7:
             return DataCell(Center(
               child: Tooltip(
-                  message: 'Costi indiretti',
-                  child: Checkbox(
-                    key: GlobalKey(),
-                    value: conto.costiIndiretti,
-                    onChanged: (bool? value) {
-                      if (conto.costiIndiretti == true) {
-                        editCostiIndiretti(conto, value);
-                      }
-                      if (conto.costiDiretti == true) {
-                        editCostiDiretti(conto, false);
-                        editCostiIndiretti(conto, value);
-                      } else {
-                        editCostiIndiretti(conto, value);
-                      }
-                    },
-                  )),
+                message: 'Costi indiretti',
+                child: Checkbox(
+                  key: GlobalKey(),
+                  value: conto.costiIndiretti,
+                  onChanged: (bool? value) {
+                    if (conto.costiIndiretti == true) {
+                      editCostiIndiretti(conto, value);
+                    }
+                    if (conto.costiDiretti == true) {
+                      editCostiDiretti(conto, false);
+                      editCostiIndiretti(conto, value);
+                    } else {
+                      editCostiIndiretti(conto, value);
+                    }
+                  },
+                )),
             ));
           case 8:
             return DataCell(Center(
               child: Tooltip(
-                  message: 'Attività economiche',
-                  child: Checkbox(
-                    key: GlobalKey(),
-                    value: conto.attivitaEconomiche,
-                    onChanged: (bool? value) {
-                      if (conto.attivitaEconomiche == true) {
-                        editAttivitaEconomiche(conto, value);
-                      }
-                      if (conto.attivitaNonEconomiche == true) {
-                        editAttivitaNonEconomiche(conto, false);
-                        editAttivitaEconomiche(conto, value);
-                      } else {
-                        editAttivitaEconomiche(conto, value);
-                      }
-                    },
-                  )),
+                message: 'Attività economiche',
+                child: Checkbox(
+                  key: GlobalKey(),
+                  value: conto.attivitaEconomiche,
+                  onChanged: (bool? value) {
+                    if (conto.attivitaEconomiche == true) {
+                      editAttivitaEconomiche(conto, value);
+                    }
+                    if (conto.attivitaNonEconomiche == true) {
+                      editAttivitaNonEconomiche(conto, false);
+                      editAttivitaEconomiche(conto, value);
+                    } else {
+                      editAttivitaEconomiche(conto, value);
+                    }
+                  },
+                )),
             ));
           case 9:
             return DataCell(Center(
               child: Tooltip(
-                  message: 'Attività non economiche',
-                  child: Checkbox(
-                    key: GlobalKey(),
-                    value: conto.attivitaNonEconomiche,
-                    onChanged: (bool? value) {
-                      if (conto.attivitaNonEconomiche == true) {
-                        editAttivitaNonEconomiche(conto, value);
-                      }
-                      if (conto.attivitaEconomiche == true) {
-                        editAttivitaEconomiche(conto, false);
-                        editAttivitaNonEconomiche(conto, value);
-                      } else {
-                        editAttivitaNonEconomiche(conto, value);
-                      }
-                    },
-                  )),
+                message: 'Attività non economiche',
+                child: Checkbox(
+                  key: GlobalKey(),
+                  value: conto.attivitaNonEconomiche,
+                  onChanged: (bool? value) {
+                    if (conto.attivitaNonEconomiche == true) {
+                      editAttivitaNonEconomiche(conto, value);
+                    }
+                    if (conto.attivitaEconomiche == true) {
+                      editAttivitaEconomiche(conto, false);
+                      editAttivitaNonEconomiche(conto, value);
+                    } else {
+                      editAttivitaNonEconomiche(conto, value);
+                    }
+                  },
+                )),
             ));
           case 10:
             final showEditIcon = index == 10;
             return DataCell(
-                Tooltip(
-                  message: 'Codice progetto',
-                  child: Text('$cell'),
-                ),
-                showEditIcon: showEditIcon, onTap: () {
-                  editCodiceProgetto2(conto);
-                }
+              Tooltip(
+                message: 'Codice progetto',
+                child: Text('$cell'),
+              ),
+              showEditIcon: showEditIcon, onTap: () {
+                editCodiceProgetto2(conto);
+              }
             );
         }
         return DataCell(Tooltip(
@@ -266,17 +257,12 @@ class _ModifyDataState extends State<ModifyData> {
     if (i == 3) return columns[i];
     if (i == 4) return columns[i];
     if (i == 5) return columns[i];
-    //if (i == 6) return columns[i];
-    //if (i == 7) return columns[i];
-    //if (i == 12) return columns[i];
-
     return testo;
   }
 
   Future editCostiDiretti(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
       var isEditedConto = conto == editConto;
-
       return isEditedConto ? conto.copy(costiDiretti: value) : conto;
     }).toList());
   }
@@ -284,7 +270,6 @@ class _ModifyDataState extends State<ModifyData> {
   Future editCostiIndiretti(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
       var isEditedConto = conto == editConto;
-
       return isEditedConto ? conto.copy(costiIndiretti: value) : conto;
     }).toList());
   }
@@ -292,7 +277,6 @@ class _ModifyDataState extends State<ModifyData> {
   Future editAttivitaEconomiche(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
       var isEditedConto = conto == editConto;
-
       return isEditedConto ? conto.copy(attivitaEconomiche: value) : conto;
     }).toList());
   }
@@ -300,10 +284,7 @@ class _ModifyDataState extends State<ModifyData> {
   Future editAttivitaNonEconomiche(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
       var isEditedConto = conto == editConto;
-
-      return isEditedConto
-          ? conto.copy(attivitaNonEconomiche: value)
-          : conto;
+      return isEditedConto ? conto.copy(attivitaNonEconomiche: value) : conto;
     }).toList());
   }
 
@@ -316,10 +297,7 @@ class _ModifyDataState extends State<ModifyData> {
 
     setState(() => conti = conti.map((conto) {
       final isEditedConto = conto == editConto;
-
-      return isEditedConto
-          ? conto.copy(codiceProgetto: codiceProgetto)
-          : conto;
+      return isEditedConto ? conto.copy(codiceProgetto: codiceProgetto) : conto;
     }).toList());
   }
 
@@ -331,7 +309,6 @@ class _ModifyDataState extends State<ModifyData> {
 
   Future editCodiceProgetto2(Conto editConto) async {
     String? selectedProject = 'DefaultProject';
-
     selectedProject = await showDialog<String>(
       context: context,
       builder: (BuildContext context) {
@@ -371,9 +348,7 @@ class _ModifyDataState extends State<ModifyData> {
     if (selectedProject != null && selectedProject != 'DefaultProject') {
       setState(() => conti = conti.map((conto) {
         final isEditedConto = conto == editConto;
-        return isEditedConto
-            ? conto.copy(codiceProgetto: selectedProject)
-            : conto;
+        return isEditedConto ? conto.copy(codiceProgetto: selectedProject): conto;
       }).toList());
     }
   }

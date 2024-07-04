@@ -18,10 +18,10 @@ class TextDialogWidget extends StatefulWidget {
   final String value;
 
   const TextDialogWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.value,
-  }) : super(key: key);
+  });
 
   @override
   _TextDialogWidgetState createState() => _TextDialogWidgetState();
@@ -52,5 +52,4 @@ class _TextDialogWidgetState extends State<TextDialogWidget> {
       ),
     ],
   );
-  
 }

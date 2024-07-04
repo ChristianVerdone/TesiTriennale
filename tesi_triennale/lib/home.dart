@@ -9,27 +9,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import 'Conto.dart';
+import 'conto.dart';
 import 'utils.dart';
-import 'Visualizza_Progetti.dart';
-import 'show_Database.dart';
+import 'visualizza_progetti.dart';
+import 'show_database.dart';
 
 class HomePage extends StatefulWidget{
   const HomePage({super.key});
   @override
-  State<HomePage> createState() => _homePageState();
+  State<HomePage> createState() => HomePageState();
 }
 
-class _homePageState extends State<HomePage>{
+class HomePageState extends State<HomePage>{
   List<Conto> conti = [];
   List<Map<String, dynamic>> csvData2 = [];
   List<List<dynamic>>? csvData;
   String? filePath;
   final String _loadingMessage = "Caricamento in corso...";
-  Timer scheduleTimeout([int milliseconds = 10000]) =>
-      Timer(Duration(milliseconds: milliseconds), handleTimeout);
-  Timer scheduleTimeout2([int milliseconds = 10000]) =>
-      Timer(Duration(milliseconds: milliseconds), handleTimeout2);
   bool _isFileErroredExists = false;
   bool caricamento = false;
   late int i;
@@ -38,93 +34,90 @@ class _homePageState extends State<HomePage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () => FirebaseAuth.instance.signOut() ),
-          ],
-          systemOverlayStyle: const SystemUiOverlayStyle(
-            // Status bar color
-            statusBarColor: Colors.blue,
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () => FirebaseAuth.instance.signOut()
           ),
-          centerTitle: true,
-          title: const Text("Home",
-              style: TextStyle(color: Colors.black, fontSize: 20.0, )
-          ),
+        ],
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.blue,
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+        centerTitle: true,
+        title: const Text("Home", style: TextStyle(color: Colors.black, fontSize: 20.0, )),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Center(
+            child: ElevatedButton(
+              child: const Text("Carica file"),
+              onPressed: () async {
+                _showLoadingDialog(context);
+                await _selectExcelFile();
+              },
+            ),
+          ),
+          const SizedBox(height: 30),
+          if(_isFileErroredExists)
             Center(
-              child: ElevatedButton(
-                child: const Text("Carica file"),
-                onPressed: () async {
-                  _showLoadingDialog(context);
-                  await _selectExcelFile();
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            if(_isFileErroredExists)
-              Center(
-                child: Column(
-                  children:[
-                    const Text('Il file errored è disponibile per il download',
-                      style: TextStyle(color: Colors.red, fontSize: 20.0,)
-                    ),
-                    ElevatedButton(
-                      child: const Text('Scarica file errored'),
+              child: Column(
+                children:[
+                  const Text('Il file errored è disponibile per il download',
+                    style: TextStyle(color: Colors.red, fontSize: 20.0,)
+                  ),
+                  ElevatedButton(
+                    child: const Text('Scarica file errored'),
+                    onPressed: () {
+                      downloadFile(storageRef.getDownloadURL().toString());
+                    },
+                  ),
+                  const SizedBox(height: 30),
+                  const Text('Carica un nuovo file per aggiungere i dati mancanti al database',
+                    style: TextStyle(color: Colors.red, fontSize: 20.0,)
+                  ),
+                  Center(
+                    child: ElevatedButton(
+                      child: const Text('Carica file integrazione'),
                       onPressed: () {
-                        downloadFile(storageRef.getDownloadURL().toString());
+                        _uploadAndProcessFile();
                       },
                     ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    const Text('Carica un nuovo file per aggiungere i dati mancanti al database',
-                      style: TextStyle(color: Colors.red, fontSize: 20.0,)
-                    ),
-                    Center(
-                      child: ElevatedButton(
-                        child: const Text('Carica file integrazione'),
-                        onPressed: () {
-                          _uploadAndProcessFile();
-                        },
-                      ),
-                    ),
-                  ]
-                )
-              ),
-            const SizedBox(
-              height: 30,
+                  ),
+                ]
+              )
             ),
-            Center(
-              child: ElevatedButton(
-                child: const Text('Visualizza Conti'),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaPage()));
-                },
-              ),
+          const SizedBox(height: 30),
+          Center(
+            child: ElevatedButton(
+              child: const Text('Visualizza Conti'),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => VisualizzaPage()));
+              },
             ),
-            const SizedBox(
-              height: 30,
+          ),
+          const SizedBox(height: 30),
+          Center(
+            child: ElevatedButton(
+              child: const Text('Carica Progetti'),
+              onPressed: () {
+                //_processFileProgetti();
+              },
             ),
-            Center(
-              child: ElevatedButton(
-                child: const Text('Visualizza Progetti'),
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaProg()));
-                },
-              ),
+          ),
+          const SizedBox(height: 30),
+          Center(
+            child: ElevatedButton(
+              child: const Text('Visualizza Progetti'),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaProg()));
+              },
             ),
-            const SizedBox(
-              height: 30,
-            ),
-          ],
-        )
+          ),
+          const SizedBox(height: 30),
+        ],
+      )
     );
   }
 
@@ -132,34 +125,32 @@ class _homePageState extends State<HomePage>{
     // Apri il selettore di file
     var uploadInput = FileUploadInputElement();
     uploadInput.click();
-
     uploadInput.onChange.listen((event) async {
       final file = uploadInput.files!.first;
       final reader = FileReader();
-
       reader.readAsArrayBuffer(file);
       reader.onLoadEnd.listen((event) async {
         // Carica il file su Firebase
         var storageRef = FirebaseStorage.instance.ref('fix.xlsx');
         await storageRef.putData(reader.result as Uint8List);
         final downloadUrl = await storageRef.getDownloadURL();
-
         if (kDebugMode) {
           print('File caricato su Firebase Storage: $downloadUrl');
         }
-
         // Invia una richiesta al server Flask per elaborare il file
         Map<String, String> headers = {
           "Content-Type": "text/plain",
         };
         final response = await http.get(
-            Uri.parse('http://127.0.0.1:5000/procFix'), headers: headers);
-
+            Uri.parse('http://127.0.0.1:5000/procFix'),
+            headers: headers
+        );
         if (response.statusCode == 200) {
           if (kDebugMode) {
             print('File elaborato con successo');
           }
           await processCsvFromFix();
+          setState(() { });
         } else {
           if (kDebugMode) {
             print('Errore durante l\'elaborazione del file');
@@ -184,10 +175,11 @@ class _homePageState extends State<HomePage>{
                 const SizedBox(width: 20),
                 Text(_loadingMessage),
                 ElevatedButton(
-                    onPressed: () {
-                      _hideLoadingDialog(context);
-                    },
-                    child: const Text('chiudi'))
+                  onPressed: () {
+                    _hideLoadingDialog(context);
+                  },
+                  child: const Text('chiudi')
+                )
               ],
             ),
           ),
@@ -201,59 +193,21 @@ class _homePageState extends State<HomePage>{
   }
 
   Future getAll() async{
-    await FirebaseFirestore.instance.collection('conti/').get().then((snapshot) => snapshot.docs.forEach((conto) {
-      getLines(conto.id);
-    }));
+    await FirebaseFirestore.instance.collection('conti/').get().then(
+      (snapshot) => snapshot.docs.forEach((conto) {
+        getLines(conto.id);
+      })
+    );
     conti = convertMapToObject(csvData2);
   }
 
   Future getLines(String idConto) async {
-    await FirebaseFirestore.instance
-        .collection('conti_dev/$idConto/lineeConto')
-        .get()
-        .then((snapshot) => snapshot.docs.forEach((linea) {
-      //print(linea.reference);
-      Map<String, dynamic> c = {
-        'Codice Conto': linea.get('Codice Conto'),
-        'Descrizione conto': linea.get('Descrizione conto'),
-        'Data operazione': linea.get('Data operazione'),
-        'COD': linea.get('COD'),
-        'Descrizione operazione': linea.get('Descrizione operazione'),
-        'Numero documento': linea.get('Numero documento'),
-        'Data documento': linea.get('Data documento'),
-        //'Numero Fattura': linea.get('Numero Fattura'),
-        'Importo': linea.get('Importo'),
-        'Saldo': linea.get('Saldo'),
-        'Contropartita': linea.get('Contropartita'),
-        'Costi Diretti': linea.get('Costi Diretti'),
-        'Costi Indiretti': linea.get('Costi Indiretti'),
-        'Attività economiche': linea.get('Attività economiche'),
-        'Attività non economiche': linea.get('Attività non economiche'),
-        'Codice progetto': linea.get('Codice progetto')
-      };
-      csvData2.add(c);
-    }));
-  }
-
-  Future<void> handleTimeout() async {  // callback function
-    if(i == 1) {
-      fetchHello();
-    }
-  }
-
-  Future<void> handleTimeout2() async {
-    if(i==1) {
-      csvData = await processCsvFromFile();
-    }
-    else{
-      setState(() {
-        /*Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ),
-        );*/
-      });
-    }
+    await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
+      (snapshot) => snapshot.docs.forEach((linea) {
+        Map<String,dynamic> c = linea.data();
+        csvData2.add(c);
+      })
+    );
   }
 
   Future<bool> checkIfFileExists() async {
@@ -275,8 +229,7 @@ class _homePageState extends State<HomePage>{
     Map<String, String> headers = {
       "Content-Type": "text/plain",
     };
-    final response = await http.get(
-        Uri.parse('http://127.0.0.1:5000/proc'), headers: headers);
+    final response = await http.get(Uri.parse('http://127.0.0.1:5000/proc'), headers: headers);
     if (response.statusCode == 200) {
       if (kDebugMode) {
         print('File elaborato con successo');
@@ -294,7 +247,6 @@ class _homePageState extends State<HomePage>{
   void downloadFile(String url) async {
     // Crea un riferimento al file in Firebase Storage
     var storageRef = FirebaseStorage.instance.refFromURL(url);
-
     // Ottieni l'URL di download del file
     String? downloadUrl;
     try {
@@ -305,11 +257,9 @@ class _homePageState extends State<HomePage>{
       }
       return;
     }
-
     if (kDebugMode) {
       print('URL di download: $downloadUrl');
     }
-
     // Avvia il download del file aprendo l'URL nel browser
     if (await canLaunchUrlString(downloadUrl)) {
       await launchUrlString(downloadUrl);
@@ -337,6 +287,7 @@ class _homePageState extends State<HomePage>{
           if(kDebugMode){
             print('File caricato su Firebase Storage: $downloadUrl');
           }
+          await refreshData();
           fetchHello();
         }
       });
@@ -350,17 +301,13 @@ class _homePageState extends State<HomePage>{
     Uint8List? byteData;
     var storageRef = FirebaseStorage.instanceFor(bucket: 'tesitriennale-4d2f1.appspot.com').ref('file.csv');
     await storageRef.getDownloadURL().then((value) => {
-      if(kDebugMode){
-        print(value)
-      }
+      print(value)
     });
     byteData = await storageRef.getData();
     String result2 = String.fromCharCodes(byteData as Iterable<int>);
     result2 = result2.replaceAll('ï»¿', '');
     List<List<dynamic>> data = const CsvToListConverter().convert(result2, eol: "\n", fieldDelimiter: ',');
-    await refreshData().then((value) => {
-      writedataFile(data)
-    });
+    writedataFile(data);
     return data;
   }
 
@@ -372,7 +319,6 @@ class _homePageState extends State<HomePage>{
     String temp = '';
     String s = 'line_00';
     String numConto = '';
-    bool refresh = false;
     for(final line in data){
       numConto = line[0];
       numConto.replaceAll('ï»¿', '');
@@ -380,10 +326,8 @@ class _homePageState extends State<HomePage>{
         temp = numConto;
         i = 0;
         s = 'line_00';
-        refresh = false;
         if(numConto != 'Codice Conto') {
-          await FirebaseFirestore.instance.collection('conti_dev2022').doc(
-              numConto).set({
+          await FirebaseFirestore.instance.collection('conti').doc(numConto).set({
             'Descrizione conto': line[1]
           });
         }
@@ -393,11 +337,9 @@ class _homePageState extends State<HomePage>{
           'Codice Conto' : numConto,
           'Descrizione conto' : line[1],
           'Data operazione' : line[2],
-          //'COD' : line[3],
           'Descrizione operazione' : line[3],
           'Numero documento' : line[4],
           'Data documento' : line[5],
-          //'Numero Fattura' : line[7],
           'Importo' : line[6],
           'Saldo' : '',
           'Contropartita' : line[7],
@@ -408,14 +350,10 @@ class _homePageState extends State<HomePage>{
           'Codice progetto' : ''
         };
         String iS = i.toString();
-        if(i>9){
-          s = 'line_0';
-        }
-        if(i>99){
-          s = 'line_';
-        }
+        if(i>9) s = 'line_0';
+        if(i>99) s = 'line_';
         i++;
-        await FirebaseFirestore.instance.collection('conti_dev2022').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
+        await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
       }
     }
     return i;
@@ -425,9 +363,7 @@ class _homePageState extends State<HomePage>{
     Uint8List? byteData;
     var storageRef = FirebaseStorage.instanceFor(bucket: 'tesitriennale-4d2f1.appspot.com').ref('fix.csv');
     await storageRef.getDownloadURL().then((value) => {
-      if(kDebugMode){
-        print(value)
-      }
+      print(value)
     });
     byteData = await storageRef.getData();
     String result2 = String.fromCharCodes(byteData as Iterable<int>);
@@ -439,22 +375,17 @@ class _homePageState extends State<HomePage>{
 
   Future<void> writedataFileInt(List<List> data) async {
     int i = 0;
-    String temp = '';
     String s = 'line_00';
     String numConto = '';
     for(final line in data){
-      String numConto = line[0];
+      numConto = line[0];
       await getNumberOfDocuments(numConto).then((value) => {
         i = value,
         if(i>9){
           s = 'line_0',
-          if(i>99){
-            s = 'line_',
-          }
+          if(i>99) s = 'line_',
         }
-        else{
-          s = 'line_00',
-        }
+        else s = 'line_00',
       });
       i++;
       if(numConto != 'Codice Conto'){
@@ -462,11 +393,9 @@ class _homePageState extends State<HomePage>{
           'Codice Conto' : numConto,
           'Descrizione conto' : line[1],
           'Data operazione' : line[2],
-          //'COD' : line[3],
           'Descrizione operazione' : line[3],
           'Numero documento' : line[4],
           'Data documento' : line[5],
-          //'Numero Fattura' : line[7],
           'Importo' : line[6],
           'Saldo' : '',
           'Contropartita' : line[7],
@@ -477,13 +406,13 @@ class _homePageState extends State<HomePage>{
           'Codice progetto' : ''
         };
         String iS = i.toString();
-        await FirebaseFirestore.instance.collection('conti_dev').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
+        await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
       }
     }
   }
 
   Future<int> getNumberOfDocuments(String num) async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('conti_dev').doc(num).collection('lineeConto').get();
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('conti').doc(num).collection('lineeConto').get();
     return querySnapshot.docs.length;
   }
 
@@ -491,7 +420,7 @@ class _homePageState extends State<HomePage>{
     if (kDebugMode) {
       print('refreshData called');
     }
-    await FirebaseFirestore.instance.collection('conti_dev').get().then((snapshot) => snapshot.docs.forEach((conto) {
+    await FirebaseFirestore.instance.collection('conti').get().then((snapshot) => snapshot.docs.forEach((conto) {
       conto.reference.collection('lineeConto').get().then((value) => {
         value.docs.forEach((linea) {
           linea.reference.delete();

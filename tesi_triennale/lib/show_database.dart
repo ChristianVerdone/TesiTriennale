@@ -1,17 +1,18 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
-import 'Conto.dart';
-import 'get_Conto.dart';
-import '../utils.dart';
+import 'conto.dart';
+import 'get_conto.dart';
+import 'utils.dart';
 import 'view_categorie.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class VisualizzaPage extends StatefulWidget { //seconda page di caricamento di dati dal database
-  VisualizzaPage({super.key,});
+  const VisualizzaPage({super.key,});
   @override
   State<VisualizzaPage> createState() => _VisualizzaPageState();
 }
@@ -20,13 +21,13 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
   List<Map<String, dynamic>> csvData2 = [];
   List<Conto> conti = [];
   List<String> contiRef = [];
-  final columns = ['Codice Conto', 'Descrizione Conto'
+  final columns = [
+    'Codice Conto',
+    'Descrizione Conto'
     'Data operazione',
-    'COD',
     'Descrizione operazione',
     'Numero documento',
     'Data documento',
-    'Numero fattura',
     'Importo',
     'Contropartita',
     'Costi diretti',
@@ -43,13 +44,15 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
 
   Future getConti() async{
     await FirebaseFirestore.instance.collection('conti').get().then(
-            (snapshot) => snapshot.docs.forEach(
-                (conto) async {
-                  if(!(contiRef.contains(conto.reference.id))){
-                    contiRef.add(conto.reference.id);
-                  }
-                }
-            )
+      (snapshot) => snapshot.docs.forEach(
+        (conto) async {
+          if(conto.reference.id != 'Codice Conto'){
+            if(!(contiRef.contains(conto.reference.id))){
+              contiRef.add(conto.reference.id);
+            }
+          }
+        }
+      )
     );
   }
 
@@ -61,33 +64,15 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
   }
 
   Future getLines(String idConto) async {
-    await FirebaseFirestore.instance
-        .collection('conti/$idConto/lineeConto')
-        .get()
-        .then((snapshot) =>
-        snapshot.docs.forEach((linea) async{
-      print(linea.reference);
-      Map<String, dynamic> c = {
-        'Codice Conto': linea.get('Codice Conto'),
-        'Descrizione conto': linea.get('Descrizione conto'),
-        'Data operazione': linea.get('Data operazione'),
-        'COD': linea.get('COD'),
-        'Descrizione operazione': linea.get('Descrizione operazione'),
-        'Numero documento': linea.get('Numero documento'),
-        'Data documento': linea.get('Data documento'),
-        'Numero Fattura': linea.get('Numero Fattura'),
-        'Importo': linea.get('Importo'),
-        'Saldo': linea.get('Saldo'),
-        'Contropartita': linea.get('Contropartita'),
-        'Costi Diretti': linea.get('Costi Diretti'),
-        'Costi Indiretti': linea.get('Costi Indiretti'),
-        'Attività economiche': linea.get('Attività economiche'),
-        'Attività non economiche': linea.get('Attività non economiche'),
-        'Codice progetto': linea.get('Codice progetto')
-      };
-      csvData2.add(c);
-      print(csvData2);
-    }));
+    await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
+      (snapshot) => snapshot.docs.forEach((linea) async{
+        Map<String, dynamic> c = linea.data();
+        csvData2.add(c);
+        if (kDebugMode) {
+          print(csvData2);
+        }
+      })
+    );
   }
 
   @override
@@ -105,7 +90,6 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
           ElevatedButton(
             child: const Text('Mostra Categorie'),
             onPressed: () {
-              // Navigate to second route when tapped.
               Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaCatPage()));
             },
           ),
@@ -114,7 +98,7 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
               await fullcsv(contiRef);
               Printing.layoutPdf(onLayout: (format) => _generatePdfContent());
             },
-            child: Icon(Icons.print),
+            child: const Icon(Icons.print),
           ),
         ],
       ),
@@ -123,17 +107,18 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-                child: FutureBuilder(
-                    future: getConti(),
-                    builder: (context, snapshot){
-                      return ListView.builder(
-                          itemCount: contiRef.length,
-                          itemBuilder: (context, index){
-                            return ListTile(
-                              title: GetConto(idConto: contiRef[index]),
-                            );
-                          });
-                    })
+              child: FutureBuilder(
+                future: getConti(), //richiamo la funzione getConti
+                builder: (context, snapshot){
+                  return ListView.builder(itemCount: contiRef.length,
+                    itemBuilder: (context, index){
+                      return ListTile(
+                        title: GetConto(idConto: contiRef[index]),
+                      );
+                    }
+                  );
+                }
+              )
             )
           ],
         ),
@@ -144,17 +129,13 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
   FutureOr<Uint8List> _generatePdfContent() async{
     final pdf = pw.Document();
     var tableData = _makeListConti();
-
-    final contentPerPage = 15; // Numero massimo di righe per pagina
+    const contentPerPage = 15; // Numero massimo di righe per pagina
     final totalPageCount = (tableData.length / contentPerPage).ceil();
-
     for (int pageIndex = 0; pageIndex < totalPageCount; pageIndex++) {
       final startIndex = pageIndex * contentPerPage;
       final endIndex = (pageIndex + 1) * contentPerPage;
-
       final currentPageData = tableData.sublist(startIndex,
           endIndex > tableData.length ? tableData.length : endIndex);
-
       final table = pw.TableHelper.fromTextArray(
           data: currentPageData,
           cellAlignment: pw.Alignment.centerLeft,
@@ -163,8 +144,8 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
             borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
             color: PdfColors.grey,
           ),
-          cellStyle: pw.TextStyle(fontSize: 8,font: pw.Font.courier()),
-          headerStyle: pw.TextStyle(fontSize: 8, font: pw.Font.courier())
+        cellStyle: pw.TextStyle(fontSize: 4,font: pw.Font.times()),
+        headerStyle: pw.TextStyle(fontSize: 4, font: pw.Font.helvetica()),
       );
 
       pw.Page p = pw.Page(
@@ -178,10 +159,8 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
           );
         },
       );
-
       pdf.addPage(p, index: pageIndex,);
     }
-
     return pdf.save();
   }
 
@@ -191,18 +170,16 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
       'Codice Conto',
       'Descrizione conto',
       'Data operazione',
-      'COD',
       'Descrizione operazione',
       'Numero documento',
       'Data documento',
-      'Numero fattura',
       'Importo',
       'Saldo',
       'Contropartita',
       'Costi diretti',
       'Costi indiretti',
-      'Attività economiche',
-      'Attività non economiche',
+      'Attivita economiche',
+      'Attivita non economiche',
       'Codice progetto'
     ];
     list.add(columns);
@@ -218,5 +195,4 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
     }
     return list;
   }
-
 }

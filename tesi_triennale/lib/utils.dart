@@ -1,17 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'Conto.dart';
+import 'conto.dart';
 
 class Utils{
-  static List<T> modelBuilder<M, T>(
-      List<M> models, T Function(int index, M model) builder )=>
-      models
-      .asMap()
-      .map<int, T>((index, model) => MapEntry(index, builder(index, model)))
-      .values
-      .toList();
+  static List<T> modelBuilder<M, T>(List<M> models, T Function(int index, M model) builder )=>
+    models.asMap().map<int, T>((index, model) => MapEntry(index, builder(index, model))).values.toList();
 }
+
 const platform = MethodChannel('mychannel');
 
 Future<int?> myDartFunction(int arg) async {
@@ -32,11 +28,9 @@ List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData
     codiceConto: item['Codice Conto'],
     descrizioneConto: item['Descrizione conto'],
     dataOperazione: item['Data operazione'],
-    //COD: item['COD'].toString(),
     descrizioneOperazione: item['Descrizione operazione'],
     numeroDocumento: item['Numero documento'].toString(),
     dataDocumento: item['Data documento'],
-    numeroFattura: item['Numero Fattura'].toString(),
     importo: item['Importo'].toString(),
     saldo: item['Saldo'].toString(),
     contropartita: item['Contropartita'],
@@ -44,5 +38,4 @@ List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData
     costiIndiretti: item['Costi Indiretti'].toString() == "" ? false : item['Costi Indiretti'],
     attivitaEconomiche: item['Attività economiche'].toString() == "" ? false : item['Attività economiche'],
     attivitaNonEconomiche: item['Attività non economiche'].toString() == "" ? false : item['Attività non economiche'],
-    codiceProgetto: item['Codice progetto']))
-    .toList();
+    codiceProgetto: item['Codice progetto'])).toList();

@@ -1,12 +1,13 @@
 class Progetto{
-  late final dynamic nomeProgetto;
-  late final dynamic anno;
-  late final dynamic valore;
+  dynamic nomeProgetto;
+  dynamic anno;
+  dynamic valore;
   late final Map<String, dynamic> costiDiretti;
   late final Map<String, dynamic> costiIndiretti;
-  late final bool isEconomico;
+  bool isEconomico;
   late final dynamic perc;
-  late final dynamic contributo;
+  dynamic contributo;
+  late final List references;
 
   Progetto.prog({required this.nomeProgetto,
     required this.anno,
@@ -15,8 +16,7 @@ class Progetto{
     required this.costiIndiretti,
     required this.isEconomico,
     required this.perc,
-    required this.contributo
+    required this.contributo,
+    required this.references
   });
-
-
 }

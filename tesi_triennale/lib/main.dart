@@ -9,7 +9,7 @@ late final app ;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   app = await Firebase.initializeApp(
+  app = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MyApp());
@@ -32,10 +32,10 @@ class MyApp extends StatelessWidget{
 class Login extends StatefulWidget{
   const Login({super.key});
   @override
-  State<Login> createState() => _loginState();
+  State<Login> createState() => LoginState();
 }
 
-class _loginState extends State<Login>{
+class LoginState extends State<Login>{
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -47,17 +47,17 @@ class _loginState extends State<Login>{
   @override
   Widget build(BuildContext context) => StreamBuilder<User?>(
     stream: auth.authStateChanges(),
-      builder: (context, snapshot){
-        if(snapshot.hasData){
-          //signed in
-          return const HomePage();
-        }else{
-          return const SignInScreen(
-            providerConfigs: [
-              EmailProviderConfiguration()
-            ]
-          );
-        }
+    builder: (context, snapshot){
+      if(snapshot.hasData){
+        //signed in
+        return const HomePage();
+      }else{
+        return const SignInScreen(
+          providerConfigs: [
+            EmailProviderConfiguration()
+          ]
+        );
       }
-  ) ;
+    }
+  );
 }
