@@ -32,8 +32,8 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
           statusBarColor: Colors.white,
-          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
         ),
         actions: <Widget>[
           const SizedBox(width: 16),
@@ -63,7 +63,7 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
           const SizedBox(width: 16),
           ElevatedButton(
             onPressed: () async {
-              await evaluate(widget.p.nomeProgetto);
+              await evaluateWithProgressDialog(widget.p.nomeProgetto);
               Navigator.of(context).pop(true);
             },
             child: const Text('Calcola costi')
@@ -275,6 +275,33 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     }
     return n;
   }
+
+  Future<void> evaluateWithProgressDialog(String nomeProgetto) async {
+  // Mostra il dialogo con il CircularProgressIndicator
+  showDialog(
+    context: context,
+    barrierDismissible: false, // Impedisce di chiudere il dialogo cliccando fuori
+    builder: (BuildContext context) {
+      return const Dialog(
+        child: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(width: 20),
+              Text("Caricamento..."),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+  // Esegui il metodo evaluate
+  await evaluate(nomeProgetto);
+  // Chiudi il dialogo una volta completato
+  Navigator.of(context).pop(true);
+}
 
   evaluate(String nomeProgetto) async {
     // Crea un array di DocumentReference

@@ -20,6 +20,7 @@ class ModifyDataCat extends StatefulWidget {
 class _ModifyDataCatState extends State<ModifyDataCat> {
   List<Conto> conti = [];
   List<String> projects = [];
+  Map<String, double> projectAmounts = {};
 
   final ScrollController _controller = ScrollController();
   final columns = [
@@ -69,27 +70,55 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
         ElevatedButton(
           child: const Text('Applica'),
           onPressed: () async {
-            String linea;
-            for (int i = 0; i < widget.lines.length; i++) {
-              linea = widget.lines[i];
-              String idConto = linea.substring(0, 8);
-              final json = {
-                'Codice Conto': conti[i].codiceConto,
-                'Descrizione conto': conti[i].descrizioneConto,
-                'Data operazione': conti[i].dataOperazione,
-                'Descrizione operazione': conti[i].descrizioneOperazione,
-                'Numero documento': conti[i].numeroDocumento,
-                'Data documento': conti[i].dataDocumento,
-                'Importo': conti[i].importo,
-                'Saldo': conti[i].saldo,
-                'Contropartita': conti[i].contropartita,
-                'Costi Diretti': conti[i].costiDiretti,
-                'Costi Indiretti': conti[i].costiIndiretti,
-                'Attività economiche': conti[i].attivitaEconomiche,
-                'Attività non economiche': conti[i].attivitaNonEconomiche,
-                'Codice progetto': conti[i].codiceProgetto
-              };
-              await FirebaseFirestore.instance.collection('conti').doc(idConto).collection('lineeConto').doc(linea).set(json);
+            if(widget.idCat == 'Personale'){
+              for (int i = 0; i < widget.lines.length; i++) {
+                String linea = widget.lines[i];
+                String idConto = linea.substring(0, 8);
+                final json = {
+                  'Codice Conto': conti[i].codiceConto,
+                  'Descrizione conto': conti[i].descrizioneConto,
+                  'Data operazione': conti[i].dataOperazione,
+                  'Descrizione operazione': conti[i].descrizioneOperazione,
+                  'Numero documento': conti[i].numeroDocumento,
+                  'Data documento': conti[i].dataDocumento,
+                  'Importo': conti[i].importo,
+                  'Saldo': conti[i].saldo,
+                  'Contropartita': conti[i].contropartita,
+                  'Costi Diretti': conti[i].costiDiretti,
+                  'Costi Indiretti': conti[i].costiIndiretti,
+                  'Attività economiche': conti[i].attivitaEconomiche,
+                  'Attività non economiche': conti[i].attivitaNonEconomiche,
+                  'Codice progetto': conti[i].codiceProgetto,
+                  'Project Amounts': conti[i].projectAmounts
+                };
+                await FirebaseFirestore.instance.collection('conti').doc(idConto).
+                collection('lineeConto').doc(linea).set(json, SetOptions(merge: true));
+              }
+            }
+            else {
+              String linea;
+              for (int i = 0; i < widget.lines.length; i++) {
+                linea = widget.lines[i];
+                String idConto = linea.substring(0, 8);
+                final json = {
+                  'Codice Conto': conti[i].codiceConto,
+                  'Descrizione conto': conti[i].descrizioneConto,
+                  'Data operazione': conti[i].dataOperazione,
+                  'Descrizione operazione': conti[i].descrizioneOperazione,
+                  'Numero documento': conti[i].numeroDocumento,
+                  'Data documento': conti[i].dataDocumento,
+                  'Importo': conti[i].importo,
+                  'Saldo': conti[i].saldo,
+                  'Contropartita': conti[i].contropartita,
+                  'Costi Diretti': conti[i].costiDiretti,
+                  'Costi Indiretti': conti[i].costiIndiretti,
+                  'Attività economiche': conti[i].attivitaEconomiche,
+                  'Attività non economiche': conti[i].attivitaNonEconomiche,
+                  'Codice progetto': conti[i].codiceProgetto
+                };
+                await FirebaseFirestore.instance.collection('conti').doc(idConto).
+                collection('lineeConto').doc(linea).set(json);
+              }
             }
             Navigator.pop(context, 'refresh');
           },
@@ -311,11 +340,11 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
 
   Future editCodiceProgetto2(Conto editConto) async {
     String? selectedProject = 'DefaultProject';
-    Map<String, double> projectAmounts = {};
     double totalAmount = double.parse(editConto.importo);
     double total = totalAmount;
+    var filteredProjects = projects.where((element) => element != 'DefaultProject').toList();
     if(widget.idCat == 'Personale'){
-      await showDialog(
+      projectAmounts = await showDialog(
         context: context,
         builder: (BuildContext context) {
           return StatefulBuilder(
@@ -325,7 +354,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                 content: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Text('Importo residuo da assegnare: $total'), ...projects.map((String project) {
+                      Text('Importo residuo da assegnare: $total'), ...filteredProjects.map((String project) {
                         return Row(
                           children: [
                             Checkbox(
@@ -385,12 +414,6 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
           );
         },
       );
-
-      if (projectAmounts.isNotEmpty) {
-        setState(() {
-
-        });
-      }
     }
     else {
       selectedProject = await showDialog<String>(
@@ -428,6 +451,17 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
           );
         },
       );
+    }
+
+    if (projectAmounts.isNotEmpty) {
+      setState(() {
+        conti = conti.map((conto) {
+          final isEditedConto = conto == editConto;
+          return isEditedConto ? conto.copy(
+            projectAmounts: projectAmounts,
+          ) : conto;
+        }).toList();
+      });
     }
 
     if (selectedProject != null && selectedProject != 'DefaultProject') {

@@ -13,6 +13,7 @@ class Conto {
   final bool attivitaEconomiche;
   final bool attivitaNonEconomiche;
   final dynamic codiceProgetto;
+  final Map<String, double>? projectAmounts;
 
   const Conto(
       {required this.codiceConto,
@@ -28,7 +29,8 @@ class Conto {
       required this.costiIndiretti,
       required this.attivitaEconomiche,
       required this.attivitaNonEconomiche,
-      required this.codiceProgetto});
+      required this.codiceProgetto,
+      this.projectAmounts});
 
   Conto copy({
     dynamic codiceConto,
@@ -44,8 +46,8 @@ class Conto {
     dynamic costiIndiretti,
     dynamic attivitaEconomiche,
     dynamic attivitaNonEconomiche,
-    dynamic codiceProgetto,
-
+    dynamic codiceProgetto, 
+    Map<String, double>? projectAmounts,
   }) =>
       Conto(
         codiceConto: codiceConto ?? this.codiceConto,
@@ -62,6 +64,7 @@ class Conto {
         attivitaEconomiche: attivitaEconomiche ?? this.attivitaEconomiche,
         attivitaNonEconomiche: attivitaNonEconomiche ?? this.attivitaNonEconomiche,
         codiceProgetto: codiceProgetto ?? this.codiceProgetto,
+        projectAmounts: projectAmounts ?? this.projectAmounts,
       );
 
   @override
