@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
@@ -43,9 +45,11 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   @override
   void initState() {
     super.initState();
+    print('initState called');
   }
 
   void reload(){
+    print('reload called');
     setState(() {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ViewContiCatPage(idCat: widget.idCat)));
     });
@@ -53,6 +57,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('build called');
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -71,6 +76,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
           ElevatedButton(
             child: const Text('Modifica'),
             onPressed: () async{
+              print('Modifica button pressed');
               String refresh = await Navigator.push(context, MaterialPageRoute(builder: (context) => ModifyDataCat(csvData: csvData, lines: lines, idCat: widget.idCat)));
               if (refresh == 'refresh') {
                 reload();
@@ -80,6 +86,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
           const SizedBox(width: 16),
           IconButton(
             onPressed: (){
+              print('Home button pressed');
               Navigator.popUntil(context, ModalRoute.withName('/'));
             },
             icon: const Icon(Icons.home)),
@@ -89,9 +96,10 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
       body: FutureBuilder(
         future: getLinesConto(),
         builder: (context, snapshot) {
-          return Scrollbar( // Aggiungi questo
-            thumbVisibility: true, // Mostra sempre la scrollbar
-            controller: _controller, // Aggiungi un controller
+          print('FutureBuilder called');
+          return Scrollbar(
+            thumbVisibility: true,
+            controller: _controller,
             child: ScrollableWidget(controller: _controller,child: buildDataTable()),
           );
         }
@@ -100,6 +108,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   Widget buildDataTable() {
+    print('buildDataTable called');
     return DataTable(
       columns: getColumns(columns),
       rows: getRows(contiM),
@@ -107,6 +116,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   List<DataColumn> getColumns(List<String> columns) {
+    print('getColumns called with columns: $columns');
     return columns.map(
       (item) => DataColumn(
         label: Text(
@@ -116,83 +126,105 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     ).toList();
   }
 
-  List<DataRow> getRows(List<Conto> conti) => conti.map((Conto conto) {
-    final cells = [
-      conto.codiceConto,
-      conto.descrizioneConto,
-      conto.dataOperazione,
-      conto.descrizioneOperazione,
-      conto.numeroDocumento,
-      conto.dataDocumento,
-      conto.importo,
-      conto.saldo,
-      conto.contropartita,
-      conto.costiDiretti,
-      conto.costiIndiretti,
-      conto.attivitaEconomiche,
-      conto.attivitaNonEconomiche,
-      conto.codiceProgetto
-    ];
+  List<DataRow> getRows(List<Conto> conti) {
+    print('getRows called with conti: $conti');
+    return conti.map((Conto conto) {
+      final cells = [
+        conto.codiceConto,
+        conto.descrizioneConto,
+        conto.dataOperazione,
+        conto.descrizioneOperazione,
+        conto.numeroDocumento,
+        conto.dataDocumento,
+        conto.importo,
+        conto.saldo,
+        conto.contropartita,
+        conto.costiDiretti,
+        conto.costiIndiretti,
+        conto.attivitaEconomiche,
+        conto.attivitaNonEconomiche,
+        conto.codiceProgetto
+      ];
 
-    return DataRow(
-      cells: Utils.modelBuilder(cells, (index, cell) {
-        if (index == 9) {
-          switch (conto.costiDiretti) {
-            case true:
-              return const DataCell(Center(
-                child: Tooltip(message: 'Costi diretti', child: Icon(Icons.check))
-              ));
-            case false:
-              return const DataCell(Center(
-                child: Tooltip(message: 'Costi diretti', child: Icon(Icons.clear))
-              ));
+      return DataRow(
+        cells: Utils.modelBuilder(cells, (index, cell) {
+          if (index == 9) {
+            switch (conto.costiDiretti) {
+              case true:
+                return const DataCell(Center(
+                  child: Tooltip(message: 'Costi diretti', child: Icon(Icons.check))
+                ));
+              case false:
+                return const DataCell(Center(
+                  child: Tooltip(message: 'Costi diretti', child: Icon(Icons.clear))
+                ));
+            }
           }
-        }
-        if (index == 10) {
-          switch (conto.costiIndiretti) {
-            case true:
-              return const DataCell(Center(
-                child: Tooltip(message: 'Costi indiretti', child: Icon(Icons.check))
-              ));
-            case false:
-              return const DataCell(Center(
-                child: Tooltip(message: 'Costi indiretti', child: Icon(Icons.clear))
-              ));
+          if (index == 10) {
+            switch (conto.costiIndiretti) {
+              case true:
+                return const DataCell(Center(
+                  child: Tooltip(message: 'Costi indiretti', child: Icon(Icons.check))
+                ));
+              case false:
+                return const DataCell(Center(
+                  child: Tooltip(message: 'Costi indiretti', child: Icon(Icons.clear))
+                ));
+            }
           }
-        }
-        if (index == 11) {
-          switch (conto.attivitaEconomiche) {
-            case true:
-              return const DataCell(Center(
-                child: Tooltip(message: 'Attività economiche', child: Icon(Icons.check))
-              ));
-            case false:
-              return const DataCell(Center(
-                child: Tooltip(message: 'Attività economiche', child: Icon(Icons.clear))
-              ));
+          if (index == 11) {
+            switch (conto.attivitaEconomiche) {
+              case true:
+                return const DataCell(Center(
+                  child: Tooltip(message: 'Attività economiche', child: Icon(Icons.check))
+                ));
+              case false:
+                return const DataCell(Center(
+                  child: Tooltip(message: 'Attività economiche', child: Icon(Icons.clear))
+                ));
+            }
           }
-        }
-        if (index == 12) {
-          switch (conto.attivitaNonEconomiche) {
-            case true:
-              return const DataCell(Center(
-                child: Tooltip(message: 'Attività non economiche', child: Icon(Icons.check))
-              ));
-            case false:
-              return const DataCell(Center(
-                child: Tooltip(message: 'Attività non economiche', child: Icon(Icons.clear))
-              ));
+          if (index == 12) {
+            switch (conto.attivitaNonEconomiche) {
+              case true:
+                return const DataCell(Center(
+                  child: Tooltip(message: 'Attività non economiche', child: Icon(Icons.check))
+                ));
+              case false:
+                return const DataCell(Center(
+                  child: Tooltip(message: 'Attività non economiche', child: Icon(Icons.clear))
+                ));
+            }
           }
-        }
-        return DataCell(Tooltip(
-          message: testo(index),
-          child: Text('$cell'),
-        ));
-      }),
-    );
-  }).toList();
+          if (index == 13) {
+            if (widget.idCat == 'Personale') {
+              return DataCell(
+                ElevatedButton(
+                  onPressed: () async {
+                    print('Visualizza Progetti button pressed for conto: ${conto.codiceConto}');
+                    await viewProjectAmounts(conto, lines[conti.indexOf(conto)]);
+                  },
+                  child: const Text('Visualizza Progetti'),
+                ),
+              );
+            } else {
+              return DataCell(Tooltip(
+                message: testo(index),
+                child: Text('$cell'),
+              ));
+            }
+          }
+          return DataCell(Tooltip(
+            message: testo(index),
+            child: Text('$cell'),
+          ));
+        }),
+      );
+    }).toList();
+  }
 
   String testo(int i) {
+    print('testo called with index: $i');
     String testo = '';
     if (i == 0) return columns[i];
     if (i == 1) return columns[i];
@@ -207,11 +239,75 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     return testo;
   }
 
+  Future<Map<String, double>> fetchProjectAmounts(Conto c, String lineaC) async {
+    print('fetchProjectAmounts called with Conto: ${c.codiceConto}, lineaC: $lineaC');
+    Map<String, double> projectAmounts = {};
+
+    // Find the matching element in conti
+    DocumentReference? matchingElement;
+    for (var idC in conti) {
+      DocumentReference s = idC as DocumentReference;
+      if (s.id == c.codiceConto) {
+        matchingElement = s;
+        break;
+      }
+    }
+    Map<String, dynamic> data = {};
+    if (matchingElement != null) {
+      await FirebaseFirestore.instance.collection('conti_dev2022/${matchingElement.id}/lineeConto').get().then(
+        (snapshot) => snapshot.docs.forEach((linea) {
+          if (linea.id == lineaC) {
+            data = linea.data();
+          } else if (data['Project Amounts'] is LinkedHashMap) {
+            projectAmounts = Map<String, double>.from(projectAmounts);
+          }
+        })
+      );
+    }
+
+    print('fetchProjectAmounts returning: $projectAmounts');
+    return projectAmounts;
+  }
+
+  Future<void> viewProjectAmounts(Conto conto, String rowIndex) async {
+    print('viewProjectAmounts called with Conto: ${conto.codiceConto}, rowIndex: $rowIndex');
+    Map<String, double> projectAmounts = await fetchProjectAmounts(conto, rowIndex);
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Visualizza Progetti'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: projectAmounts.keys.map((String key) {
+                return ListTile(
+                  title: Text(key),
+                  subtitle: Text('Importo: ${projectAmounts[key]}'),
+                );
+              }).toList(),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                print('Dialog OK button pressed');
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Future getLinesConto() async {
+    print('getLinesConto called');
     await findConti(widget.idCat);
     for (var idC in conti) {
       DocumentReference s = idC as DocumentReference;
-      await FirebaseFirestore.instance.collection('conti/${s.id}/lineeConto').get().then(
+      await FirebaseFirestore.instance.collection('conti_dev2022/${s.id}/lineeConto').get().then(
         (snapshot) => snapshot.docs.forEach((linea) {
           Map<String, dynamic> c = linea.data();
           lines.add(linea.id);
@@ -219,13 +315,14 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
         })
       );
     }
-    contiM = convertMapToObject(csvData);
+    contiM = convertMapToObject2(csvData);
     await valuateTot();
     await valuatePerc();
   }
 
   Future findConti(String idcat) async {
-    await FirebaseFirestore.instance.collection('categorie').get().then(
+    print('findConti called with idcat: $idcat');
+    await FirebaseFirestore.instance.collection('categorie_dev').get().then(
       (snapshot) => snapshot.docs.forEach((cat) {
         if (cat.id == idcat) {
           conti = cat.get('Conti') as List<dynamic>;
@@ -237,6 +334,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   num totIndiretti = 0;
 
   Future<void> valuateTot() async {
+    print('valuateTot called');
     totIndiretti = 0;
     num totInnE = 0;
     num totInE = 0;
@@ -245,7 +343,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     num totD = 0;
     num percDE = 0;
     num percDnE = 0;
-    DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(widget.idCat);
+    DocumentReference d = FirebaseFirestore.instance.collection('categorie_dev').doc(widget.idCat);
     for(var linea in contiM){
       if(linea.costiIndiretti){
         if(!linea.attivitaNonEconomiche && !linea.attivitaEconomiche){
@@ -282,14 +380,15 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   Future<void> valuatePerc() async {
+    print('valuatePerc called');
     num percCIAE = 0;
     num percCIAnE = 0;
     num totCIAE = 0;
     num totCIAnE = 0;
-    CollectionReference c =  FirebaseFirestore.instance.collection('categorie');
+    CollectionReference c =  FirebaseFirestore.instance.collection('categorie_dev');
     totCIAE = 0;
     totCIAnE = 0;
-    await FirebaseFirestore.instance.collection('categorie').get().then(
+    await FirebaseFirestore.instance.collection('categorie_dev').get().then(
       (snapshot) => snapshot.docs.forEach(
         (cat) {
           totCIAE = totCIAE + num.parse(cat.get('Totale Costi Indiretti A E').toString());
