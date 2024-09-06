@@ -11,6 +11,8 @@
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/conto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" afterDir="false" />
     </list>
@@ -300,7 +302,7 @@
       <workItem from="1723131544238" duration="11785000" />
       <workItem from="1725358904551" duration="289000" />
       <workItem from="1725359681903" duration="3671000" />
-      <workItem from="1725435190667" duration="4226000" />
+      <workItem from="1725435190667" duration="18636000" />
     </task>
     <servers />
   </component>
@@ -312,13 +314,8 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart</url>
-          <line>318</line>
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart</url>
-          <line>317</line>
-          <option name="timeStamp" value="8" />
+          <line>248</line>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

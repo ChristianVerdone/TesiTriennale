@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +22,7 @@ class ModifyDataCat extends StatefulWidget {
 class _ModifyDataCatState extends State<ModifyDataCat> {
   List<Conto> conti = [];
   List<String> projects = [];
-  Map<String, double> projectAmounts = {};
+  LinkedHashMap<String, double> projectAmounts = LinkedHashMap<String, double>();
 
   final ScrollController _controller = ScrollController();
   final columns = [
@@ -74,24 +76,27 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
               for (int i = 0; i < widget.lines.length; i++) {
                 String linea = widget.lines[i];
                 String idConto = linea.substring(0, 8);
+                var conto = conti[i];
+                var projectAmounts = conto.projectAmounts;
+                projectAmounts ??= LinkedHashMap<String, double>();
                 final json = {
-                  'Codice Conto': conti[i].codiceConto,
-                  'Descrizione conto': conti[i].descrizioneConto,
-                  'Data operazione': conti[i].dataOperazione,
-                  'Descrizione operazione': conti[i].descrizioneOperazione,
-                  'Numero documento': conti[i].numeroDocumento,
-                  'Data documento': conti[i].dataDocumento,
-                  'Importo': conti[i].importo,
-                  'Saldo': conti[i].saldo,
-                  'Contropartita': conti[i].contropartita,
-                  'Costi Diretti': conti[i].costiDiretti,
-                  'Costi Indiretti': conti[i].costiIndiretti,
-                  'Attività economiche': conti[i].attivitaEconomiche,
-                  'Attività non economiche': conti[i].attivitaNonEconomiche,
-                  'Codice progetto': conti[i].codiceProgetto,
-                  'Project Amounts': conti[i].projectAmounts
+                  'Codice Conto': conto.codiceConto,
+                  'Descrizione conto': conto.descrizioneConto,
+                  'Data operazione': conto.dataOperazione,
+                  'Descrizione operazione': conto.descrizioneOperazione,
+                  'Numero documento': conto.numeroDocumento,
+                  'Data documento': conto.dataDocumento,
+                  'Importo': conto.importo,
+                  'Saldo': conto.saldo,
+                  'Contropartita': conto.contropartita,
+                  'Costi Diretti': conto.costiDiretti,
+                  'Costi Indiretti': conto.costiIndiretti,
+                  'Attività economiche': conto.attivitaEconomiche,
+                  'Attività non economiche': conto.attivitaNonEconomiche,
+                  'Codice progetto': conto.codiceProgetto,
+                  'Project Amounts': projectAmounts
                 };
-                await FirebaseFirestore.instance.collection('conti').doc(idConto).
+                await FirebaseFirestore.instance.collection('conti_dev2022').doc(idConto).
                 collection('lineeConto').doc(linea).set(json, SetOptions(merge: true));
               }
             }
@@ -116,7 +121,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                   'Attività non economiche': conti[i].attivitaNonEconomiche,
                   'Codice progetto': conti[i].codiceProgetto
                 };
-                await FirebaseFirestore.instance.collection('conti').doc(idConto).
+                await FirebaseFirestore.instance.collection('conti_dev2022').doc(idConto).
                 collection('lineeConto').doc(linea).set(json);
               }
             }
@@ -453,7 +458,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
       );
     }
 
-    if (projectAmounts.isNotEmpty) {
+    if (projectAmounts!.isNotEmpty) {
       setState(() {
         conti = conti.map((conto) {
           final isEditedConto = conto == editConto;

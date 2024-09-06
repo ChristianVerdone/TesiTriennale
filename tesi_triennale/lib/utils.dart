@@ -45,9 +45,9 @@ List<Conto> convertMapToObject2(List<Map<String, dynamic>> csvData) => csvData
     .map((item) {
       var projectAmounts = item['Project Amounts'];
       if (projectAmounts == null) {
-        projectAmounts = {};
+        projectAmounts = LinkedHashMap<String, double>();
       } else if (projectAmounts is LinkedHashMap) {
-        projectAmounts = Map<String, double>.from(projectAmounts);
+        projectAmounts = LinkedHashMap<String, double>.from(projectAmounts.map((key, value) => MapEntry(key, value.toDouble())));
       }
       return Conto(
         codiceConto: item['Codice Conto'],

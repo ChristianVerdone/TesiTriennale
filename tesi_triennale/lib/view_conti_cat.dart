@@ -24,6 +24,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   List<Map<String, dynamic>> csvData = [];
   List<dynamic> conti = [];
   final ScrollController _controller = ScrollController();
+  late Future bool;
   final columns = [
     'Codice conto',
     'Descrizione conto',
@@ -45,11 +46,12 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   @override
   void initState() {
     super.initState();
-    print('initState called');
+    getLinesConto().then((_) {
+      setState(() {});
+    });
   }
 
   void reload(){
-    print('reload called');
     setState(() {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ViewContiCatPage(idCat: widget.idCat)));
     });
@@ -57,7 +59,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('build called');
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: const SystemUiOverlayStyle(
@@ -76,7 +77,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
           ElevatedButton(
             child: const Text('Modifica'),
             onPressed: () async{
-              print('Modifica button pressed');
               String refresh = await Navigator.push(context, MaterialPageRoute(builder: (context) => ModifyDataCat(csvData: csvData, lines: lines, idCat: widget.idCat)));
               if (refresh == 'refresh') {
                 reload();
@@ -86,29 +86,21 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
           const SizedBox(width: 16),
           IconButton(
             onPressed: (){
-              print('Home button pressed');
               Navigator.popUntil(context, ModalRoute.withName('/'));
             },
             icon: const Icon(Icons.home)),
           const SizedBox(width: 16),
         ],
       ),
-      body: FutureBuilder(
-        future: getLinesConto(),
-        builder: (context, snapshot) {
-          print('FutureBuilder called');
-          return Scrollbar(
-            thumbVisibility: true,
-            controller: _controller,
-            child: ScrollableWidget(controller: _controller,child: buildDataTable()),
-          );
-        }
-      )
+      body: Scrollbar(
+        thumbVisibility: true,
+        controller: _controller,
+        child: ScrollableWidget(controller: _controller, child: buildDataTable()),
+      ),
     );
   }
 
   Widget buildDataTable() {
-    print('buildDataTable called');
     return DataTable(
       columns: getColumns(columns),
       rows: getRows(contiM),
@@ -116,7 +108,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   List<DataColumn> getColumns(List<String> columns) {
-    print('getColumns called with columns: $columns');
     return columns.map(
       (item) => DataColumn(
         label: Text(
@@ -127,7 +118,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   List<DataRow> getRows(List<Conto> conti) {
-    print('getRows called with conti: $conti');
     return conti.map((Conto conto) {
       final cells = [
         conto.codiceConto,
@@ -201,7 +191,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
               return DataCell(
                 ElevatedButton(
                   onPressed: () async {
-                    print('Visualizza Progetti button pressed for conto: ${conto.codiceConto}');
                     await viewProjectAmounts(conto, lines[conti.indexOf(conto)]);
                   },
                   child: const Text('Visualizza Progetti'),
@@ -224,7 +213,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   String testo(int i) {
-    print('testo called with index: $i');
     String testo = '';
     if (i == 0) return columns[i];
     if (i == 1) return columns[i];
@@ -239,9 +227,8 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     return testo;
   }
 
-  Future<Map<String, double>> fetchProjectAmounts(Conto c, String lineaC) async {
-    print('fetchProjectAmounts called with Conto: ${c.codiceConto}, lineaC: $lineaC');
-    Map<String, double> projectAmounts = {};
+  Future<LinkedHashMap<String, double>> fetchProjectAmounts(Conto c, String lineaC) async {
+    LinkedHashMap<String, double> projectAmounts = LinkedHashMap<String, double>();
 
     // Find the matching element in conti
     DocumentReference? matchingElement;
@@ -258,20 +245,18 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
         (snapshot) => snapshot.docs.forEach((linea) {
           if (linea.id == lineaC) {
             data = linea.data();
-          } else if (data['Project Amounts'] is LinkedHashMap) {
-            projectAmounts = Map<String, double>.from(projectAmounts);
+            if (data['Project Amounts'] is LinkedHashMap) {
+              projectAmounts = LinkedHashMap<String, double>.from(data['Project Amounts'].map((key, value) => MapEntry(key, value.toDouble())));
+            }
           }
         })
       );
     }
-
-    print('fetchProjectAmounts returning: $projectAmounts');
     return projectAmounts;
   }
 
   Future<void> viewProjectAmounts(Conto conto, String rowIndex) async {
-    print('viewProjectAmounts called with Conto: ${conto.codiceConto}, rowIndex: $rowIndex');
-    Map<String, double> projectAmounts = await fetchProjectAmounts(conto, rowIndex);
+    LinkedHashMap<String, double> projectAmounts = await fetchProjectAmounts(conto, rowIndex);
 
     await showDialog(
       context: context,
@@ -292,7 +277,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
             TextButton(
               child: const Text('OK'),
               onPressed: () {
-                print('Dialog OK button pressed');
                 Navigator.of(context).pop();
               },
             ),
@@ -303,7 +287,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   Future getLinesConto() async {
-    print('getLinesConto called');
     await findConti(widget.idCat);
     for (var idC in conti) {
       DocumentReference s = idC as DocumentReference;
@@ -321,7 +304,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   Future findConti(String idcat) async {
-    print('findConti called with idcat: $idcat');
     await FirebaseFirestore.instance.collection('categorie_dev').get().then(
       (snapshot) => snapshot.docs.forEach((cat) {
         if (cat.id == idcat) {
@@ -334,7 +316,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   num totIndiretti = 0;
 
   Future<void> valuateTot() async {
-    print('valuateTot called');
     totIndiretti = 0;
     num totInnE = 0;
     num totInE = 0;
@@ -380,7 +361,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   Future<void> valuatePerc() async {
-    print('valuatePerc called');
     num percCIAE = 0;
     num percCIAnE = 0;
     num totCIAE = 0;
