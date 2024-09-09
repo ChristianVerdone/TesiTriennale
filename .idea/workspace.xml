@@ -11,10 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/conto.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -302,7 +299,8 @@
       <workItem from="1723131544238" duration="11785000" />
       <workItem from="1725358904551" duration="289000" />
       <workItem from="1725359681903" duration="3671000" />
-      <workItem from="1725435190667" duration="18636000" />
+      <workItem from="1725435190667" duration="19467000" />
+      <workItem from="1725869109259" duration="4687000" />
     </task>
     <servers />
   </component>
@@ -310,15 +308,6 @@
     <option name="version" value="3" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart</url>
-          <line>248</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="FlutterRunConfigurationType">
         <watch expression="e...&#10;Waiting for connection from debug service on Chrome...&#10;This app is linked to the debug service: ws://127.0.0.1:49278/QXD5di9RF80=/ws&#10;Debug service listening on ws://127.0.0.1:49278/QXD5di9RF80=/ws&#10;Debug service listening on ws://127.0.0.1:49278/QXD5di9RF80=/ws&#10;" />

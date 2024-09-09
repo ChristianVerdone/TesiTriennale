@@ -45,7 +45,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
   @override
   void initState() {
     super.initState();
-    conti = convertMapToObject(widget.csvData);
+    conti = convertMapToObject2(widget.csvData);
     getProjects().then((projectList) {
       setState(() {
         projects = projectList;
@@ -349,6 +349,10 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
     double total = totalAmount;
     var filteredProjects = projects.where((element) => element != 'DefaultProject').toList();
     if(widget.idCat == 'Personale'){
+      projectAmounts = editConto.projectAmounts!;
+      if (projectAmounts.isNotEmpty) {
+        total = totalAmount - projectAmounts.values.reduce((a, b) => a + b);
+      }
       projectAmounts = await showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -378,6 +382,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                             if (projectAmounts.containsKey(project))
                               Expanded(
                                 child: TextFormField(
+                                  initialValue: projectAmounts[project].toString(),
                                   onFieldSubmitted: (value) {
                                     double amount = double.tryParse(value) ?? 0;
                                     if (amount > 0 && amount <= totalAmount) {
@@ -458,7 +463,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
       );
     }
 
-    if (projectAmounts!.isNotEmpty) {
+    if (projectAmounts.isNotEmpty) {
       setState(() {
         conti = conti.map((conto) {
           final isEditedConto = conto == editConto;
