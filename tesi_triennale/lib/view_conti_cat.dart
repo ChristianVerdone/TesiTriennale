@@ -241,7 +241,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     }
     Map<String, dynamic> data = {};
     if (matchingElement != null) {
-      await FirebaseFirestore.instance.collection('conti_dev2022/${matchingElement.id}/lineeConto').get().then(
+      await FirebaseFirestore.instance.collection('conti/${matchingElement.id}/lineeConto').get().then(
         (snapshot) => snapshot.docs.forEach((linea) {
           if (linea.id == lineaC) {
             data = linea.data();
@@ -290,7 +290,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     await findConti(widget.idCat);
     for (var idC in conti) {
       DocumentReference s = idC as DocumentReference;
-      await FirebaseFirestore.instance.collection('conti_dev2022/${s.id}/lineeConto').get().then(
+      await FirebaseFirestore.instance.collection('conti/${s.id}/lineeConto').get().then(
         (snapshot) => snapshot.docs.forEach((linea) {
           Map<String, dynamic> c = linea.data();
           lines.add(linea.id);
@@ -304,7 +304,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   Future findConti(String idcat) async {
-    await FirebaseFirestore.instance.collection('categorie_dev').get().then(
+    await FirebaseFirestore.instance.collection('categorie').get().then(
       (snapshot) => snapshot.docs.forEach((cat) {
         if (cat.id == idcat) {
           conti = cat.get('Conti') as List<dynamic>;
@@ -324,7 +324,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     num totD = 0;
     num percDE = 0;
     num percDnE = 0;
-    DocumentReference d = FirebaseFirestore.instance.collection('categorie_dev').doc(widget.idCat);
+    DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(widget.idCat);
     for(var linea in contiM){
       if(linea.costiIndiretti){
         if(!linea.attivitaNonEconomiche && !linea.attivitaEconomiche){
@@ -365,10 +365,10 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     num percCIAnE = 0;
     num totCIAE = 0;
     num totCIAnE = 0;
-    CollectionReference c =  FirebaseFirestore.instance.collection('categorie_dev');
+    CollectionReference c =  FirebaseFirestore.instance.collection('categorie');
     totCIAE = 0;
     totCIAnE = 0;
-    await FirebaseFirestore.instance.collection('categorie_dev').get().then(
+    await FirebaseFirestore.instance.collection('categorie').get().then(
       (snapshot) => snapshot.docs.forEach(
         (cat) {
           totCIAE = totCIAE + num.parse(cat.get('Totale Costi Indiretti A E').toString());

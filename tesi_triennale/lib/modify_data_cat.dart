@@ -96,7 +96,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                   'Codice progetto': conto.codiceProgetto,
                   'Project Amounts': projectAmounts
                 };
-                await FirebaseFirestore.instance.collection('conti_dev2022').doc(idConto).
+                await FirebaseFirestore.instance.collection('conti').doc(idConto).
                 collection('lineeConto').doc(linea).set(json, SetOptions(merge: true));
               }
             }
@@ -121,7 +121,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                   'Attività non economiche': conti[i].attivitaNonEconomiche,
                   'Codice progetto': conti[i].codiceProgetto
                 };
-                await FirebaseFirestore.instance.collection('conti_dev2022').doc(idConto).
+                await FirebaseFirestore.instance.collection('conti').doc(idConto).
                 collection('lineeConto').doc(linea).set(json);
               }
             }
