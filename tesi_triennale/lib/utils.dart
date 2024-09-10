@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -39,3 +40,30 @@ List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData
     attivitaEconomiche: item['Attività economiche'].toString() == "" ? false : item['Attività economiche'],
     attivitaNonEconomiche: item['Attività non economiche'].toString() == "" ? false : item['Attività non economiche'],
     codiceProgetto: item['Codice progetto'])).toList();
+
+List<Conto> convertMapToObject2(List<Map<String, dynamic>> csvData) => csvData
+    .map((item) {
+      var projectAmounts = item['Project Amounts'];
+      if (projectAmounts == null) {
+        projectAmounts = LinkedHashMap<String, double>();
+      } else if (projectAmounts is LinkedHashMap) {
+        projectAmounts = LinkedHashMap<String, double>.from(projectAmounts.map((key, value) => MapEntry(key, value.toDouble())));
+      }
+      return Conto(
+        codiceConto: item['Codice Conto'],
+        descrizioneConto: item['Descrizione conto'],
+        dataOperazione: item['Data operazione'],
+        descrizioneOperazione: item['Descrizione operazione'],
+        numeroDocumento: item['Numero documento'].toString(),
+        dataDocumento: item['Data documento'],
+        importo: item['Importo'].toString(),
+        saldo: item['Saldo'].toString(),
+        contropartita: item['Contropartita'],
+        costiDiretti: item['Costi Diretti'].toString() == "" ? false : item['Costi Diretti'],
+        costiIndiretti: item['Costi Indiretti'].toString() == "" ? false : item['Costi Indiretti'],
+        attivitaEconomiche: item['Attività economiche'].toString() == "" ? false : item['Attività economiche'],
+        attivitaNonEconomiche: item['Attività non economiche'].toString() == "" ? false : item['Attività non economiche'],
+        projectAmounts: projectAmounts,
+        codiceProgetto: item['Codice progetto']
+      );
+    }).toList();

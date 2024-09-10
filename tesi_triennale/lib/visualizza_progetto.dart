@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -261,7 +262,7 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
   }
 
   getCat() async {
-    await FirebaseFirestore.instance.collection('categorie').get().then((value) {
+    await FirebaseFirestore.instance.collection('categorie_dev').get().then((value) {
       for (var element in value.docs) {
         categories.add(element.id);
       }
@@ -309,20 +310,46 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     num s;
     for (var categoria in widget.p.costiDiretti.keys) {
       s = 0;
-      await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
+      await FirebaseFirestore.instance.collection('categorie_dev').doc(categoria).get().then(
         (cat) async {
-          for (var element in (cat.get('Conti') as List<dynamic>)){
-            DocumentReference d = element as DocumentReference;
-            if (kDebugMode) {
-              print(d.id);
+          if(cat.reference.id == 'Personale'){
+            for (var element in (cat.get('Conti') as List<dynamic>)) {
+              DocumentReference d = element as DocumentReference;
+              if (kDebugMode) {
+                print(d.id);
+              }
+              await FirebaseFirestore.instance.collection('conti_dev2022/${d.id}/lineeConto').get().then(
+                (value) => value.docs.forEach((linea) {
+                  if (linea.reference.id != 'defaultLine') {
+                    LinkedHashMap<String, double> progetti = LinkedHashMap<String, double>.from(linea.data()['Project Amounts'].map((key, value) => MapEntry(key, value.toDouble())));
+                    if (progetti.containsKey(nomeProgetto) && linea.get('Costi Diretti') == true) {
+                        s = s + num.parse(progetti[nomeProgetto].toString());
+                        // Aggiungi il DocumentReference all'array
+                        documentReferences.add(linea.reference);
+                        if (kDebugMode) {
+                          print(linea.reference.id);
+                        }
+                    }
+                  }
+                })
+              );
             }
-            await FirebaseFirestore.instance.collection('conti/${d.id}/lineeConto').get().then(
-              (value) => value.docs.forEach(
-                (linea) {
-                  if(linea.reference.id != 'defaultLine'){
-                    var c = linea.data()['Codice progetto'].toString();
-                    if(c == nomeProgetto && linea.get('Costi Diretti') == true){
-                      s = s + num.parse(linea.get('Importo').toString());
+          }
+          else {
+            for (var element in (cat.get('Conti') as List<dynamic>)) {
+              DocumentReference d = element as DocumentReference;
+              if (kDebugMode) {
+                print(d.id);
+              }
+              await FirebaseFirestore.instance.collection('conti_dev2022/${d.id}/lineeConto').get().then(
+                (value) => value.docs.forEach( (linea) {
+                  if (linea.reference.id != 'defaultLine') {
+                    var c = linea.data()['Codice progetto']
+                        .toString();
+                    if (c == nomeProgetto &&
+                        linea.get('Costi Diretti') == true) {
+                      s = s + num.parse(linea.get('Importo')
+                          .toString());
                       // Aggiungi il DocumentReference all'array
                       documentReferences.add(linea.reference);
                       if (kDebugMode) {
@@ -330,9 +357,9 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
                       }
                     }
                   }
-                }
-              )
-            );
+                })
+              );
+            }
           }
         }
       );
@@ -340,7 +367,7 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     }
     num totCostiIndAE = 0;
     num totCostiIndAnE = 0;
-    await FirebaseFirestore.instance.collection('categorie').get().then(
+    await FirebaseFirestore.instance.collection('categorie_dev').get().then(
       (snap) => snap.docs.forEach(
         (cat) {
           totCostiIndAE = totCostiIndAE + num.parse(cat.get('Totale Costi Indiretti A E').toString());
@@ -350,7 +377,7 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     );
     for (var categoria in widget.p.costiIndiretti.keys) {
       s = 0;
-      await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
+      await FirebaseFirestore.instance.collection('categorie_dev').doc(categoria).get().then(
         (cat) {
           if(widget.p.isEconomico){
             s = num.parse(widget.p.perc.toString()) / 100 * totCostiIndAE * num.parse(cat.get('Percentuale CI A E').toString()) / 100;

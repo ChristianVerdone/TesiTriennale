@@ -10,10 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/conto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetto.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -74,7 +71,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Christian&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;ChrisDev&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
@@ -135,9 +132,6 @@
     <configuration name="ci-cd.yaml" type="SwaggerCodegen" editBeforeRun="true" temporary="true" show_console_on_std_err="false" show_console_on_std_out="false">
       <option name="allowRunningInParallel" value="false" />
       <option name="customTemplatesPath" value="" />
-      <option name="envs">
-        <map />
-      </option>
       <option name="generateToPath" value="C:\Users\chris\Desktop\ServiceCICD" />
       <option name="generationParameters">
         <list />
@@ -145,14 +139,11 @@
       <option name="generatorType" value="OPENAPI_GENERATOR_V6" />
       <option name="jdkPath" value="C:\Users\chris\AppData\Local\Programs\IntelliJ IDEA Ultimate\jbr\bin\java.exe" />
       <option name="language" value="java-vertx-web" />
-      <option name="passParentEnvs" value="true" />
-      <option name="programParameters" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
       </option>
       <option name="specificationPath" value="C:\Users\chris\Desktop\ci-cd.yaml" />
-      <option name="workingDirectory" value="C:\Users\chris\Desktop" />
       <method v="2" />
     </configuration>
     <list>
@@ -169,8 +160,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-IU-241.18034.62" />
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.21829.142" />
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-IU-242.21829.142" />
       </set>
     </attachedChunks>
   </component>
@@ -306,6 +297,11 @@
       <workItem from="1723119738796" duration="2459000" />
       <workItem from="1723126022979" duration="742000" />
       <workItem from="1723131544238" duration="11785000" />
+      <workItem from="1725358904551" duration="289000" />
+      <workItem from="1725359681903" duration="3671000" />
+      <workItem from="1725435190667" duration="19467000" />
+      <workItem from="1725869109259" duration="5549000" />
+      <workItem from="1725954301482" duration="3656000" />
     </task>
     <servers />
   </component>

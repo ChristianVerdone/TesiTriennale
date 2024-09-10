@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 class Conto {
   final dynamic codiceConto;
   final dynamic descrizioneConto;
@@ -13,7 +15,7 @@ class Conto {
   final bool attivitaEconomiche;
   final bool attivitaNonEconomiche;
   final dynamic codiceProgetto;
-  final Map<String, double>? projectAmounts;
+  final LinkedHashMap<String, double>? projectAmounts;
 
   const Conto(
       {required this.codiceConto,
@@ -47,7 +49,7 @@ class Conto {
     dynamic attivitaEconomiche,
     dynamic attivitaNonEconomiche,
     dynamic codiceProgetto, 
-    Map<String, double>? projectAmounts,
+    LinkedHashMap<String, double>? projectAmounts,
   }) =>
       Conto(
         codiceConto: codiceConto ?? this.codiceConto,
