@@ -379,6 +379,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                               },
                             ),
                             Text(project),
+                            const SizedBox(width: 50),
                             if (projectAmounts.containsKey(project))
                               Expanded(
                                 child: TextFormField(

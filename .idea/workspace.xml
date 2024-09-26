@@ -11,6 +11,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/conto.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetto.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -301,7 +302,9 @@
       <workItem from="1725359681903" duration="3671000" />
       <workItem from="1725435190667" duration="19467000" />
       <workItem from="1725869109259" duration="5549000" />
-      <workItem from="1725954301482" duration="3656000" />
+      <workItem from="1725954301482" duration="7165000" />
+      <workItem from="1726135645283" duration="3088000" />
+      <workItem from="1726157731865" duration="6000" />
     </task>
     <servers />
   </component>
