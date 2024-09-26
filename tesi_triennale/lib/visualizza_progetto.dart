@@ -40,10 +40,35 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
           const SizedBox(width: 16),
           IconButton(
             onPressed: () async {
-              await deleteProgetto();
+              await showDialog<bool>(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Conferma Rimozione'),
+                    content: const Text('Sei sicuro di voler rimuovere questo Progetto?'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: const Text('Annulla'),
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
+                      ),
+                      TextButton(
+                        child: const Text('Conferma'),
+                        onPressed: () async {
+                          // Add your removal logic here
+                          await deleteProgetto();
+                          await FirebaseFirestore.instance.collection('progetti').doc(widget.p.nomeProgetto).delete();
+                          Navigator.of(context).pop(true);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
               Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaProg()));
             },
-            icon: const Icon(Icons.remove)),
+            icon: const Icon(Icons.delete, color: Colors.red)),
           ElevatedButton(
             child: const Text('Modifica'),
             onPressed: () async {
@@ -138,7 +163,7 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
         },
       );
     }
-    conti = convertMapToObject(csvData);
+    conti = convertMapToObject2(csvData);
   }
 
   List<List<dynamic>> _makeListConti() {
@@ -158,16 +183,17 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
       'Attivita economiche',
       'Attivita non economiche',
       'Codice progetto'
+      'Project Amounts'
     ];
     list.add(columns);
     int i = 0;
     for (var conto in conti) {
       if(i/14 >= 1){
-        list.add(conto.toListF());
+        list.add(conto.toListFPAmounts(widget.p.nomeProgetto));
         list.add(columns);
       }
       else{
-        list.add(conto.toListF());
+        list.add(conto.toListFPAmounts(widget.p.nomeProgetto));
       }
     }
     return list;
@@ -274,6 +300,7 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     for (var element in iterable) {
       n = n + num.parse(element) ;
     }
+    n = num.parse(n.toStringAsFixed(2));
     return n;
   }
 

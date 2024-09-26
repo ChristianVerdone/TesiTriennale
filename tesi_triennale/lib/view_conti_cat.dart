@@ -137,6 +137,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
       ];
 
       return DataRow(
+        color: conto.costiDiretti ? MaterialStateProperty.all(Colors.blue) : null,
         cells: Utils.modelBuilder(cells, (index, cell) {
           if (index == 9) {
             switch (conto.costiDiretti) {
