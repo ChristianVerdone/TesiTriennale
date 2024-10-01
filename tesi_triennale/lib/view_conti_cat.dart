@@ -42,6 +42,8 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     'CodiceProgetto'
   ];
   String refresh = '';
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   void initState() {

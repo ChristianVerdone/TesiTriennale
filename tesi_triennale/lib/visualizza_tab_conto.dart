@@ -220,6 +220,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
     ];
 
     return DataRow(
+      color: conto.costiDiretti ? MaterialStateProperty.all(Colors.blue) : null,
       cells: Utils.modelBuilder(cells, (index, cell) {
         if (index == 7) {
           switch (conto.costiDiretti) {
