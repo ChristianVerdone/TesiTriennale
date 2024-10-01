@@ -14,12 +14,13 @@ class _InsertProgettoState extends State<InsertProgetto>{
   final TextEditingController _annoController = TextEditingController();
   final TextEditingController _valoreController = TextEditingController();
   final TextEditingController _contributoController = TextEditingController();
-  final bool _isEconomico = false;
+  bool _isEconomico = false;
   Map<String, dynamic> staticMap = {
     'Ammortamenti' : '0',
     'God beni terzi' : '0',
     'Materie Prime' : '0',
     'Oneri diversi' : '0',
+    'Oneri finanziari' : '0',
     'Personale' : '0',
     'Servizi' : '0'
   };
@@ -119,9 +120,11 @@ class _InsertProgettoState extends State<InsertProgetto>{
           const SizedBox(height: 20),
           Checkbox(
             key: GlobalKey(),
-            value: false,
+            value: _isEconomico,
             onChanged: (bool? value) {
-              isEconomico = value!;
+              setState(() {
+                _isEconomico = value!;
+              });
             },
           ),
         ],
@@ -190,6 +193,6 @@ class _InsertProgettoState extends State<InsertProgetto>{
   }
 
   set isEconomico(bool value) {
-    isEconomico = value;
+    _isEconomico = value;
   }
 }

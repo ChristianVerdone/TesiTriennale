@@ -379,7 +379,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                               },
                             ),
                             Text(project),
-                            const SizedBox(width: 50),
+                            const SizedBox(width: 10),
                             if (projectAmounts.containsKey(project))
                               Expanded(
                                 child: TextFormField(
@@ -404,6 +404,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                                     }
                                   },
                                   keyboardType: TextInputType.number,
+                                  textAlign: TextAlign.right,
                                 ),
                               ),
                           ],

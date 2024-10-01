@@ -66,7 +66,9 @@ class _ModifyProgettoState extends State<ModifyProgetto> {
           key: GlobalKey(),
           value: widget.progetto.isEconomico,
           onChanged: (bool? value) {
-            widget.progetto.isEconomico = value!;
+            setState(() {
+              widget.progetto.isEconomico = value!;
+            });
           },
         ),
         const SizedBox(height: 20),
