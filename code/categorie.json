@@ -1,0 +1,161 @@
+[
+    {
+        "Conti": [
+            "conti/8.22.003",
+            "conti/8.22.005",
+            "conti/8.22.009",
+            "conti/8.22.010",
+            "conti/8.22.013",
+            "conti/8.22.015",
+            "conti/8.26.004",
+            "conti/8.04.003",
+            "conti/8.22.029",
+            "conti/8.22.042",
+            "conti/8.22.043"
+        ],
+        "Totale Costi Indiretti A E": 4664.292,
+        "Totale Costi Diretti A nE": 0,
+        "Totale Costi Diretti A E": 0,
+        "Totale Costi Indiretti A nE": 41978.628,
+        "Percentuale CI A E": "0.82",
+        "Percentuale CI A nE": "3.48",
+        "doc_name": "Ammortamenti"
+    },
+    {
+        "Conti": [
+            "conti/8.12.000"
+        ],
+        "Totale Costi Indiretti A E": 14082.769,
+        "Totale Costi Diretti A nE": 0,
+        "Totale Costi Diretti A E": 0,
+        "Totale Costi Indiretti A nE": 126744.921,
+        "Percentuale CI A E": "2.48",
+        "Percentuale CI A nE": "10.52",
+        "doc_name": "God beni terzi"
+    },
+    {
+        "Conti": [
+            "conti/8.01.010",
+            "conti/8.11.011"
+        ],
+        "Totale Costi Indiretti A E": 9330.495,
+        "Totale Costi Diretti A nE": 4703.8,
+        "Totale Costi Diretti A E": 0,
+        "Totale Costi Indiretti A nE": 83974.45500000002,
+        "Percentuale CI A E": "1.64",
+        "Percentuale CI A nE": "6.97",
+        "doc_name": "Materie Prime"
+    },
+    {
+        "Conti": [
+            "conti/8.11.000",
+            "conti/8.14.005",
+            "conti/8.14.010",
+            "conti/8.14.011",
+            "conti/8.15.005",
+            "conti/8.17.006",
+            "conti/8.20.002",
+            "conti/8.20.007",
+            "conti/8.20.010",
+            "conti/8.21.000",
+            "conti/8.21.005",
+            "conti/8.21.006",
+            "conti/8.36.001",
+            "conti/8.36.004",
+            "conti/8.37.010",
+            "conti/8.38.003",
+            "conti/8.38.004",
+            "conti/8.38.005",
+            "conti/8.38.012",
+            "conti/8.46.005",
+            "conti/8.46.007",
+            "conti/8.46.008",
+            "conti/8.46.009",
+            "conti/8.20.006",
+            "conti/8.20.009",
+            "conti/8.21.003",
+            "conti/8.35.001",
+            "conti/8.35.006",
+            "conti/8.36.003",
+            "conti/8.38.008",
+            "conti/8.40.004"
+        ],
+        "Totale Costi Indiretti A E": 11462.038999999999,
+        "Totale Costi Diretti A nE": 4687.5,
+        "Totale Costi Diretti A E": 0,
+        "Totale Costi Indiretti A nE": 103158.351,
+        "Percentuale CI A E": "2.02",
+        "Percentuale CI A nE": "8.56",
+        "doc_name": "Oneri diversi"
+    },
+    {
+        "Conti": [
+            "conti/8.33.000",
+            "conti/8.33.006",
+            "conti/8.33.011",
+            "conti/8.36.002",
+            "conti/9.09.003",
+            "conti/9.11.008"
+        ],
+        "Totale Costi Indiretti A E": 2896.900000000028,
+        "Totale Costi Diretti A nE": 0,
+        "Totale Costi Diretti A E": 0,
+        "Totale Costi Indiretti A nE": 26072.10000000025,
+        "Percentuale CI A E": "0.51",
+        "Percentuale CI A nE": "2.16",
+        "doc_name": "Oneri finanziari"
+    },
+    {
+        "Conti": [
+            "conti/8.04.000",
+            "conti/8.04.002",
+            "conti/8.04.004",
+            "conti/8.04.023",
+            "conti/8.04.024",
+            "conti/8.06.004",
+            "conti/8.06.008",
+            "conti/8.07.000",
+            "conti/8.08.000",
+            "conti/8.04.003",
+            "conti/8.07.002"
+        ],
+        "Totale Costi Indiretti A E": 12124.591219725364,
+        "Totale Costi Diretti A nE": 387525.3799999998,
+        "Totale Costi Diretti A E": 6646.8,
+        "Totale Costi Indiretti A nE": 706894.5687802752,
+        "Percentuale CI A E": "2.13",
+        "Percentuale CI A nE": "58.68",
+        "doc_name": "Personale"
+    },
+    {
+        "Conti": [
+            "conti/8.01.009",
+            "conti/8.01.031",
+            "conti/8.04.010",
+            "conti/8.09.005",
+            "conti/8.11.013",
+            "conti/8.14.000",
+            "conti/8.14.001",
+            "conti/8.14.004",
+            "conti/8.14.007",
+            "conti/8.14.021",
+            "conti/8.14.024",
+            "conti/8.16.000",
+            "conti/8.16.019",
+            "conti/8.17.000",
+            "conti/8.18.000",
+            "conti/8.19.000",
+            "conti/8.03.001",
+            "conti/8.09.020",
+            "conti/8.14.027",
+            "conti/8.18.008"
+        ],
+        "Totale Costi Indiretti A E": 513578.08173197915,
+        "Totale Costi Diretti A nE": 7901.200000000001,
+        "Totale Costi Diretti A E": 35000,
+        "Totale Costi Indiretti A nE": 115939.51826802042,
+        "Percentuale CI A E": "90.40",
+        "Percentuale CI A nE": "9.62",
+        "doc_name": "Servizi"
+    }
+]

@@ -10,10 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/code/retrieveDb.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/insert_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/insert_progetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/modify_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/modify_progetto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_tab_conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_tab_conto.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,36 +63,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Flutter.login.dart.executor&quot;: &quot;Run&quot;,
-    &quot;Flutter.main.dart.executor&quot;: &quot;Run&quot;,
-    &quot;OpenAPI/Swagger Code Generator.ci-cd.yaml.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;ChrisDev&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;io.flutter.reload.alreadyRun&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/chris/Desktop/apitest&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15234375&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.24913494&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;show.migrate.to.gradle.popup&quot;: &quot;false&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Flutter.login.dart.executor": "Run",
+    "Flutter.main.dart.executor": "Run",
+    "OpenAPI/Swagger Code Generator.ci-cd.yaml.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "dart.analysis.tool.window.visible": "false",
+    "git-widget-placeholder": "ChrisDev",
+    "ignore.virus.scanning.warn.message": "true",
+    "io.flutter.reload.alreadyRun": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/chris/Desktop/apitest",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15234375",
+    "project.structure.side.proportion": "0.24913494",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "show.migrate.to.gradle.popup": "false",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\TesiTriennale\tesi_triennale" />
@@ -307,7 +308,7 @@
       <workItem from="1726135645283" duration="3088000" />
       <workItem from="1726157731865" duration="6000" />
       <workItem from="1727270262153" duration="10313000" />
-      <workItem from="1727769075614" duration="2998000" />
+      <workItem from="1727769075614" duration="14760000" />
     </task>
     <servers />
   </component>

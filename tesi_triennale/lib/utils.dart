@@ -24,6 +24,29 @@ Future<int?> myDartFunction(int arg) async {
   return null;
 }
 
+List<Conto> filterConti(List<Conto> conti, String query) {
+  if (query.isEmpty) {
+    return conti;
+  }
+  final lowerCaseQuery = query.toLowerCase();
+  return conti.where((conto) {
+    return conto.codiceConto.toLowerCase().contains(lowerCaseQuery) ||
+        conto.descrizioneConto.toLowerCase().contains(lowerCaseQuery) ||
+        conto.dataOperazione.toLowerCase().contains(lowerCaseQuery) ||
+        conto.descrizioneOperazione.toLowerCase().contains(lowerCaseQuery) ||
+        conto.numeroDocumento.toLowerCase().contains(lowerCaseQuery) ||
+        conto.dataDocumento.toLowerCase().contains(lowerCaseQuery) ||
+        conto.importo.toLowerCase().contains(lowerCaseQuery) ||
+        conto.saldo.toLowerCase().contains(lowerCaseQuery) ||
+        conto.contropartita.toLowerCase().contains(lowerCaseQuery) ||
+        conto.costiDiretti.toString().toLowerCase().contains(lowerCaseQuery) ||
+        conto.costiIndiretti.toString().toLowerCase().contains(lowerCaseQuery) ||
+        conto.attivitaEconomiche.toString().toLowerCase().contains(lowerCaseQuery) ||
+        conto.attivitaNonEconomiche.toString().toLowerCase().contains(lowerCaseQuery) ||
+        conto.codiceProgetto.toLowerCase().contains(lowerCaseQuery);
+  }).toList();
+}
+
 List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData
     .map((item) => Conto(
     codiceConto: item['Codice Conto'],
