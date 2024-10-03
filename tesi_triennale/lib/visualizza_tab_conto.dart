@@ -39,10 +39,15 @@ class _VisualizzaConto extends State<VisualizzaConto> {
     'Attività non economiche',
     'Codice progetto'
   ];
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
+    getLines(widget.idConto).then((_) {
+      setState(() {});
+    });
   }
 
   void reload(){
@@ -91,15 +96,32 @@ class _VisualizzaConto extends State<VisualizzaConto> {
           const SizedBox(width: 16),
         ],
       ),
-      body: FutureBuilder(
-        future: getLines(widget.idConto),
-        builder: (context, snapshot) {
-          return Scrollbar(
-            thumbVisibility: true, // Mostra sempre la scrollbar
-            controller: _controller,
-            child: ScrollableWidget(controller: _controller,child: buildDataTable()),
-          );
-        })
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                labelText: 'Search',
+                suffixIcon: Icon(Icons.search),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+            ),
+          ),
+          Expanded(
+            child: Scrollbar(
+              thumbVisibility: true, // Mostra sempre la scrollbar
+              controller: _controller,
+              child: ScrollableWidget(controller: _controller,child: buildDataTable()),
+            ),
+          )
+        ],
+      )
     );
   }
 
@@ -187,9 +209,10 @@ class _VisualizzaConto extends State<VisualizzaConto> {
   }
 
   Widget buildDataTable() {
+    final filteredConti = filterConti(conti, _searchQuery);
     return DataTable(
       columns: getColumns(columns),
-      rows: getRows(conti),
+      rows: getRows(filteredConti),
     );
   }
 
@@ -202,6 +225,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
       ),
     ).toList();
   }
+
 
   List<DataRow> getRows(List<Conto> conti) => conti.map((Conto conto) {
     final cells = [
@@ -294,7 +318,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
   }
 
   Future getLines(String idConto) async {
-    await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
+    await FirebaseFirestore.instance.collection('conti_dev2022/$idConto/lineeConto').get().then(
       (snapshot) => snapshot.docs.forEach((linea) {
         if(linea.reference.id != 'defaultLine'){
           Map<String, dynamic> c = linea.data();

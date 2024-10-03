@@ -10,7 +10,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/code/retrieveDb.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
+=======
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" afterDir="false" />
+>>>>>>> ChrisDev
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_tab_conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_tab_conto.dart" afterDir="false" />
     </list>
@@ -72,7 +77,11 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "dart.analysis.tool.window.visible": "false",
+<<<<<<< HEAD
     "git-widget-placeholder": "Christian",
+=======
+    "git-widget-placeholder": "ChrisDev",
+>>>>>>> ChrisDev
     "ignore.virus.scanning.warn.message": "true",
     "io.flutter.reload.alreadyRun": "true",
     "kotlin-language-version-configured": "true",
@@ -306,7 +315,11 @@
       <workItem from="1726135645283" duration="3088000" />
       <workItem from="1726157731865" duration="6000" />
       <workItem from="1727270262153" duration="10313000" />
+<<<<<<< HEAD
       <workItem from="1727769075614" duration="7405000" />
+=======
+      <workItem from="1727769075614" duration="14760000" />
+>>>>>>> ChrisDev
     </task>
     <servers />
   </component>

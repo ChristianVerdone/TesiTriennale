@@ -94,18 +94,40 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
           const SizedBox(width: 16),
         ],
       ),
-      body: Scrollbar(
-        thumbVisibility: true,
-        controller: _controller,
-        child: ScrollableWidget(controller: _controller, child: buildDataTable()),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                labelText: 'Search',
+                suffixIcon: Icon(Icons.search),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+            ),
+          ),
+          Expanded(
+            child: Scrollbar(
+              thumbVisibility: true,
+              controller: _controller,
+              child: ScrollableWidget(controller: _controller, child: buildDataTable()),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget buildDataTable() {
+    final filteredConti = filterConti(contiM, _searchQuery);
     return DataTable(
       columns: getColumns(columns),
-      rows: getRows(contiM),
+      rows: getRows(filteredConti),
     );
   }
 
