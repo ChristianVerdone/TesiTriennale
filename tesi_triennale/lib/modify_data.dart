@@ -8,16 +8,12 @@ import 'conto.dart';
 import 'utils.dart';
 
 class ModifyData extends StatefulWidget {
-  final List<String> lines;
+  List<Map<String, dynamic>> lines;
   final List<Map<String, dynamic>> csvData;
   final String codiceConto;
 
-  const ModifyData({
-    super.key,
-    required this.csvData,
-    required this.lines,
-    required this.codiceConto,
-  });
+  ModifyData({super.key, required this.csvData, required List<String> lines, required this.codiceConto})
+      : lines = lines.map((line) => {'linea': line, 'isModified': false}).toList();
   @override
   State<ModifyData> createState() => _ModifyDataState();
 }
@@ -39,6 +35,8 @@ class _ModifyDataState extends State<ModifyData> {
     'Attivita non economiche',
     'Codice progetto'
   ];
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   @override
   void initState() {
@@ -72,29 +70,31 @@ class _ModifyDataState extends State<ModifyData> {
           onPressed: () async {
             String linea;
             for (int i = 0; i < widget.lines.length; i++) {
-              linea = widget.lines[i];
-              String idConto = linea.substring(0, 8);
-              var conto = conti[i];
-              if (kDebugMode) {
-                print(conto.descrizioneConto);
+              if(widget.lines[i]['isModified'] == false) {
+                continue;
+              } else {
+                linea = widget.lines[i]['linea'];
+                var conto = conti[i];
+                final json = {
+                  'Codice Conto': widget.codiceConto,
+                  'Descrizione conto': conto.descrizioneConto,
+                  'Data operazione': conto.dataOperazione,
+                  'Descrizione operazione': conto.descrizioneOperazione,
+                  'Numero documento': conto.numeroDocumento,
+                  'Data documento': conto.dataDocumento,
+                  'Importo': conto.importo,
+                  'Saldo': conto.saldo,
+                  'Contropartita': conto.contropartita,
+                  'Costi Diretti': conto.costiDiretti,
+                  'Costi Indiretti': conto.costiIndiretti,
+                  'Attività economiche': conto.attivitaEconomiche,
+                  'Attività non economiche': conto.attivitaNonEconomiche,
+                  'Codice progetto': conto.codiceProgetto
+                };
+                await FirebaseFirestore.instance.collection('conti').doc(
+                    widget.codiceConto).collection('lineeConto').doc(linea).set(
+                    json, SetOptions(merge: true));
               }
-              final json = {
-                'Codice Conto': widget.codiceConto,
-                'Descrizione conto': conto.descrizioneConto,
-                'Data operazione': conto.dataOperazione,
-                'Descrizione operazione': conto.descrizioneOperazione,
-                'Numero documento': conto.numeroDocumento,
-                'Data documento': conto.dataDocumento,
-                'Importo': conto.importo,
-                'Saldo': conto.saldo,
-                'Contropartita': conto.contropartita,
-                'Costi Diretti': conto.costiDiretti,
-                'Costi Indiretti': conto.costiIndiretti,
-                'Attività economiche': conto.attivitaEconomiche,
-                'Attività non economiche': conto.attivitaNonEconomiche,
-                'Codice progetto': conto.codiceProgetto
-              };
-              await FirebaseFirestore.instance.collection('conti').doc(idConto).collection('lineeConto').doc(linea).set(json);
             }
             Navigator.pop(context, 'refresh');
           },
@@ -108,13 +108,38 @@ class _ModifyDataState extends State<ModifyData> {
         const SizedBox(width: 16),
       ],
     ),
-    body: ScrollableWidget(controller: _controller,child: buildDataTable()),
+    body: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _searchController,
+            decoration: const InputDecoration(
+              labelText: 'Search',
+              suffixIcon: Icon(Icons.search),
+            ),
+            onChanged: (value) {
+              setState(() {
+                _searchQuery = value;
+              });
+            },
+          ),
+        ),
+        Expanded(
+          child: ScrollableWidget(
+            controller: _controller,
+            child: buildDataTable(),
+          ),
+        ),
+      ],
+    ),
   );
 
   Widget buildDataTable() {
+    final filteredConti = filterConti(conti, _searchQuery);
     return DataTable(
       columns: getColumns(columns),
-      rows: getRows(conti),
+      rows: getRows(filteredConti),
     );
   }
 
@@ -143,6 +168,7 @@ class _ModifyDataState extends State<ModifyData> {
       conto.codiceProgetto
     ];
     return DataRow(
+      color: conto.costiDiretti ? MaterialStateProperty.all(Colors.blue) : null,
       cells: Utils.modelBuilder(cells, (index, cell) {
         switch (index) {
           case 6:
@@ -262,28 +288,40 @@ class _ModifyDataState extends State<ModifyData> {
 
   Future editCostiDiretti(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
-      var isEditedConto = conto == editConto;
+      var isEditedConto = conto ==(editConto);
+      if(isEditedConto == true) {
+        widget.lines[conti.indexOf(conto)]['isModified'] = true;
+      }
       return isEditedConto ? conto.copy(costiDiretti: value) : conto;
     }).toList());
   }
 
   Future editCostiIndiretti(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
-      var isEditedConto = conto == editConto;
+      var isEditedConto = conto ==(editConto);
+      if(isEditedConto == true) {
+        widget.lines[conti.indexOf(conto)]['isModified'] = true;
+      }
       return isEditedConto ? conto.copy(costiIndiretti: value) : conto;
     }).toList());
   }
 
   Future editAttivitaEconomiche(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
-      var isEditedConto = conto == editConto;
+      var isEditedConto = conto ==(editConto);
+      if(isEditedConto == true) {
+        widget.lines[conti.indexOf(conto)]['isModified'] = true;
+      }
       return isEditedConto ? conto.copy(attivitaEconomiche: value) : conto;
     }).toList());
   }
 
   Future editAttivitaNonEconomiche(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
-      var isEditedConto = conto == editConto;
+      var isEditedConto = conto ==(editConto);
+      if(isEditedConto == true) {
+        widget.lines[conti.indexOf(conto)]['isModified'] = true;
+      }
       return isEditedConto ? conto.copy(attivitaNonEconomiche: value) : conto;
     }).toList());
   }
@@ -296,7 +334,10 @@ class _ModifyDataState extends State<ModifyData> {
     );
 
     setState(() => conti = conti.map((conto) {
-      final isEditedConto = conto == editConto;
+      final isEditedConto = conto ==(editConto);
+      if(isEditedConto == true) {
+        widget.lines[conti.indexOf(conto)]['isModified'] = true;
+      }
       return isEditedConto ? conto.copy(codiceProgetto: codiceProgetto) : conto;
     }).toList());
   }
@@ -347,7 +388,10 @@ class _ModifyDataState extends State<ModifyData> {
 
     if (selectedProject != null && selectedProject != 'DefaultProject') {
       setState(() => conti = conti.map((conto) {
-        final isEditedConto = conto == editConto;
+        final isEditedConto = conto ==(editConto);
+        if(isEditedConto == true) {
+          widget.lines[conti.indexOf(conto)]['isModified'] = true;
+        }
         return isEditedConto ? conto.copy(codiceProgetto: selectedProject): conto;
       }).toList());
     }

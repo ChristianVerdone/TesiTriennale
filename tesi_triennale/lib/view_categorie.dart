@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tesi_triennale/utils.dart';
 import 'view_conti_cat.dart';
 
-class VisualizzaCatPage extends StatefulWidget { //seconda page di caricamento di dati dal database
+class VisualizzaCatPage extends StatefulWidget {
   const VisualizzaCatPage({super.key});
   @override
   State<VisualizzaCatPage> createState() => _VisualizzaCatPageState();
@@ -51,7 +52,9 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
                       return ListTile(
                         title: TextButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => ViewContiCatPage(idCat: cat.elementAt(index))));
+                            Navigator.push(context, MaterialPageRoute(builder:
+                                (context) => ViewContiCatPage(
+                                    idCat: cat.elementAt(index))));
                           },
                           child: Text(cat.elementAt(index))
                         ),
@@ -69,7 +72,12 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
 
   getCat() async {
     await FirebaseFirestore.instance.collection('categorie').get().then(
-      (value) => value.docs.forEach((categ) => cat.add(categ.id))
+      (value) => value.docs.forEach((categ) {
+        if (categ.id != 'riepilogoCat') {
+          cat.add(categ.id);
+        }
+      })
     );
+    calcolaEInserisciRiepilogoCat();
   }
 }

@@ -9,11 +9,12 @@ import 'conto.dart';
 import 'utils.dart';
 
 class ModifyDataCat extends StatefulWidget {
-  final List<String> lines;
   final List<Map<String, dynamic>> csvData;
+  List<Map<String, dynamic>> lines;
   String idCat;
 
-  ModifyDataCat({super.key, required this.csvData, required this.lines, required this.idCat});
+  ModifyDataCat({super.key, required this.csvData, required List<String> lines, required this.idCat})
+      : lines = lines.map((line) => {'linea': line, 'isModified': false}).toList();
 
   @override
   State<ModifyDataCat> createState() => _ModifyDataCatState();
@@ -41,6 +42,9 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
     'Attivita non economiche',
     'CodiceProgetto'
   ];
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
 
   @override
   void initState() {
@@ -74,55 +78,66 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
           onPressed: () async {
             if(widget.idCat == 'Personale'){
               for (int i = 0; i < widget.lines.length; i++) {
-                String linea = widget.lines[i];
-                String idConto = linea.substring(0, 8);
-                var conto = conti[i];
-                var projectAmounts = conto.projectAmounts;
-                projectAmounts ??= LinkedHashMap<String, double>();
-                final json = {
-                  'Codice Conto': conto.codiceConto,
-                  'Descrizione conto': conto.descrizioneConto,
-                  'Data operazione': conto.dataOperazione,
-                  'Descrizione operazione': conto.descrizioneOperazione,
-                  'Numero documento': conto.numeroDocumento,
-                  'Data documento': conto.dataDocumento,
-                  'Importo': conto.importo,
-                  'Saldo': conto.saldo,
-                  'Contropartita': conto.contropartita,
-                  'Costi Diretti': conto.costiDiretti,
-                  'Costi Indiretti': conto.costiIndiretti,
-                  'Attività economiche': conto.attivitaEconomiche,
-                  'Attività non economiche': conto.attivitaNonEconomiche,
-                  'Codice progetto': conto.codiceProgetto,
-                  'Project Amounts': projectAmounts
-                };
-                await FirebaseFirestore.instance.collection('conti').doc(idConto).
-                collection('lineeConto').doc(linea).set(json, SetOptions(merge: true));
+                if (widget.lines[i]['isModified'] == false) {
+                  continue;
+                }
+                else {
+                  String linea = widget.lines[i]['linea'];
+                  String idConto = linea.substring(0, 8);
+                  var conto = conti[i];
+                  var projectAmounts = conto.projectAmounts;
+                  final json = {
+                    'Codice Conto': conto.codiceConto,
+                    'Descrizione conto': conto.descrizioneConto,
+                    'Data operazione': conto.dataOperazione,
+                    'Descrizione operazione': conto.descrizioneOperazione,
+                    'Numero documento': conto.numeroDocumento,
+                    'Data documento': conto.dataDocumento,
+                    'Importo': conto.importo,
+                    'Saldo': conto.saldo,
+                    'Contropartita': conto.contropartita,
+                    'Costi Diretti': conto.costiDiretti,
+                    'Costi Indiretti': conto.costiIndiretti,
+                    'Attività economiche': conto.attivitaEconomiche,
+                    'Attività non economiche': conto.attivitaNonEconomiche,
+                    'Codice progetto': conto.codiceProgetto,
+                    'Project Amounts': projectAmounts
+                  };
+                  await FirebaseFirestore.instance.collection('conti').doc(
+                      idConto).collection('lineeConto').doc(linea).set(json,
+                      SetOptions(merge: true));
+                }
               }
             }
             else {
               String linea;
               for (int i = 0; i < widget.lines.length; i++) {
-                linea = widget.lines[i];
-                String idConto = linea.substring(0, 8);
-                final json = {
-                  'Codice Conto': conti[i].codiceConto,
-                  'Descrizione conto': conti[i].descrizioneConto,
-                  'Data operazione': conti[i].dataOperazione,
-                  'Descrizione operazione': conti[i].descrizioneOperazione,
-                  'Numero documento': conti[i].numeroDocumento,
-                  'Data documento': conti[i].dataDocumento,
-                  'Importo': conti[i].importo,
-                  'Saldo': conti[i].saldo,
-                  'Contropartita': conti[i].contropartita,
-                  'Costi Diretti': conti[i].costiDiretti,
-                  'Costi Indiretti': conti[i].costiIndiretti,
-                  'Attività economiche': conti[i].attivitaEconomiche,
-                  'Attività non economiche': conti[i].attivitaNonEconomiche,
-                  'Codice progetto': conti[i].codiceProgetto
-                };
-                await FirebaseFirestore.instance.collection('conti').doc(idConto).
-                collection('lineeConto').doc(linea).set(json);
+                if (widget.lines[i]['isModified'] == false) {
+                  continue;
+                }
+                else {
+                  linea = widget.lines[i]['linea'];
+                  String idConto = linea.substring(0, 8);
+                  final json = {
+                    'Codice Conto': conti[i].codiceConto,
+                    'Descrizione conto': conti[i].descrizioneConto,
+                    'Data operazione': conti[i].dataOperazione,
+                    'Descrizione operazione': conti[i].descrizioneOperazione,
+                    'Numero documento': conti[i].numeroDocumento,
+                    'Data documento': conti[i].dataDocumento,
+                    'Importo': conti[i].importo,
+                    'Saldo': conti[i].saldo,
+                    'Contropartita': conti[i].contropartita,
+                    'Costi Diretti': conti[i].costiDiretti,
+                    'Costi Indiretti': conti[i].costiIndiretti,
+                    'Attività economiche': conti[i].attivitaEconomiche,
+                    'Attività non economiche': conti[i].attivitaNonEconomiche,
+                    'Codice progetto': conti[i].codiceProgetto
+                  };
+                  await FirebaseFirestore.instance.collection('conti').doc(
+                      idConto).collection('lineeConto').doc(linea).set(json,
+                      SetOptions(merge: true));
+                }
               }
             }
             Navigator.pop(context, 'refresh');
@@ -137,13 +152,38 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
         const SizedBox(width: 16),
       ],
     ),
-    body: ScrollableWidget(controller: _controller, child: buildDataTable()),
+    body:  Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: _searchController,
+            decoration: const InputDecoration(
+              labelText: 'Search',
+              suffixIcon: Icon(Icons.search),
+            ),
+            onChanged: (value) {
+              setState(() {
+                _searchQuery = value;
+              });
+            },
+          ),
+        ),
+        Expanded(
+          child: ScrollableWidget(
+            controller: _controller,
+            child: buildDataTable(),
+          ),
+        ),
+      ],
+    ),
   );
 
   Widget buildDataTable() {
+    final filteredConti = filterConti(conti, _searchQuery);
     return DataTable(
       columns: getColumns(columns),
-      rows: getRows(conti),
+      rows: getRows(filteredConti),
     );
   }
 
@@ -299,6 +339,9 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
   Future editCostiDiretti(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
       var isEditedConto = conto == editConto;
+      if(isEditedConto == true) {
+        widget.lines[conti.indexOf(conto)]['isModified'] = true;
+      }
       return isEditedConto ? conto.copy(costiDiretti: value) : conto;
     }).toList());
   }
@@ -306,6 +349,9 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
   Future editCostiIndiretti(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
       var isEditedConto = conto == editConto;
+      if(isEditedConto == true) {
+        widget.lines[conti.indexOf(conto)]['isModified'] = true;
+      }
       return isEditedConto ? conto.copy(costiIndiretti: value) : conto;
     }).toList());
   }
@@ -313,6 +359,9 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
   Future editAttivitaEconomiche(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
       var isEditedConto = conto == editConto;
+      if(isEditedConto == true) {
+        widget.lines[conti.indexOf(conto)]['isModified'] = true;
+      }
       return isEditedConto ? conto.copy(attivitaEconomiche: value) : conto;
     }).toList());
   }
@@ -320,6 +369,9 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
   Future editAttivitaNonEconomiche(Conto editConto, bool? value) async {
     setState(() => conti = conti.map((conto) {
       var isEditedConto = conto == editConto;
+      if(isEditedConto == true) {
+        widget.lines[conti.indexOf(conto)]['isModified'] = true;
+      }
       return isEditedConto ? conto.copy(attivitaNonEconomiche: value) : conto;
     }).toList());
   }
@@ -333,6 +385,9 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
 
     setState(() => conti = conti.map((conto) {
       final isEditedConto = conto == editConto;
+      if(isEditedConto == true) {
+        widget.lines[conti.indexOf(conto)]['isModified'] = true;
+      }
       return isEditedConto ? conto.copy(codiceProgetto: codiceProgetto) : conto;
     }).toList());
   }
@@ -469,6 +524,9 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
       setState(() {
         conti = conti.map((conto) {
           final isEditedConto = conto == editConto;
+          if(isEditedConto == true) {
+            widget.lines[conti.indexOf(conto)]['isModified'] = true;
+          }
           return isEditedConto ? conto.copy(
             projectAmounts: projectAmounts,
           ) : conto;
@@ -479,6 +537,9 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
     if (selectedProject != null && selectedProject != 'DefaultProject') {
       setState(() => conti = conti.map((conto) {
         final isEditedConto = conto == editConto;
+        if(isEditedConto == true) {
+          widget.lines[conti.indexOf(conto)]['isModified'] = true;
+        }
         return isEditedConto ? conto.copy(codiceProgetto: selectedProject) : conto;
       }).toList());
     }

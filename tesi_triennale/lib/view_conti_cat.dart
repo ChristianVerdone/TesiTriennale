@@ -336,9 +336,28 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
         }
       })
     );
+    for (var conto in conti){
+      DocumentReference s = conto as DocumentReference;
+      calcolaSommaImporti(s.id);
+    }
   }
 
   num totIndiretti = 0;
+
+  Future<Map<String, dynamic>> getContoAttributes(String id) async {
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('conti').doc(id).get();
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+      return {
+        'Saldo': data['Saldo'],
+        'TotaleCostiDirettiEconomici': data['TotaleCostiDirettiEconomici'],
+        'TotaleCostiDirettiNonEconomici': data['TotaleCostiDirettiNonEconomici'],
+        'TotaleCostiIndiretti': data['TotaleCostiIndiretti'],
+      };
+    } else {
+      throw Exception('Document does not exist');
+    }
+  }
 
   Future<void> valuateTot() async {
     totIndiretti = 0;
@@ -349,22 +368,23 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     num totD = 0;
     num percDE = 0;
     num percDnE = 0;
+    num totSaldo = 0;
     DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(widget.idCat);
-    for(var linea in contiM){
-      if(linea.costiIndiretti){
-        if(!linea.attivitaNonEconomiche && !linea.attivitaEconomiche){
-          totIndiretti = totIndiretti + num.parse(linea.importo);
-        }
-      }
-      if(linea.costiDiretti){
-        if(linea.attivitaNonEconomiche) {
-          totDnE = totDnE + num.parse(linea.importo);
-        }
-        if(linea.attivitaEconomiche){
-          totDE = totDE + num.parse(linea.importo);
-        }
-      }
+    for (var conto in conti){
+      DocumentReference s = conto as DocumentReference;
+      var attributes = await getContoAttributes(s.id);
+      num saldo = attributes['Saldo'];
+      num totaleCostiDirettiEconomici = attributes['TotaleCostiDirettiEconomici'];
+      num totaleCostiDirettiNonEconomici = attributes['TotaleCostiDirettiNonEconomici'];
+      num totaleCostiIndiretti = attributes['TotaleCostiIndiretti'];
+
+      // Usa i valori ottenuti per calcolare i totali
+      totDE += totaleCostiDirettiEconomici;
+      totDnE += totaleCostiDirettiNonEconomici;
+      totIndiretti += totaleCostiIndiretti;
+      totSaldo += saldo;
     }
+
     if(totDnE != 0 && totDE != 0){
       totD = totDE + totDnE;
       percDE = 100 * totDE/totD;
@@ -393,28 +413,30 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     CollectionReference c =  FirebaseFirestore.instance.collection('categorie');
     totCIAE = 0;
     totCIAnE = 0;
-    await FirebaseFirestore.instance.collection('categorie').get().then(
-      (snapshot) => snapshot.docs.forEach(
-        (cat) {
-          totCIAE = totCIAE + num.parse(cat.get('Totale Costi Indiretti A E').toString());
-          totCIAnE = totCIAnE + num.parse(cat.get('Totale Costi Indiretti A nE').toString());
+    await FirebaseFirestore.instance.collection('categorie').doc('riepilogoCat').get().then(
+      (doc) {
+        if (doc.exists) {
+          totCIAE = num.parse(doc.get('totCostiIndirettiAttEco').toString());
+          totCIAnE = num.parse(doc.get('totCostiIndirettiAttNonEco').toString());
         }
-      )
+      }
     );
     c.get().then(
       (snapshot) => snapshot.docs.forEach(
         (cat) {
-          var sTotCIAE = cat.get('Totale Costi Indiretti A E').toString();
-          var sTotCIAnE = cat.get('Totale Costi Indiretti A nE').toString();
-          percCIAE = 0;
-          percCIAnE = 0;
-          percCIAE = 100 * (num.parse(sTotCIAE)/totCIAE);
-          percCIAnE = 100 * (num.parse(sTotCIAnE)/totCIAnE);
-          final json = {
-            'Percentuale CI A E' : percCIAE.toStringAsFixed(2),
-            'Percentuale CI A nE' : percCIAnE.toStringAsFixed(2)
-          };
-          c.doc(cat.id).update(json);
+          if (cat.id != 'riepilogoCat') {
+            var sTotCIAE = cat.get('Totale Costi Indiretti A E').toString();
+            var sTotCIAnE = cat.get('Totale Costi Indiretti A nE').toString();
+            percCIAE = 0;
+            percCIAnE = 0;
+            percCIAE = 100 * (num.parse(sTotCIAE) / totCIAE);
+            percCIAnE = 100 * (num.parse(sTotCIAnE) / totCIAnE);
+            final json = {
+              'Percentuale CI A E': percCIAE.toStringAsFixed(2),
+              'Percentuale CI A nE': percCIAnE.toStringAsFixed(2)
+            };
+            c.doc(cat.id).update(json);
+          }
         }
       )
     );

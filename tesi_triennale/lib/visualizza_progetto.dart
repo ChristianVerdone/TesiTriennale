@@ -26,6 +26,18 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
   num n = 0;
   List<Map<String, dynamic>> csvData = [];
   List<Conto> conti = [];
+  bool isLoading = true;
+  List<DocumentReference> documentReferences = [];
+
+  @override
+  void initState() {
+    super.initState();
+    evaluateWithProgressDialog(widget.p.nomeProgetto).then((_) {
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +70,6 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
                         onPressed: () async {
                           // Add your removal logic here
                           await deleteProgetto();
-                          await FirebaseFirestore.instance.collection('progetti').doc(widget.p.nomeProgetto).delete();
                           Navigator.of(context).pop(true);
                         },
                       ),
@@ -87,6 +98,7 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
             },
             icon: const Icon(Icons.home)),
           const SizedBox(width: 16),
+          /*
           ElevatedButton(
             onPressed: () async {
               await evaluateWithProgressDialog(widget.p.nomeProgetto);
@@ -94,60 +106,55 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
             },
             child: const Text('Calcola costi')
           )
+          */
         ],
         centerTitle: true,
         title: Text('Visualizzazione Progetto: ${widget.p.nomeProgetto}',
             style: const TextStyle(color: Colors.black, fontSize: 20.0)
         ),
       ),
-      body: FutureBuilder(
-        future: getCat(),
-        builder: (context, snapshot){
-          if(snapshot.connectionState == ConnectionState.done){
-          return Center(
-            child: Column(
-              children: [
-                Text('| Anno: ${widget.p.anno} | Valore: ${widget.p.valore} | isEconomico: ${widget.p.isEconomico.toString()} | '
-                    'Contributo di competenza: ${widget.p.contributo} |',
+      body: isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : Center(
+          child: Column(
+            children: [
+              Text('| Anno: ${widget.p.anno} | Valore: ${widget.p.valore} | isEconomico: ${widget.p.isEconomico.toString()} | '
+              'Contributo di competenza: ${widget.p.contributo} |',
+              ),
+              const SizedBox(height: 20),
+              const Text('Costi Diretti:', textAlign: TextAlign.left),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: widget.p.costiDiretti.length,
+                  itemExtent: 40,
+                  itemBuilder: (context, index){
+                    return ListTile(
+                      visualDensity: VisualDensity.compact,
+                      title: Text('${widget.p.costiDiretti.keys.elementAt(index)}: ${widget.p.costiDiretti.values.elementAt(index)}'),
+                    );
+                  }
                 ),
-                const SizedBox(height: 20),
-                const Text('Costi Diretti:', textAlign: TextAlign.left),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: widget.p.costiDiretti.length,
-                    itemExtent: 40,
-                    itemBuilder: (context, index){
-                      return ListTile(
-                        visualDensity: VisualDensity.compact,
-                        title: Text('${widget.p.costiDiretti.keys.elementAt(index)}: ${widget.p.costiDiretti.values.elementAt(index)}'),
-                      );
-                    }
-                  ),
-                ),
-                Text('Totale:${n = getSum(widget.p.costiDiretti.values)}'),
-                const SizedBox(height: 20),
-                const Text('Costi Indiretti:', textAlign: TextAlign.left),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: widget.p.costiIndiretti.length,
-                    itemExtent: 40,
-                    itemBuilder: (context, index){
-                      return ListTile(
-                        visualDensity: VisualDensity.compact,
-                        title: Text('${widget.p.costiIndiretti.keys.elementAt(index)}: ${widget.p.costiIndiretti.values.elementAt(index)}'),
-                      );
-                    }
-                  )
-                ),
-                Text('Totale:${n = getSum(widget.p.costiIndiretti.values)}'),
-                const SizedBox(height: 20),
-              ],
-            ),
-          );
-          }
-          return const Center(child: Text('loading...'));
-        },
-      )
+              ),
+              Text('Totale:${n = getSum(widget.p.costiDiretti.values)}'),
+              const SizedBox(height: 20),
+              const Text('Costi Indiretti:', textAlign: TextAlign.left),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: widget.p.costiIndiretti.length,
+                  itemExtent: 40,
+                  itemBuilder: (context, index){
+                    return ListTile(
+                      visualDensity: VisualDensity.compact,
+                      title: Text('${widget.p.costiIndiretti.keys.elementAt(index)}: ${widget.p.costiIndiretti.values.elementAt(index)}'),
+                    );
+                  }
+                )
+              ),
+              Text('Totale:${n = getSum(widget.p.costiIndiretti.values)}'),
+              const SizedBox(height: 20),
+            ],
+          ),
+        ),
     );
   }
 
@@ -305,35 +312,11 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
   }
 
   Future<void> evaluateWithProgressDialog(String nomeProgetto) async {
-  // Mostra il dialogo con il CircularProgressIndicator
-  showDialog(
-    context: context,
-    barrierDismissible: false, // Impedisce di chiudere il dialogo cliccando fuori
-    builder: (BuildContext context) {
-      return const Dialog(
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 20),
-              Text("Caricamento..."),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-  // Esegui il metodo evaluate
-  await evaluate(nomeProgetto);
-  // Chiudi il dialogo una volta completato
-  Navigator.of(context).pop(true);
-}
+    // Esegui il metodo evaluate
+    await evaluate(nomeProgetto);
+  }
 
   evaluate(String nomeProgetto) async {
-    // Crea un array di DocumentReference
-    List<DocumentReference> documentReferences = [];
     num s;
     for (var categoria in widget.p.costiDiretti.keys) {
       s = 0;
@@ -342,9 +325,6 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
           if(cat.reference.id == 'Personale'){
             for (var element in (cat.get('Conti') as List<dynamic>)) {
               DocumentReference d = element as DocumentReference;
-              if (kDebugMode) {
-                print(d.id);
-              }
               await FirebaseFirestore.instance.collection('conti/${d.id}/lineeConto').get().then(
                 (value) => value.docs.forEach((linea) {
                   if (linea.reference.id != 'defaultLine') {
@@ -353,9 +333,6 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
                         s = s + num.parse(progetti[nomeProgetto].toString());
                         // Aggiungi il DocumentReference all'array
                         documentReferences.add(linea.reference);
-                        if (kDebugMode) {
-                          print(linea.reference.id);
-                        }
                     }
                   }
                 })
@@ -365,9 +342,6 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
           else {
             for (var element in (cat.get('Conti') as List<dynamic>)) {
               DocumentReference d = element as DocumentReference;
-              if (kDebugMode) {
-                print(d.id);
-              }
               await FirebaseFirestore.instance.collection('conti/${d.id}/lineeConto').get().then(
                 (value) => value.docs.forEach( (linea) {
                   if (linea.reference.id != 'defaultLine') {
@@ -379,9 +353,6 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
                           .toString());
                       // Aggiungi il DocumentReference all'array
                       documentReferences.add(linea.reference);
-                      if (kDebugMode) {
-                        print(linea.reference.id);
-                      }
                     }
                   }
                 })
@@ -394,14 +365,10 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     }
     num totCostiIndAE = 0;
     num totCostiIndAnE = 0;
-    await FirebaseFirestore.instance.collection('categorie').get().then(
-      (snap) => snap.docs.forEach(
-        (cat) {
-          totCostiIndAE = totCostiIndAE + num.parse(cat.get('Totale Costi Indiretti A E').toString());
-          totCostiIndAnE = totCostiIndAnE + num.parse(cat.get('Totale Costi Indiretti A nE').toString());
-        }
-      )
-    );
+    DocumentSnapshot riepilogoCatDoc = await FirebaseFirestore.instance.collection('categorie').doc('riepilogoCat').get();
+    totCostiIndAE = num.parse(riepilogoCatDoc.get('totCostiIndirettiAttEco').toString());
+    totCostiIndAnE = num.parse(riepilogoCatDoc.get('totCostiIndirettiAttNonEco').toString());
+
     for (var categoria in widget.p.costiIndiretti.keys) {
       s = 0;
       await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(

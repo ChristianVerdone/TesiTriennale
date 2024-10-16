@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'modify_data.dart';
@@ -74,7 +75,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
           ElevatedButton(
             child: const Text('Modifica'),
             onPressed: () async {
-              String refresh = await Navigator.push(context, MaterialPageRoute(builder: (context) => ModifyData(csvData: csvData, lines: lines, codiceConto: widget.idConto)));
+              String refresh = await Navigator.push(context, MaterialPageRoute(builder: (context) => ModifyData(csvData: csvData, lines: lines, codiceConto: widget.idConto))) ?? '';
               if (refresh == 'refresh') {
                 reload();
               }
@@ -318,7 +319,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
   }
 
   Future getLines(String idConto) async {
-    await FirebaseFirestore.instance.collection('conti_dev2022/$idConto/lineeConto').get().then(
+    await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
       (snapshot) => snapshot.docs.forEach((linea) {
         if(linea.reference.id != 'defaultLine'){
           Map<String, dynamic> c = linea.data();
@@ -328,5 +329,8 @@ class _VisualizzaConto extends State<VisualizzaConto> {
       })
     );
     conti = convertMapToObject(csvData);
+    calcolaSommaImporti(idConto);
   }
+
+
 }
