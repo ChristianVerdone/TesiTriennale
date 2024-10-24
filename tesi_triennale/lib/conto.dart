@@ -120,13 +120,13 @@ class Conto {
   }
 
   List<dynamic> toListF(){
-    return [codiceConto, descrizioneConto, dataOperazione, descrizioneOperazione, numeroDocumento, dataDocumento,
+    return [codiceConto, descrizioneConto, dataOperazione, descrizioneOperazione, dataDocumento, numeroDocumento,
       importo, saldo, contropartita, costiDiretti, costiIndiretti, attivitaEconomiche, attivitaNonEconomiche, codiceProgetto, projectAmounts
     ];
   }
 
   List<dynamic> toListFPAmounts(String project){
-    return [codiceConto, descrizioneConto, dataOperazione, descrizioneOperazione, numeroDocumento, dataDocumento,
+    return [codiceConto, descrizioneConto, dataOperazione, descrizioneOperazione, dataDocumento, numeroDocumento,
       importo, saldo, contropartita, costiDiretti, costiIndiretti, attivitaEconomiche, attivitaNonEconomiche, codiceProgetto, projectAmounts?.containsKey(project) == true ? projectAmounts![project] : 0.0
     ];
   }

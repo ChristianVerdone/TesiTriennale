@@ -73,7 +73,7 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
   getCat() async {
     await FirebaseFirestore.instance.collection('categorie').get().then(
       (value) => value.docs.forEach((categ) {
-        if (categ.id != 'riepilogoCat') {
+        if (categ.id != 'riepilogoCat' && categ.id != 'Valore della Produzione') {
           cat.add(categ.id);
         }
       })

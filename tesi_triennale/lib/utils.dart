@@ -91,10 +91,8 @@ Future<void> calcolaEInserisciRiepilogoCat() async {
 
   // Itera su ogni categoria
   for (var categoriaDoc in categorieSnapshot.docs) {
-    if (categoriaDoc.id != 'riepilogoCat') {
-      print('Categoria: ${categoriaDoc.id}');
+    if (categoriaDoc.id != 'riepilogoCat' && categoriaDoc.id != 'Valore della Produzione') {
       var data = categoriaDoc.data() as Map<String, dynamic>;
-      print('Data: $data');
       if(categoriaDoc.id.toString() == 'Oneri finanziari'){
         saldoOneriFinanziari = data['Totale Costi Diretti A E'] ?? 0.0;
         saldoOneriFinanziari += data['Totale Costi Diretti A nE'] ?? 0.0;
@@ -114,12 +112,16 @@ Future<void> calcolaEInserisciRiepilogoCat() async {
 
   // Somma i saldi di ogni conto
   for (var contoDoc in contiSnapshot.docs) {
-    var data = contoDoc.data() as Map<String, dynamic>;
-    costiDiProduzione += data['Saldo'] ?? 0.0;
+    if (contoDoc.id.toString().startsWith('8') && !contoDoc.id.toString().startsWith('8.33') && contoDoc.id.toString() != '8.36.002') {
+      var data = contoDoc.data() as Map<String, dynamic>;
+      costiDiProduzione += data['Saldo'] ?? 0.0;
+      if (kDebugMode) {
+        print('Conto ID: ${contoDoc.id}, Saldo: ${data['Saldo']}');
+      }
+    }
   }
-
   costiDiProduzione = costiDiProduzione - saldoOneriFinanziari;
-  
+
   totIndiretti = totCostiIndirettiAttEco + totCostiIndirettiAttNonEco;
   // Calcola le percentuali
   double percIndirettiAttEco = totIndiretti != 0 ? (totCostiIndirettiAttEco / totIndiretti) * 100 : 0;

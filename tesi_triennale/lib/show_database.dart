@@ -129,7 +129,7 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
   FutureOr<Uint8List> _generatePdfContent() async{
     final pdf = pw.Document();
     var tableData = _makeListConti();
-    const contentPerPage = 15; // Numero massimo di righe per pagina
+    const contentPerPage = 20; // Numero massimo di righe per pagina
     final totalPageCount = (tableData.length / contentPerPage).ceil();
     for (int pageIndex = 0; pageIndex < totalPageCount; pageIndex++) {
       final startIndex = pageIndex * contentPerPage;

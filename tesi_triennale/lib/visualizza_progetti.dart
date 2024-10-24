@@ -110,10 +110,10 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
               progetti.add(progetto.reference.id);
             }
             if(progetto.get('isEconomico')){
-              perc = (num.parse(progetto.get('Valore').toString()) / totProgettiE) * 100;
+              perc = (num.parse(progetto.get('Contributo Competenza').toString()) / totProgettiE) * 100;
             }
             else{
-              perc = (num.parse(progetto.get('Valore').toString()) / totProgettinE) * 100;
+              perc = (num.parse(progetto.get('Contributo Competenza').toString()) / totProgettinE) * 100;
             }
             final json = {
               'Percentuale' : perc.toStringAsFixed(2),
@@ -132,15 +132,21 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
         (progetto) {
           if(progetto.reference.id != 'DefaultProject'){
             if(progetto.get('isEconomico')){
-              totProgettiE = totProgettiE + num.parse(progetto.get('Valore').toString());
+              totProgettiE = totProgettiE + num.parse(progetto.get('Contributo Competenza').toString());
             }
             else{
-              totProgettinE = totProgettinE + num.parse(progetto.get('Valore').toString());
+              totProgettinE = totProgettinE + num.parse(progetto.get('Contributo Competenza').toString());
             }
           }
         }
       )
     );
+    final json = {
+      'totProgettiE': totProgettiE,
+      'totProgettinE': totProgettinE,
+    };
+    await FirebaseFirestore.instance.collection('categorie').doc('Valore della Produzione').set(json,
+        SetOptions(merge: true));
   }
 
   Future getLinesProg(Progetto p) async {

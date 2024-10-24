@@ -189,18 +189,20 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
       'Costi indiretti',
       'Attivita economiche',
       'Attivita non economiche',
-      'Codice progetto'
+      'Codice progetto',
       'Project Amounts'
     ];
     list.add(columns);
     int i = 0;
     for (var conto in conti) {
-      if(i/14 >= 1){
-        list.add(conto.toListFPAmounts(widget.p.nomeProgetto));
+      if(i/29 >= 1){
         list.add(columns);
+        list.add(conto.toListFPAmounts(widget.p.nomeProgetto));
+        i = 0;
       }
       else{
         list.add(conto.toListFPAmounts(widget.p.nomeProgetto));
+        i++;
       }
     }
     return list;
@@ -210,8 +212,9 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     final pdf = pw.Document();
     await getLinesProg();
     var tableData = _makeListConti();
-    const contentPerPage = 20; // Numero massimo di righe per pagina
+    const contentPerPage = 30; // Numero massimo di righe per pagina
     final totalPageCount = (tableData.length / contentPerPage).ceil();
+    final image = await imageFromAssetBundle('CeRICT_logo.png');
 
     pdf.addPage(pw.Page(
       margin: const pw.EdgeInsets.all(3),
@@ -219,7 +222,17 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
         return pw.Center(
           child: pw.Column(
             children: [
-              pw.Text('${widget.p.nomeProgetto}'),
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Image(image, width: 50, height: 50),
+                  pw.Text(
+                    'Riepilogo Progetto: ${widget.p.nomeProgetto}',
+                    style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+                  ),
+                  pw.SizedBox(width: 50), // Placeholder to balance the row
+                ],
+              ),
               pw.Text('Anno: ${widget.p.anno} | Valore: ${widget.p.valore} | isEconomico: ${widget.p.isEconomico.toString()} | '
                 'Contributo di competenza: ${widget.p.contributo}',
               ),
