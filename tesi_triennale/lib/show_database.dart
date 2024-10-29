@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:printing/printing.dart';
 import 'conto.dart';
 import 'get_conto.dart';
@@ -64,15 +65,14 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
   }
 
   Future getLines(String idConto) async {
+    csvData2 = [];
     await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
       (snapshot) => snapshot.docs.forEach((linea) async{
         Map<String, dynamic> c = linea.data();
         csvData2.add(c);
-        if (kDebugMode) {
-          print(csvData2);
-        }
       })
     );
+    conti = convertMapToObject(csvData2);
   }
 
   @override
@@ -95,7 +95,7 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
           ),
           FloatingActionButton(
             onPressed: () async {
-              await fullcsv(contiRef);
+              //await fullcsv(contiRef);
               Printing.layoutPdf(onLayout: (format) => _generatePdfContent());
             },
             child: const Icon(Icons.print),
@@ -126,17 +126,83 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
     );
   }
 
-  FutureOr<Uint8List> _generatePdfContent() async{
-    final pdf = pw.Document();
+FutureOr<Uint8List> _generatePdfContent() async {
+  final pdf = pw.Document();
+  const contentPerPage = 35; // Numero massimo di righe per pagina
+  final image = await imageFromAssetBundle('CeRICT_logo.png');
+  // Load the NotoSans font from assets
+  final notoSans = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSans-Regular.ttf'));
+  final notoSansBold = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSans-Bold.ttf'));
+
+  int counter = 0;
+
+  for (var ref in contiRef) {
+    if (counter >= 5) break;
+
+    await getLines(ref);
     var tableData = _makeListConti();
-    const contentPerPage = 20; // Numero massimo di righe per pagina
     final totalPageCount = (tableData.length / contentPerPage).ceil();
-    for (int pageIndex = 0; pageIndex < totalPageCount; pageIndex++) {
-      final startIndex = pageIndex * contentPerPage;
-      final endIndex = (pageIndex + 1) * contentPerPage;
-      final currentPageData = tableData.sublist(startIndex,
-          endIndex > tableData.length ? tableData.length : endIndex);
-      final table = pw.TableHelper.fromTextArray(
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance
+        .collection('conti').doc(ref).get();
+
+    // Extract account details
+    String codiceConto = documentSnapshot.id;
+    String descrizioneConto = documentSnapshot.get('Descrizione conto');
+    double saldo = documentSnapshot.get('Saldo');
+    double totaleCostiDirettiEconomici = documentSnapshot.get(
+        'TotaleCostiDirettiEconomici');
+    double totaleCostiDirettiNonEconomici = documentSnapshot.get(
+        'TotaleCostiDirettiNonEconomici');
+    double totaleCostiIndiretti = documentSnapshot.get('TotaleCostiIndiretti');
+
+    // Add account details page
+    pdf.addPage(pw.Page(
+      build: (pw.Context context) {
+        return pw.Align(
+          alignment: pw.Alignment.centerLeft,
+          child: pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Image(image, width: 80, height: 80), // Add the image
+                  pw.SizedBox(width: 5),
+                  pw.Text('Riepilogo Conto',
+                      style: pw.TextStyle(fontSize: 10, font: notoSans)),
+                  pw.SizedBox(width: 5),
+                  pw.Text('Documenti Riservati',
+                      style: pw.TextStyle(fontSize: 10, font: notoSans)),
+                ],
+              ),
+              pw.SizedBox(height: 20),
+              pw.Text('$codiceConto $descrizioneConto',
+                  style: pw.TextStyle(fontSize: 18,
+                      font: notoSansBold)),
+              pw.Text('Saldo: $saldo',
+                  style: pw.TextStyle(fontSize: 16, font: notoSans)),
+              pw.Text(
+                  'Totale Costi Diretti Economici: $totaleCostiDirettiEconomici',
+                  style: pw.TextStyle(fontSize: 16, font: notoSans)),
+              pw.Text(
+                  'Totale Costi Diretti Non Economici: $totaleCostiDirettiNonEconomici',
+                  style: pw.TextStyle(fontSize: 16, font: notoSans)),
+              pw.Text('Totale Costi Indiretti: ${totaleCostiIndiretti
+                  .toStringAsFixed(2)}',
+                  style: pw.TextStyle(fontSize: 16, font: notoSans)),
+            ],
+          ),
+        );
+      },
+    ));
+    if (saldo != 0) {
+      for (int pageIndex = 0; pageIndex < totalPageCount; pageIndex++) {
+        final startIndex = pageIndex * contentPerPage;
+        final endIndex = (pageIndex + 1) * contentPerPage;
+        final currentPageData = tableData.sublist(startIndex,
+            endIndex > tableData.length ? tableData.length : endIndex);
+
+        final table = pw.TableHelper.fromTextArray(
           data: currentPageData,
           cellAlignment: pw.Alignment.centerLeft,
           cellPadding: const pw.EdgeInsets.all(5),
@@ -144,31 +210,43 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
             borderRadius: pw.BorderRadius.all(pw.Radius.circular(2)),
             color: PdfColors.grey,
           ),
-        cellStyle: pw.TextStyle(fontSize: 4,font: pw.Font.times()),
-        headerStyle: pw.TextStyle(fontSize: 4, font: pw.Font.helvetica()),
-      );
+          cellStyle: pw.TextStyle(fontSize: 4, font: notoSans),
+          headerStyle: pw.TextStyle(fontSize: 4, font: notoSansBold),
+        );
 
-      pw.Page p = pw.Page(
-        orientation: pw.PageOrientation.landscape,
-        margin: const pw.EdgeInsets.all(3),
-        build: (pw.Context context) {
-          return pw.Center(
-              child: pw.Container(
-                child: table,
-              )
-          );
-        },
-      );
-      pdf.addPage(p, index: pageIndex,);
+        pdf.addPage(pw.Page(
+          orientation: pw.PageOrientation.landscape,
+          margin: const pw.EdgeInsets.all(3),
+          build: (pw.Context context) {
+            return pw.Column(
+              children: [
+                pw.Padding( // Aggiunto il widget Padding
+                  padding: const pw.EdgeInsets.all(10),
+                  // Aggiunto un margine di 10
+                  child: pw.Expanded( // Aggiunto il widget Expanded
+                    child: pw.Center(
+                      child: pw.Container(
+                        child: table,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        ));
+      }
     }
-    return pdf.save();
+    counter++;
   }
+  return pdf.save();
+}
 
   List<List<dynamic>> _makeListConti() {
     List<List<dynamic>> list = [];
     final columns = [
-      'Codice Conto',
-      'Descrizione conto',
+      //'Codice Conto',
+      //'Descrizione conto',
       'Data operazione',
       'Descrizione operazione',
       'Numero documento',
@@ -185,12 +263,14 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
     list.add(columns);
     int i = 0;
     for (var conto in conti) {
-      if(i/14 >= 1){
-        list.add(conto.toList());
+      if(i/34 >= 1){
         list.add(columns);
+        list.add(conto.toList());
+        i = 0;
       }
       else{
         list.add(conto.toList());
+        i++;
       }
     }
     return list;

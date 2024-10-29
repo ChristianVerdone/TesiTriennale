@@ -9,12 +9,15 @@ class VisualizzaCatPage extends StatefulWidget {
   State<VisualizzaCatPage> createState() => _VisualizzaCatPageState();
 }
 
-class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
+class _VisualizzaCatPageState extends State<VisualizzaCatPage> {
   List<String> cat = [];
+  Map<String, dynamic>? riepilogoCatData;
+  bool isLoading = true; // Add a loading state
 
   @override
   void initState() {
     super.initState();
+    getCat(); // Call getCat in initState
   }
 
   @override
@@ -31,53 +34,85 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage>{
         actions: <Widget>[
           const SizedBox(width: 16),
           IconButton(
-            onPressed: (){
+            onPressed: () {
               Navigator.popUntil(context, ModalRoute.withName('/'));
             },
-            icon: const Icon(Icons.home)),
+            icon: const Icon(Icons.home),
+          ),
           const SizedBox(width: 16),
         ],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: FutureBuilder(
-                future: getCat(),
-                builder: (context, snapshot){
-                  return ListView.builder(
-                    itemCount: cat.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: TextButton(
-                          onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder:
-                                (context) => ViewContiCatPage(
-                                    idCat: cat.elementAt(index))));
-                          },
-                          child: Text(cat.elementAt(index))
-                        ),
-                      );
-                    }
-                  );
-                }
-              )
-            )
-          ],
-        ),
+        child: isLoading // Show a loading indicator while fetching data
+            ? const CircularProgressIndicator()
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (riepilogoCatData != null) // Display riepilogoCat data if available
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Costi di produzione: '
+                              '${riepilogoCatData!['Costi di produzione']?.toStringAsFixed(2) ?? 'N/A'}'),
+                          const Text('Costi diretti:'),
+                          Text('  Attivit\u00E0 economiche: '
+                              '${riepilogoCatData!['totCostiDirettiAttEco']?.toStringAsFixed(2) ?? 'N/A'}'),
+                          Text('  Attivit\u00E0 non economiche: '
+                              '${riepilogoCatData!['totCostiDirettiAttNonEco']?.toStringAsFixed(2) ?? 'N/A'}'),
+                          const Text('Costi indiretti:'),
+                          Text('  Attivit\u00E0 economiche: '
+                              '${riepilogoCatData!['totCostiIndirettiAttEco']?.toStringAsFixed(2) ?? 'N/A'} '
+                              '(${riepilogoCatData!['percIndirettiAttEco']?.toStringAsFixed(2) ?? 'N/A'}%)'),
+                          Text('  Attivit\u00E0 non economiche: '
+                              '${riepilogoCatData!['totCostiIndirettiAttNonEco']?.toStringAsFixed(2) ?? 'N/A'} '
+                              '(${riepilogoCatData!['percIndirettiAttNonEco']?.toStringAsFixed(2) ?? 'N/A'}%)'),
+                        ],
+                      ),
+                    ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: cat.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ViewContiCatPage(
+                                    idCat: cat.elementAt(index),
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(cat.elementAt(index)),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
       ),
     );
   }
 
-  getCat() async {
+  Future<void> getCat() async {
     await FirebaseFirestore.instance.collection('categorie').get().then(
       (value) => value.docs.forEach((categ) {
         if (categ.id != 'riepilogoCat' && categ.id != 'Valore della Produzione') {
           cat.add(categ.id);
         }
-      })
+        else if (categ.id == 'riepilogoCat') {
+          riepilogoCatData = categ.data();
+        }
+      }),
     );
     calcolaEInserisciRiepilogoCat();
+    setState(() {
+      isLoading = false;
+    });
   }
 }

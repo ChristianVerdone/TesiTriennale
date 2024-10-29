@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
@@ -83,7 +82,7 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
           ElevatedButton(
             child: const Text('Modifica'),
             onPressed: () async {
-              var refresh = await Navigator.push(context, MaterialPageRoute(builder: (context) => ModifyProgetto(progetto: widget.p)));
+              await Navigator.push(context, MaterialPageRoute(builder: (context) => ModifyProgetto(progetto: widget.p)));
             },
           ),
           IconButton(
@@ -159,18 +158,20 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
   }
 
   Future getLinesProg() async {
-    for(var ref in widget.p.references){
-      await FirebaseFirestore.instance.doc(ref).get().then(
-        (linea) {
-          if(linea.reference.id != 'defaultLine'){
-            var data = linea.data();
-            Map<String, dynamic>? c = data;
-            csvData.add(c!);
-          }
-        },
-      );
+    if (csvData.isEmpty) {
+      for (var ref in widget.p.references) {
+        await FirebaseFirestore.instance.doc(ref).get().then(
+              (linea) {
+            if (linea.reference.id != 'defaultLine') {
+              var data = linea.data();
+              Map<String, dynamic>? c = data;
+              csvData.add(c!);
+            }
+          },
+        );
+      }
+      conti = convertMapToObject2(csvData);
     }
-    conti = convertMapToObject2(csvData);
   }
 
   List<List<dynamic>> _makeListConti() {
@@ -195,7 +196,7 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     list.add(columns);
     int i = 0;
     for (var conto in conti) {
-      if(i/29 >= 1){
+      if(i/34 >= 1){
         list.add(columns);
         list.add(conto.toListFPAmounts(widget.p.nomeProgetto));
         i = 0;
@@ -212,9 +213,12 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     final pdf = pw.Document();
     await getLinesProg();
     var tableData = _makeListConti();
-    const contentPerPage = 30; // Numero massimo di righe per pagina
+    const contentPerPage = 35; // Numero massimo di righe per pagina
     final totalPageCount = (tableData.length / contentPerPage).ceil();
     final image = await imageFromAssetBundle('CeRICT_logo.png');
+    // Load custom fonts
+    final fontRegular = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSans-Regular.ttf'));
+    final fontBold = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSans-Bold.ttf'));
 
     pdf.addPage(pw.Page(
       margin: const pw.EdgeInsets.all(3),
@@ -225,39 +229,60 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
               pw.Row(
                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                 children: [
-                  pw.Image(image, width: 50, height: 50),
+                  pw.Image(image, width: 100, height: 100),
                   pw.Text(
                     'Riepilogo Progetto: ${widget.p.nomeProgetto}',
-                    style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold),
+                    style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold, font: fontBold),
                   ),
-                  pw.SizedBox(width: 50), // Placeholder to balance the row
+                  pw.SizedBox(width: 100), // Placeholder to balance the row
                 ],
               ),
-              pw.Text('Anno: ${widget.p.anno} | Valore: ${widget.p.valore} | isEconomico: ${widget.p.isEconomico.toString()} | '
-                'Contributo di competenza: ${widget.p.contributo}',
+              pw.SizedBox(height: 20),
+              pw.Text('L\'anno di riferimento: ${widget.p.anno}, il progetto nella sua interezza assume un valore di:'
+                  ' ${widget.p.valore} \u20AC.',
+                style: pw.TextStyle(fontSize: 12, font: fontRegular),
+              ),
+              pw.Text(
+                widget.p.isEconomico
+                  ? 'Il Progetto \u00E8 di natura economica'
+                  : 'Il Progetto \u00E8 di natura non economica',
+                style: pw.TextStyle(fontSize: 12, font: fontRegular),
+              ),
+              pw.Text('Il contributo di competenza per l\'anno di riferimento \u00E8 di: ${widget.p.contributo} \u20AC.',
+                style: pw.TextStyle(fontSize: 12, font: fontRegular),
               ),
               pw.SizedBox(height: 10),
-              pw.Text('Costi Diretti:', textAlign: pw.TextAlign.left),
+              pw.Text('I Costi Diretti associati al progetto divisi per categoria sono:',
+                  textAlign: pw.TextAlign.left,
+                  style: pw.TextStyle(fontSize: 12, font: fontRegular)),
               pw.ListView.builder(
                 itemCount: widget.p.costiDiretti.length,
                 itemBuilder: (context, index){
                   return pw.Container(
-                    child: pw.Text('${widget.p.costiDiretti.keys.elementAt(index)}: ${widget.p.costiDiretti.values.elementAt(index)}'),
+                    child: pw.Text('${widget.p.costiDiretti.keys.elementAt(index)}:     ${widget.p.costiDiretti.values.elementAt(index)} \u20AC',
+                     style: pw.TextStyle(fontSize: 12, font: fontRegular)),
+                    alignment: pw.Alignment.centerLeft,
                   );
                 }
               ),
-              pw.Text('Totale:${n = getSum(widget.p.costiDiretti.values)}'),
+              pw.Text('Totale:${n = getSum(widget.p.costiDiretti.values)} \u20AC',
+                  style: pw.TextStyle(fontSize: 12, font: fontRegular)),
               pw.SizedBox(height: 10),
-              pw.Text('Costi Indiretti:', textAlign: pw.TextAlign.left),
+              pw.Text('I Costi Indiretti associati al progetto divisi per categoria sono:',
+                  textAlign: pw.TextAlign.left,
+                  style: pw.TextStyle(fontSize: 12, font: fontRegular)),
               pw.ListView.builder(
                 itemCount: widget.p.costiIndiretti.length,
                 itemBuilder: (context, index){
                   return pw.Container(
-                    child: pw.Text('${widget.p.costiIndiretti.keys.elementAt(index)}: ${widget.p.costiIndiretti.values.elementAt(index)}'),
+                    child: pw.Text('${widget.p.costiIndiretti.keys.elementAt(index)}:     ${widget.p.costiIndiretti.values.elementAt(index)} \u20AC',
+                      style: pw.TextStyle(fontSize: 12, font: fontRegular)),
+                    alignment: pw.Alignment.centerLeft,
                   );
                 }
               ),
-              pw.Text('Totale:${n = getSum(widget.p.costiIndiretti.values)}'),
+              pw.Text('Totale:${n = getSum(widget.p.costiIndiretti.values)} \u20AC',
+                  style: pw.TextStyle(fontSize: 12, font: fontRegular)),
             ],
           )
         );
