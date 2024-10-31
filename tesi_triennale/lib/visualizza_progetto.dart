@@ -215,7 +215,11 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     var tableData = _makeListConti();
     const contentPerPage = 35; // Numero massimo di righe per pagina
     final totalPageCount = (tableData.length / contentPerPage).ceil();
-    final image = await imageFromAssetBundle('CeRICT_logo.png');
+    //final image = await imageFromAssetBundle('CeRICT_logo.png');
+    // Load the image as a Uint8List
+    final ByteData bytes = await rootBundle.load('assets/images/CeRICT_logo.png');
+    final Uint8List imageData = bytes.buffer.asUint8List();
+    final image = pw.MemoryImage(imageData);
     // Load custom fonts
     final fontRegular = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSans-Regular.ttf'));
     final fontBold = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSans-Bold.ttf'));

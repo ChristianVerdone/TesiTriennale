@@ -127,6 +127,9 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
   }
 
   Future<void> valuatetot() async {
+    List<dynamic> contiRef = [];
+    Map<String, dynamic>? data;
+    double valoreProduzione = 0;
     await FirebaseFirestore.instance.collection('progetti').get().then(
       (snap) => snap.docs.forEach(
         (progetto) {
@@ -141,9 +144,33 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
         }
       )
     );
+    await FirebaseFirestore.instance.collection('categorie').doc('Valore della Produzione').get().then(
+      (value) async {
+        if(value.exists){
+          contiRef = value.data()!['Conti'];
+          for (var conto in contiRef) {
+            DocumentReference s = conto as DocumentReference;
+            DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('conti').doc(s.id).get();
+            if (documentSnapshot.exists) {
+              data = documentSnapshot.data() as Map<String, dynamic>?;
+            }
+            valoreProduzione = valoreProduzione + data!['Saldo'].abs();
+          }
+        }
+      }
+    );
+    var valNonEconomico = valoreProduzione - totProgettiE;
+    // Calculate percentages
+    double percValoreProduzioneNonE = valoreProduzione != 0 ? (valNonEconomico / valoreProduzione) * 100 : 0;
+    double percTotProgettiE = valoreProduzione != 0 ? (totProgettiE / valoreProduzione) * 100 : 0;
+
     final json = {
+      'ValoreProduzione': valoreProduzione,
+      'ValoreProduzioneNonE': valNonEconomico,
       'totProgettiE': totProgettiE,
       'totProgettinE': totProgettinE,
+      'percValoreProduzioneNonE': percValoreProduzioneNonE,
+      'percTotProgettiE': percTotProgettiE,
     };
     await FirebaseFirestore.instance.collection('categorie').doc('Valore della Produzione').set(json,
         SetOptions(merge: true));

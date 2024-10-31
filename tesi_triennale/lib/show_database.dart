@@ -129,7 +129,11 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
 FutureOr<Uint8List> _generatePdfContent() async {
   final pdf = pw.Document();
   const contentPerPage = 35; // Numero massimo di righe per pagina
-  final image = await imageFromAssetBundle('CeRICT_logo.png');
+  //final image = await imageFromAssetBundle('CeRICT_logo.png');
+  // Load the image as a Uint8List
+  final ByteData bytes = await rootBundle.load('assets/images/CeRICT_logo.png');
+  final Uint8List imageData = bytes.buffer.asUint8List();
+  final image = pw.MemoryImage(imageData);
   // Load the NotoSans font from assets
   final notoSans = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSans-Regular.ttf'));
   final notoSansBold = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSans-Bold.ttf'));
