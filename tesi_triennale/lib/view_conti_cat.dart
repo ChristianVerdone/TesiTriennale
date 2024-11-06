@@ -384,7 +384,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
       totIndiretti += totaleCostiIndiretti;
       totSaldo += saldo;
     }
-
+    /*
     if(totDnE != 0 && totDE != 0){
       totD = totDE + totDnE;
       percDE = 100 * totDE/totD;
@@ -393,10 +393,26 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
       totInnE = totIndiretti * percDnE / 100;
     }
     else{
-      totInE = totIndiretti * 0.1;
-      totInnE = totIndiretti * 0.9;
+     */
+    double percIndirettiAttEco = 0.0;
+    double percIndirettiAttNonEco = 0.0;
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('categorie').doc('riepilogoCat').get();
+    if (documentSnapshot.exists) {
+      Map<String, dynamic> data = documentSnapshot.data() as Map<String,
+          dynamic>;
+      percIndirettiAttEco = data['percIndirettiAttEco'] ?? 0.0;
+      percIndirettiAttNonEco = data['percIndirettiAttNonEco'] ?? 0.0;
     }
+    print('percIndirettiAttEco: $percIndirettiAttEco');
+    print('percIndirettiAttNonEco: $percIndirettiAttNonEco');
+
+    totInE = totIndiretti * percIndirettiAttEco / 100;
+    totInnE = totIndiretti * percIndirettiAttNonEco / 100;
+
+    print('totInE $totInE  + totInnE $totInnE: ${totInE+totInnE} == totIndiretti: $totIndiretti');
+    //}
     final json = {
+      'Saldo': totSaldo,
       'Totale Costi Diretti A E' : totDE,
       'Totale Costi Diretti A nE' : totDnE,
       'Totale Costi Indiretti A E' : totInE,
@@ -424,7 +440,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     c.get().then(
       (snapshot) => snapshot.docs.forEach(
         (cat) {
-          if (cat.id != 'riepilogoCat') {
+          if (cat.id != 'riepilogoCat' && cat.id != 'Valore della Produzione') {
             var sTotCIAE = cat.get('Totale Costi Indiretti A E').toString();
             var sTotCIAnE = cat.get('Totale Costi Indiretti A nE').toString();
             percCIAE = 0;
