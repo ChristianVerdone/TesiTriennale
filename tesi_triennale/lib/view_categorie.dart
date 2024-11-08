@@ -12,6 +12,7 @@ class VisualizzaCatPage extends StatefulWidget {
 class _VisualizzaCatPageState extends State<VisualizzaCatPage> {
   List<String> cat = [];
   Map<String, dynamic>? riepilogoCatData;
+  Map<String, dynamic>? valoreProduzione;
   bool isLoading = true; // Add a loading state
 
   @override
@@ -48,6 +49,29 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage> {
             : Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children:[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Valore della Produzione: '
+                            '${valoreProduzione!['ValoreProduzione']?.toStringAsFixed(2) ?? 'N/A'}'),
+                        Text('Valore della Produzione Attivit\u00E0 Economiche: '
+                            '${valoreProduzione!['ValoreProduzioneE']?.toStringAsFixed(2) ?? 'N/A'} '
+                            '(${valoreProduzione!['percTotProgettiE']?.toStringAsFixed(2) ?? 'N/A'}%)'),
+                        Text('Valore della Produzione Attivit\u00E0 Non Economiche + Altri: '
+                            '${valoreProduzione!['ValoreProduzioneNonE']?.toStringAsFixed(2) ?? 'N/A'} '
+                            '(${valoreProduzione!['percValoreProduzioneNonE']?.toStringAsFixed(2) ?? 'N/A'}%)'),
+                        Text('Valore della Produzione Progetti Economici: '
+                            '${valoreProduzione!['totProgettiE']?.toStringAsFixed(2) ?? 'N/A'}'),
+                        Text('Valore della Produzione Progetti Non Economici: '
+                            '${valoreProduzione!['totProgettinE']?.toStringAsFixed(2) ?? 'N/A'}'),
+                      ],
+                    ),
+                  ),
                   if (riepilogoCatData != null) // Display riepilogoCat data if available
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -56,6 +80,12 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage> {
                         children: [
                           Text('Costi di produzione: '
                               '${riepilogoCatData!['Costi di produzione']?.toStringAsFixed(2) ?? 'N/A'}'),
+                          Text('Costi di produzione Attivit\u00E0 Economiche: '
+                              '${riepilogoCatData!['totCostiAttEco']?.toStringAsFixed(2) ?? 'N/A'} '
+                              '(${valoreProduzione!['percTotProgettiE']?.toStringAsFixed(2) ?? 'N/A'}%)'),
+                          Text('Costi di produzione Attivit\u00E0 Non Economiche: '
+                              '${riepilogoCatData!['totCostiAttNonEco']?.toStringAsFixed(2) ?? 'N/A'} '
+                              '(${valoreProduzione!['percValoreProduzioneNonE']?.toStringAsFixed(2) ?? 'N/A'}%)'),
                           const Text('Costi diretti:'),
                           Text('  Attivit\u00E0 economiche: '
                               '${riepilogoCatData!['totCostiDirettiAttEco']?.toStringAsFixed(2) ?? 'N/A'}'),
@@ -71,6 +101,7 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage> {
                         ],
                       ),
                     ),
+                  ]),
                   Expanded(
                     child: ListView.builder(
                       itemCount: cat.length,
@@ -107,6 +138,9 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage> {
         }
         else if (categ.id == 'riepilogoCat') {
           riepilogoCatData = categ.data();
+        }
+        else if (categ.id == 'Valore della Produzione') {
+          valoreProduzione = categ.data();
         }
       }),
     );

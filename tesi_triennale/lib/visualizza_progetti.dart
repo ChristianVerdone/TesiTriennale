@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -19,14 +20,22 @@ class VisualizzaProg extends StatefulWidget {
 class _VisualizzaProgState extends State<VisualizzaProg> {
   num totProgettiE = 0;
   num totProgettinE = 0;
+  num totProgPerPercEco = 0;
+  num totProgPerPercNonEco = 0;
   List<String> progetti = [];
   List<Map<String, dynamic>> csvData = [];
   List<Conto> conti = [];
   num n = 0;
   String refresh = '';
+  List<DocumentReference> documentReferences = [];
+  bool _isProcessing = false;
+  bool _isValuating = false;
 
   @override
   void initState() {
+    processProgetti();
+    _isValuating = true;
+    valuatetot();
     super.initState();
   }
 
@@ -45,7 +54,6 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
 
   @override
   Widget build(BuildContext context) {
-    valuatetot();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -73,31 +81,55 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
               },
               icon: const Icon(Icons.home)),
             const SizedBox(width: 16),
+            IconButton(
+              onPressed: _isProcessing ? null : _evaluateAllProjects,
+              icon: const Icon(Icons.refresh),
+            ),
           ]
       ),
-      body: Center(
+      body:_isProcessing || _isValuating
+          ? const Center(
+        child: CircularProgressIndicator(),
+      )
+          :Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: FutureBuilder(
-                future: getProgetti(),
-                builder: (context, snapshot){
-                  return ListView.builder(
-                    itemCount: progetti.length,
-                    itemBuilder: (context, index){
-                      return ListTile(
-                        title: GetProgetto(idProg: progetti[index]),
-                      );
-                    }
+              child: ListView.builder(
+                itemCount: progetti.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: GetProgetto(idProg: progetti[index]),
                   );
-                }
-              )
-            )
+                },
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _evaluateAllProjects() async {
+    setState(() {
+      _isProcessing = true;
+    });
+
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('progetti').get();
+      for (var doc in snapshot.docs) {
+        if (doc.id != 'DefaultProject') {
+          await evaluate(doc.id);
+        }
+      }
+    } catch (e) {
+      // Handle errors if necessary
+    } finally {
+      setState(() {
+        _isProcessing = false;
+      });
+    }
   }
 
   Future getProgetti() async{
@@ -105,22 +137,40 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
     await FirebaseFirestore.instance.collection('progetti').get().then(
       (snapshot) => snapshot.docs.forEach(
         (progetto) {
-          if(progetto.reference.id != 'DefaultProject'){
-            if(!(progetti.contains(progetto.reference.id))){
+          if(progetto.reference.id != 'DefaultProject') {
+            if (!(progetti.contains(progetto.reference.id))) {
               progetti.add(progetto.reference.id);
             }
-            if(progetto.get('isEconomico')){
-              perc = (num.parse(progetto.get('Contributo Competenza').toString()) / totProgettiE) * 100;
+            if (progetto.reference.id != 'GIROCONTO') {
+              if (progetto.get('isEconomico')) {
+                if (progetto.get('Contributo Competenza').toString().contains(
+                    '-')) {
+                  perc = 0;
+                }
+                else {
+                  perc = (num.parse(
+                      progetto.get('Contributo Competenza').toString()) /
+                      totProgPerPercEco) * 100;
+                }
+              }
+              else {
+                if (progetto.get('Contributo Competenza').toString().contains(
+                    '-')) {
+                  perc = 0;
+                }
+                else {
+                  perc = (num.parse(
+                      progetto.get('Contributo Competenza').toString()) /
+                      totProgPerPercNonEco) * 100;
+                }
+              }
+              final json = {
+                'Percentuale': perc.toStringAsFixed(2),
+              };
+              progetto.reference.update(json);
             }
-            else{
-              perc = (num.parse(progetto.get('Contributo Competenza').toString()) / totProgettinE) * 100;
-            }
-            final json = {
-              'Percentuale' : perc.toStringAsFixed(2),
-            };
-            progetto.reference.update(json);
+            perc = 0;
           }
-          perc = 0;
         }
       )
     );
@@ -135,15 +185,31 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
         (progetto) {
           if(progetto.reference.id != 'DefaultProject'){
             if(progetto.get('isEconomico')){
-              totProgettiE = totProgettiE + num.parse(progetto.get('Contributo Competenza').toString());
+              if(progetto.get('Contributo Competenza').toString().contains('-') || progetto.id == 'GIROCONTO'){
+                totProgettiE = totProgettiE + num.parse(progetto.get('Contributo Competenza').toString());
+              }
+              else{
+                totProgPerPercEco = totProgPerPercEco + num.parse(progetto.get('Contributo Competenza').toString());
+                totProgettiE = totProgettiE + num.parse(progetto.get('Contributo Competenza').toString());
+              }
             }
-            else{
-              totProgettinE = totProgettinE + num.parse(progetto.get('Contributo Competenza').toString());
+            else {
+              if (progetto.get('Contributo Competenza').toString().contains(
+                  '-') || progetto.id == 'GIROCONTO') {
+                totProgettinE = totProgettinE +
+                    num.parse(progetto.get('Contributo Competenza').toString());
+              }
+              else {
+                totProgPerPercNonEco = totProgPerPercNonEco + num.parse(progetto.get('Contributo Competenza').toString());
+                totProgettinE = totProgettinE +
+                    num.parse(progetto.get('Contributo Competenza').toString());
+              }
             }
           }
         }
       )
     );
+
     await FirebaseFirestore.instance.collection('categorie').doc('Valore della Produzione').get().then(
       (value) async {
         if(value.exists){
@@ -167,6 +233,7 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
     final json = {
       'ValoreProduzione': valoreProduzione,
       'ValoreProduzioneNonE': valNonEconomico,
+      'ValoreProduzioneE': totProgettiE,
       'totProgettiE': totProgettiE,
       'totProgettinE': totProgettinE,
       'percValoreProduzioneNonE': percValoreProduzioneNonE,
@@ -174,6 +241,11 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
     };
     await FirebaseFirestore.instance.collection('categorie').doc('Valore della Produzione').set(json,
         SetOptions(merge: true));
+
+    await getProgetti();
+    setState(() {
+      _isValuating = false;
+    });
   }
 
   Future getLinesProg(Progetto p) async {
@@ -322,5 +394,94 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
       n = n + num.parse(element) ;
     }
     return n;
+  }
+
+  Future<Progetto> getProgetto(String nomeProgetto) async {
+    Progetto p = Progetto.prog(nomeProgetto: '', anno: 0, valore: 0, costiDiretti: {}, costiIndiretti: {}, isEconomico: false, perc: 0, contributo: 0, references: []);
+    await FirebaseFirestore.instance.collection('progetti').doc(nomeProgetto).get().then(
+      (value) {
+        p = Progetto.prog(nomeProgetto: nomeProgetto, anno: value.get('Anno'), valore: value.get('Valore'), costiDiretti: value.get('Costi Diretti'),
+          costiIndiretti: value.get('Costi Indiretti'), isEconomico: value.get('isEconomico'), perc: value.get('Percentuale'),
+          contributo: value.get('Contributo Competenza'), references: value.get('CostiDirettiValue'));
+      }
+    );
+    return p;
+  }
+
+  evaluate(String nomeProgetto) async {
+    documentReferences = [];
+    Progetto p = await getProgetto(nomeProgetto);
+    num s;
+    for (var categoria in p.costiDiretti.keys) {
+      s = 0;
+      await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
+              (cat) async {
+            if(cat.reference.id == 'Personale'){
+              for (var element in (cat.get('Conti') as List<dynamic>)) {
+                DocumentReference d = element as DocumentReference;
+                await FirebaseFirestore.instance.collection('conti/${d.id}/lineeConto').get().then(
+                        (value) => value.docs.forEach((linea) {
+                      if (linea.reference.id != 'defaultLine') {
+                        LinkedHashMap<String, double> progetti = LinkedHashMap<String, double>.from(linea.data()['Project Amounts'].map((key, value) => MapEntry(key, value.toDouble())));
+                        if (progetti.containsKey(nomeProgetto) && linea.get('Costi Diretti') == true) {
+                          s = s + num.parse(progetti[nomeProgetto].toString());
+                          // Aggiungi il DocumentReference all'array
+                          documentReferences.add(linea.reference);
+                        }
+                      }
+                    })
+                );
+              }
+            }
+            else {
+              for (var element in (cat.get('Conti') as List<dynamic>)) {
+                DocumentReference d = element as DocumentReference;
+                await FirebaseFirestore.instance.collection('conti/${d.id}/lineeConto').get().then(
+                        (value) => value.docs.forEach( (linea) {
+                      if (linea.reference.id != 'defaultLine') {
+                        var c = linea.data()['Codice progetto']
+                            .toString();
+                        if (c == nomeProgetto &&
+                            linea.get('Costi Diretti') == true) {
+                          s = s + num.parse(linea.get('Importo')
+                              .toString());
+                          // Aggiungi il DocumentReference all'array
+                          documentReferences.add(linea.reference);
+                        }
+                      }
+                    })
+                );
+              }
+            }
+          }
+      );
+      p.costiDiretti.update(categoria, (value) => s.toStringAsFixed(2));
+    }
+    num totCostiIndAE = 0;
+    num totCostiIndAnE = 0;
+    DocumentSnapshot riepilogoCatDoc = await FirebaseFirestore.instance.collection('categorie').doc('riepilogoCat').get();
+    totCostiIndAE = num.parse(riepilogoCatDoc.get('totCostiIndirettiAttEco').toString());
+    totCostiIndAnE = num.parse(riepilogoCatDoc.get('totCostiIndirettiAttNonEco').toString());
+
+    for (var categoria in p.costiIndiretti.keys) {
+      s = 0;
+      await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
+              (cat) {
+            if(p.isEconomico){
+              s = (num.parse(p.perc.toString()) / 100 * totCostiIndAE) * num.parse(cat.get('Percentuale CI A E').toString()) / 100;
+            }
+            else {
+              s = (num.parse(p.perc.toString()) / 100 * totCostiIndAnE) * num.parse(cat.get('Percentuale CI A nE').toString()) / 100;
+            }
+          }
+      );
+      p.costiIndiretti.update(categoria, (value) => s.toStringAsFixed(2));
+    }
+    final json = {
+      'Costi Diretti' : p.costiDiretti,
+      'Costi Indiretti' : p.costiIndiretti,
+      'CostiDirettiValue': documentReferences.map((docRef) => docRef.path).toList(),
+    };
+    await FirebaseFirestore.instance.collection('progetti').doc(nomeProgetto).update(json);
   }
 }

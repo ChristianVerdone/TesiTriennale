@@ -44,6 +44,11 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   String refresh = '';
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  num saldo = 0;
+  num totaleCostiDirettiAE = 0;
+  num totaleCostiDirettiAnE = 0;
+  num totaleCostiIndirettiAE = 0;
+  num totaleCostiIndirettiAnE = 0;
 
   @override
   void initState() {
@@ -96,6 +101,19 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Saldo: $saldo'),
+                Text('Totale Costi Diretti Attivit\u00E0 Economica: $totaleCostiDirettiAE'),
+                Text('Totale Costi Diretti Attivit\u00E0 non Economica: $totaleCostiDirettiAnE'),
+                Text('Totale Costi Indiretti Attivit\u00E0 Economica: $totaleCostiIndirettiAE'),
+                Text('Totale Costi Indiretti Attivit\u00E0 non Economica: $totaleCostiIndirettiAnE'),
+              ],
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
@@ -419,6 +437,11 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
       'Totale Costi Indiretti A nE' : totInnE,
     };
     d.update(json);
+    totaleCostiDirettiAE = totDE;
+    totaleCostiDirettiAnE = totDnE;
+    totaleCostiIndirettiAE = totInE;
+    totaleCostiIndirettiAnE = totInnE;
+    saldo = totSaldo;
   }
 
   Future<void> valuatePerc() async {

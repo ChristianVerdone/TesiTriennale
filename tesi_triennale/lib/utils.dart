@@ -136,40 +136,47 @@ void calcolaSommaImporti(String idConto) async {
   });
 }
 
+bool valuate = true;
+
 Future<void> processProgetti() async {
-  final collectionRef = FirebaseFirestore.instance.collection('A1-A5');
-  final documents = ['A1', 'A5'];
+  if(valuate) {
+    final collectionRef = FirebaseFirestore.instance.collection('A1-A5');
+    final documents = ['A1', 'A5'];
 
-  for (var docId in documents) {
-    DocumentSnapshot documentSnapshot = await collectionRef.doc(docId).get();
-    if (documentSnapshot.exists) {
-      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
-      List<String> progetti = List<String>.from(data['PROGETTI'] ?? []);
+    for (var docId in documents) {
+      DocumentSnapshot documentSnapshot = await collectionRef.doc(docId).get();
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+        List<String> progetti = List<String>.from(data['PROGETTI'] ?? []);
 
-      double totalEconomic = 0.0;
-      double totalNonEconomic = 0.0;
+        double totalEconomic = 0.0;
+        double totalNonEconomic = 0.0;
 
-      for (var progetto in progetti) {
-        DocumentSnapshot progettoSnapshot = await FirebaseFirestore.instance.collection('progetti').doc(progetto).get();
-        if (progettoSnapshot.exists) {
-          Map<String, dynamic> progettoData = progettoSnapshot.data() as Map<String, dynamic>;
-          double contributo = progettoData['contributo'] ?? 0.0;
-          bool isEconomic = progettoData['isEconomic'] ?? false;
+        for (var progetto in progetti) {
+          DocumentSnapshot progettoSnapshot = await FirebaseFirestore.instance
+              .collection('progetti').doc(progetto).get();
+          if (progettoSnapshot.exists) {
+            Map<String, dynamic> progettoData = progettoSnapshot.data() as Map<String, dynamic>;
+            double contributo = double.parse(progettoData['Contributo Competenza']) ?? 0.0;
+            bool isEconomic = progettoData['isEconomico'] ?? false;
 
-          if (isEconomic) {
-            totalEconomic += contributo;
-          } else {
-            totalNonEconomic += contributo;
+            if (isEconomic) {
+              totalEconomic += contributo;
+            } else {
+              totalNonEconomic += contributo;
+            }
           }
         }
-      }
+        double total = totalEconomic + totalNonEconomic;
 
-      await collectionRef.doc(docId).update({
-        'totalEconomic': totalEconomic,
-        'totalNonEconomic': totalNonEconomic,
-      });
-    } else {
-      print('Document $docId does not exist');
+        await collectionRef.doc(docId).update({
+          'Totale': total,
+          'totalEconomic': totalEconomic,
+          'totalNonEconomic': totalNonEconomic,
+        });
+      } else {
+        print('Document $docId does not exist');
+      }
     }
   }
 }

@@ -12,7 +12,10 @@
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view_categorie.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view_categorie.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetti.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetti.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetto.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -318,6 +321,8 @@
       <workItem from="1730363668333" duration="11976000" />
       <workItem from="1730720347364" duration="149000" />
       <workItem from="1730802046537" duration="24411000" />
+      <workItem from="1730909949815" duration="2993000" />
+      <workItem from="1730966987123" duration="34443000" />
     </task>
     <servers />
   </component>

@@ -359,6 +359,7 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
   }
 
   evaluate(String nomeProgetto) async {
+
     num s;
     for (var categoria in widget.p.costiDiretti.keys) {
       s = 0;
@@ -416,10 +417,10 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
       await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
         (cat) {
           if(widget.p.isEconomico){
-            s = num.parse(widget.p.perc.toString()) / 100 * totCostiIndAE * num.parse(cat.get('Percentuale CI A E').toString()) / 100;
+            s = (num.parse(widget.p.perc.toString()) / 100 * totCostiIndAE) * num.parse(cat.get('Percentuale CI A E').toString()) / 100;
           }
           else {
-            s = num.parse(widget.p.perc.toString()) / 100 * totCostiIndAnE * num.parse(cat.get('Percentuale CI A nE').toString()) / 100;
+            s = (num.parse(widget.p.perc.toString()) / 100 * totCostiIndAnE) * num.parse(cat.get('Percentuale CI A nE').toString()) / 100;
           }
         }
       );
