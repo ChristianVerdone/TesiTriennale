@@ -3,6 +3,8 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle;
+import 'package:provider/provider.dart';
+import 'app_state.dart';
 import 'modify_data_cat.dart';
 import 'scrollable_widget.dart';
 import 'conto.dart';
@@ -33,13 +35,14 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     'Numero documento',
     'Data documento',
     'Importo',
-    'Saldo',
+    'Codice Fiscale',
+    'Partita IVA',
     'Contropartita',
     'Costi diretti',
     'Costi indiretti',
-    'Attivita economiche',
-    'Attivita non economiche',
-    'CodiceProgetto'
+    'Attività economiche',
+    'Attività non economiche',
+    'Codice progetto'
   ];
   String refresh = '';
   final TextEditingController _searchController = TextEditingController();
@@ -169,7 +172,8 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
         conto.numeroDocumento,
         conto.dataDocumento,
         conto.importo,
-        conto.saldo,
+        conto.codiceFiscale,
+        conto.partitaIva,
         conto.contropartita,
         conto.costiDiretti,
         conto.costiIndiretti,
@@ -181,7 +185,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
       return DataRow(
         color: conto.costiDiretti ? MaterialStateProperty.all(Colors.blue) : null,
         cells: Utils.modelBuilder(cells, (index, cell) {
-          if (index == 9) {
+          if (index == 10) {
             switch (conto.costiDiretti) {
               case true:
                 return const DataCell(Center(
@@ -193,7 +197,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
                 ));
             }
           }
-          if (index == 10) {
+          if (index == 11) {
             switch (conto.costiIndiretti) {
               case true:
                 return const DataCell(Center(
@@ -205,7 +209,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
                 ));
             }
           }
-          if (index == 11) {
+          if (index == 12) {
             switch (conto.attivitaEconomiche) {
               case true:
                 return const DataCell(Center(
@@ -217,7 +221,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
                 ));
             }
           }
-          if (index == 12) {
+          if (index == 13) {
             switch (conto.attivitaNonEconomiche) {
               case true:
                 return const DataCell(Center(
@@ -229,7 +233,7 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
                 ));
             }
           }
-          if (index == 13) {
+          if (index == 14) {
             if (widget.idCat == 'Personale') {
               return DataCell(
                 ElevatedButton(
@@ -266,11 +270,13 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     if (i == 6) return columns[i];
     if (i == 7) return columns[i];
     if (i == 8) return columns[i];
-    if (i == 13) return columns[i];
+    if (i == 9) return columns[i];
+    if (i == 14) return columns[i];
     return testo;
   }
 
   Future<LinkedHashMap<String, double>> fetchProjectAmounts(Conto c, String lineaC) async {
+    final appState = Provider.of<AppState>(context, listen: false);
     LinkedHashMap<String, double> projectAmounts = LinkedHashMap<String, double>();
 
     // Find the matching element in conti
@@ -284,16 +290,15 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     }
     Map<String, dynamic> data = {};
     if (matchingElement != null) {
-      await FirebaseFirestore.instance.collection('conti/${matchingElement.id}/lineeConto').get().then(
-        (snapshot) => snapshot.docs.forEach((linea) {
-          if (linea.id == lineaC) {
-            data = linea.data();
-            if (data['Project Amounts'] is LinkedHashMap) {
-              projectAmounts = LinkedHashMap<String, double>.from(data['Project Amounts'].map((key, value) => MapEntry(key, value.toDouble())));
+      await appState.conti.doc(matchingElement.id).collection('lineeConto').get().then(
+              (snapshot) => snapshot.docs.forEach((linea) {
+            if (linea.id == lineaC) {
+              data = linea.data();
+              if (data['Project Amounts'] is LinkedHashMap) {
+                projectAmounts = LinkedHashMap<String, double>.from(data['Project Amounts'].map((key, value) => MapEntry(key, value.toDouble())));
+              }
             }
-          }
-        })
-      );
+          }));
     }
     return projectAmounts;
   }
@@ -330,16 +335,18 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   Future getLinesConto() async {
+    final appstate = Provider.of<AppState>(context, listen: false);
     await findConti(widget.idCat);
     for (var idC in conti) {
       DocumentReference s = idC as DocumentReference;
-      await FirebaseFirestore.instance.collection('conti/${s.id}/lineeConto').get().then(
-        (snapshot) => snapshot.docs.forEach((linea) {
-          Map<String, dynamic> c = linea.data();
-          lines.add(linea.id);
-          csvData.add(c);
-        })
-      );
+      await appstate.conti.doc(s.id).collection('lineeConto').get().then(
+              (snapshot) => snapshot.docs.forEach((linea) {
+            if (linea.reference.id != 'defaultLine') {
+              Map<String, dynamic> c = linea.data();
+              lines.add(linea.id);
+              csvData.add(c);
+            }
+          }));
     }
     contiM = convertMapToObject2(csvData);
     await valuateTot();
@@ -347,23 +354,24 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   Future findConti(String idcat) async {
-    await FirebaseFirestore.instance.collection('categorie').get().then(
-      (snapshot) => snapshot.docs.forEach((cat) {
-        if (cat.id == idcat) {
-          conti = cat.get('Conti') as List<dynamic>;
-        }
-      })
-    );
-    for (var conto in conti){
+    final appState = Provider.of<AppState>(context, listen: false);
+    await appState.categorie.get().then(
+            (snapshot) => snapshot.docs.forEach((cat) {
+          if (cat.id == idcat) {
+            conti = cat.get('Conti');
+          }
+        }));
+    for (var conto in conti) {
       DocumentReference s = conto as DocumentReference;
-      calcolaSommaImporti(s.id);
+      calcolaSommaImporti(context, s.id);
     }
   }
 
   num totIndiretti = 0;
 
   Future<Map<String, dynamic>> getContoAttributes(String id) async {
-    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('conti').doc(id).get();
+    final appState = Provider.of<AppState>(context, listen: false);
+    DocumentSnapshot documentSnapshot = await appState.conti.doc(id).get();
     if (documentSnapshot.exists) {
       Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
       return {
@@ -373,11 +381,12 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
         'TotaleCostiIndiretti': data['TotaleCostiIndiretti'],
       };
     } else {
-      throw Exception('Document does not exist');
+      return {};
     }
   }
 
   Future<void> valuateTot() async {
+    final appState = Provider.of<AppState>(context, listen: false);
     totIndiretti = 0;
     num totInnE = 0;
     num totInE = 0;
@@ -387,10 +396,13 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     num percDE = 0;
     num percDnE = 0;
     num totSaldo = 0;
-    DocumentReference d = FirebaseFirestore.instance.collection('categorie').doc(widget.idCat);
-    for (var conto in conti){
+    DocumentReference d = appState.categorie.doc(widget.idCat);
+    for (var conto in conti) {
       DocumentReference s = conto as DocumentReference;
       var attributes = await getContoAttributes(s.id);
+      if(attributes.isEmpty) {
+        continue;
+      }
       num saldo = attributes['Saldo'];
       num totaleCostiDirettiEconomici = attributes['TotaleCostiDirettiEconomici'];
       num totaleCostiDirettiNonEconomici = attributes['TotaleCostiDirettiNonEconomici'];
@@ -402,22 +414,11 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
       totIndiretti += totaleCostiIndiretti;
       totSaldo += saldo;
     }
-    /*
-    if(totDnE != 0 && totDE != 0){
-      totD = totDE + totDnE;
-      percDE = 100 * totDE/totD;
-      percDnE = 100 * totDnE/totD;
-      totInE = totIndiretti * percDE / 100;
-      totInnE = totIndiretti * percDnE / 100;
-    }
-    else{
-     */
     double percIndirettiAttEco = 0.0;
     double percIndirettiAttNonEco = 0.0;
-    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('categorie').doc('riepilogoCat').get();
+    DocumentSnapshot documentSnapshot = await appState.categorie.doc('riepilogoCat').get();
     if (documentSnapshot.exists) {
-      Map<String, dynamic> data = documentSnapshot.data() as Map<String,
-          dynamic>;
+      Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
       percIndirettiAttEco = data['percIndirettiAttEco'] ?? 0.0;
       percIndirettiAttNonEco = data['percIndirettiAttNonEco'] ?? 0.0;
     }
@@ -427,14 +428,13 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     totInE = totIndiretti * percIndirettiAttEco / 100;
     totInnE = totIndiretti * percIndirettiAttNonEco / 100;
 
-    print('totInE $totInE  + totInnE $totInnE: ${totInE+totInnE} == totIndiretti: $totIndiretti');
-    //}
+    print('totInE $totInE  + totInnE $totInnE: ${totInE + totInnE} == totIndiretti: $totIndiretti');
     final json = {
       'Saldo': totSaldo,
-      'Totale Costi Diretti A E' : totDE,
-      'Totale Costi Diretti A nE' : totDnE,
-      'Totale Costi Indiretti A E' : totInE,
-      'Totale Costi Indiretti A nE' : totInnE,
+      'Totale Costi Diretti A E': totDE,
+      'Totale Costi Diretti A nE': totDnE,
+      'Totale Costi Indiretti A E': totInE,
+      'Totale Costi Indiretti A nE': totInnE,
     };
     d.update(json);
     totaleCostiDirettiAE = totDE;
@@ -445,39 +445,38 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
   }
 
   Future<void> valuatePerc() async {
+    final appState = Provider.of<AppState>(context, listen: false);
     num percCIAE = 0;
     num percCIAnE = 0;
     num totCIAE = 0;
     num totCIAnE = 0;
-    CollectionReference c =  FirebaseFirestore.instance.collection('categorie');
+    CollectionReference c = appState.categorie;
     totCIAE = 0;
     totCIAnE = 0;
-    await FirebaseFirestore.instance.collection('categorie').doc('riepilogoCat').get().then(
-      (doc) {
-        if (doc.exists) {
-          totCIAE = num.parse(doc.get('totCostiIndirettiAttEco').toString());
-          totCIAnE = num.parse(doc.get('totCostiIndirettiAttNonEco').toString());
-        }
-      }
-    );
-    c.get().then(
-      (snapshot) => snapshot.docs.forEach(
-        (cat) {
-          if (cat.id != 'riepilogoCat' && cat.id != 'Valore della Produzione') {
-            var sTotCIAE = cat.get('Totale Costi Indiretti A E').toString();
-            var sTotCIAnE = cat.get('Totale Costi Indiretti A nE').toString();
-            percCIAE = 0;
-            percCIAnE = 0;
-            percCIAE = 100 * (num.parse(sTotCIAE) / totCIAE);
-            percCIAnE = 100 * (num.parse(sTotCIAnE) / totCIAnE);
-            final json = {
-              'Percentuale CI A E': percCIAE.toStringAsFixed(2),
-              'Percentuale CI A nE': percCIAnE.toStringAsFixed(2)
-            };
-            c.doc(cat.id).update(json);
+    await appState.categorie.doc('riepilogoCat').get().then(
+            (doc) {
+          if (doc.exists) {
+            totCIAE = num.parse(doc.get('totCostiIndirettiAttEco').toString());
+            totCIAnE = num.parse(doc.get('totCostiIndirettiAttNonEco').toString());
           }
-        }
-      )
-    );
+        });
+    c.get().then(
+            (snapshot) => snapshot.docs.forEach(
+              (cat) {
+            if (cat.id != 'riepilogoCat' && cat.id != 'Valore della Produzione') {
+              var sTotCIAE = cat.get('Totale Costi Indiretti A E').toString();
+              var sTotCIAnE = cat.get('Totale Costi Indiretti A nE').toString();
+              percCIAE = 0;
+              percCIAnE = 0;
+              percCIAE = 100 * (num.parse(sTotCIAE) / totCIAE);
+              percCIAnE = 100 * (num.parse(sTotCIAnE) / totCIAnE);
+              final json = {
+                'Percentuale CI A E': percCIAE.toStringAsFixed(2),
+                'Percentuale CI A nE': percCIAnE.toStringAsFixed(2)
+              };
+              c.doc(cat.id).update(json);
+            }
+          },
+        ));
   }
 }

@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/auth.dart';
+import 'package:provider/provider.dart';
+import 'package:tesi_triennale/app_state.dart';
 import 'home.dart';
 import 'firebase_options.dart';
 
@@ -12,7 +14,8 @@ Future<void> main() async {
   app = await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [ChangeNotifierProvider(create: (_) => AppState())],
+    child: const MyApp(),));
 }
 
 class MyApp extends StatelessWidget{

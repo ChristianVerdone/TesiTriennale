@@ -8,7 +8,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
 import 'package:csv/csv.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
+import 'app_state.dart';
 import 'conto.dart';
 import 'utils.dart';
 import 'visualizza_progetti.dart';
@@ -30,12 +32,47 @@ class HomePageState extends State<HomePage>{
   bool caricamento = false;
   late int i;
   var storageRef;
+  List<int> years = [2022, 2023];
+  int? selectedYear;
+  late AppState appState;
+
+  @override
+  void initState() {
+    super.initState();
+    appState = Provider.of<AppState>(context, listen: false);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
+          DropdownButton<int>(
+            hint: const Text("Select Year"),
+            value: selectedYear,
+            onChanged: (int? newValue) {
+              setState(() {
+                selectedYear = newValue;
+                if (newValue == 2022) {
+                  appState.setA1A5('A1-A5');
+                  appState.setCategorie('categorie');
+                  appState.setConti('conti');
+                  appState.setProgetti('progetti');
+                } else if (newValue == 2023) {
+                  appState.setA1A5('A1-A5-2023');
+                  appState.setCategorie('categorie-2023');
+                  appState.setConti('conti-2023');
+                  appState.setProgetti('progetti-2023');
+                }
+              });
+            },
+            items: years.map<DropdownMenuItem<int>>((int value) {
+              return DropdownMenuItem<int>(
+                value: value,
+                child: Text(value.toString()),
+              );
+            }).toList(),
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () => FirebaseAuth.instance.signOut()
@@ -192,23 +229,23 @@ class HomePageState extends State<HomePage>{
     Navigator.of(context).pop();
   }
 
-  Future getAll() async{
-    await FirebaseFirestore.instance.collection('conti/').get().then(
-      (snapshot) => snapshot.docs.forEach((conto) {
-        getLines(conto.id);
-      })
-    );
-    conti = convertMapToObject(csvData2);
-  }
+  Future getAll() async {
+  await appState.conti.get().then(
+    (snapshot) => snapshot.docs.forEach((conto) {
+      getLines(conto.id);
+    })
+  );
+  conti = convertMapToObject(csvData2);
+}
 
   Future getLines(String idConto) async {
-    await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
-      (snapshot) => snapshot.docs.forEach((linea) {
-        Map<String,dynamic> c = linea.data();
-        csvData2.add(c);
-      })
-    );
-  }
+  await appState.conti.doc(idConto).collection('lineeConto').get().then(
+    (snapshot) => snapshot.docs.forEach((linea) {
+      Map<String, dynamic> c = linea.data();
+      csvData2.add(c);
+    })
+  );
+}
 
   Future<bool> checkIfFileExists() async {
     if (kDebugMode) {
@@ -287,7 +324,7 @@ class HomePageState extends State<HomePage>{
           if(kDebugMode){
             print('File caricato su Firebase Storage: $downloadUrl');
           }
-          await refreshData();
+          //await refreshData();
           fetchHello();
         }
       });
@@ -327,7 +364,7 @@ class HomePageState extends State<HomePage>{
         i = 0;
         s = 'line_00';
         if(numConto != 'Codice Conto') {
-          await FirebaseFirestore.instance.collection('conti').doc(numConto).set({
+          await appState.conti.doc(numConto).set({
             'Descrizione conto': line[1]
           });
         }
@@ -353,7 +390,7 @@ class HomePageState extends State<HomePage>{
         if(i>9) s = 'line_0';
         if(i>99) s = 'line_';
         i++;
-        await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
+        await appState.conti.doc(numConto).collection('lineeConto').doc(numConto + s + iS).set(json);
       }
     }
     return i;
@@ -406,13 +443,13 @@ class HomePageState extends State<HomePage>{
           'Codice progetto' : ''
         };
         String iS = i.toString();
-        await FirebaseFirestore.instance.collection('conti').doc(numConto).collection('lineeConto').doc(numConto+s+iS).set(json);
+        await appState.conti.doc(numConto).collection('lineeConto').doc(numConto + s + iS).set(json);
       }
     }
   }
 
   Future<int> getNumberOfDocuments(String num) async {
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('conti').doc(num).collection('lineeConto').get();
+    QuerySnapshot querySnapshot = await appState.conti.doc(num).collection('lineeConto').get();
     return querySnapshot.docs.length;
   }
 
@@ -420,12 +457,14 @@ class HomePageState extends State<HomePage>{
     if (kDebugMode) {
       print('refreshData called');
     }
-    await FirebaseFirestore.instance.collection('conti').get().then((snapshot) => snapshot.docs.forEach((conto) {
-      conto.reference.collection('lineeConto').get().then((value) => {
-        value.docs.forEach((linea) {
-          linea.reference.delete();
-        })
-      });
-    }));
+    await appState.conti.get().then((snapshot) {
+      for (var conto in snapshot.docs) {
+        conto.reference.collection('lineeConto').get().then((value) {
+          for (var linea in value.docs) {
+            linea.reference.delete();
+          }
+        });
+      }
+    });
   }
 }

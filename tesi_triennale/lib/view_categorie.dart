@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tesi_triennale/utils.dart';
 import 'view_conti_cat.dart';
+import 'app_state.dart';
 
 class VisualizzaCatPage extends StatefulWidget {
   const VisualizzaCatPage({super.key});
@@ -82,10 +84,10 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage> {
                               '${riepilogoCatData!['Costi di produzione']?.toStringAsFixed(2) ?? 'N/A'}'),
                           Text('Costi di produzione Attivit\u00E0 Economiche: '
                               '${riepilogoCatData!['totCostiAttEco']?.toStringAsFixed(2) ?? 'N/A'} '
-                              '(${valoreProduzione!['percTotProgettiE']?.toStringAsFixed(2) ?? 'N/A'}%)'),
+                              ' (${valoreProduzione!['percTotProgettiE']?.toStringAsFixed(2) ?? 'N/A'}%)'),
                           Text('Costi di produzione Attivit\u00E0 Non Economiche: '
                               '${riepilogoCatData!['totCostiAttNonEco']?.toStringAsFixed(2) ?? 'N/A'} '
-                              '(${valoreProduzione!['percValoreProduzioneNonE']?.toStringAsFixed(2) ?? 'N/A'}%)'),
+                              ' (${valoreProduzione!['percValoreProduzioneNonE']?.toStringAsFixed(2) ?? 'N/A'}%)'),
                           const Text('Costi diretti:'),
                           Text('  Attivit\u00E0 economiche: '
                               '${riepilogoCatData!['totCostiDirettiAttEco']?.toStringAsFixed(2) ?? 'N/A'}'),
@@ -93,11 +95,9 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage> {
                               '${riepilogoCatData!['totCostiDirettiAttNonEco']?.toStringAsFixed(2) ?? 'N/A'}'),
                           const Text('Costi indiretti:'),
                           Text('  Attivit\u00E0 economiche: '
-                              '${riepilogoCatData!['totCostiIndirettiAttEco']?.toStringAsFixed(2) ?? 'N/A'} '
-                              '(${riepilogoCatData!['percIndirettiAttEco']?.toStringAsFixed(2) ?? 'N/A'}%)'),
+                              '${riepilogoCatData!['totCostiIndirettiAttEco']?.toStringAsFixed(2) ?? 'N/A'}'),
                           Text('  Attivit\u00E0 non economiche: '
-                              '${riepilogoCatData!['totCostiIndirettiAttNonEco']?.toStringAsFixed(2) ?? 'N/A'} '
-                              '(${riepilogoCatData!['percIndirettiAttNonEco']?.toStringAsFixed(2) ?? 'N/A'}%)'),
+                              '${riepilogoCatData!['totCostiIndirettiAttNonEco']?.toStringAsFixed(2) ?? 'N/A'}'),
                         ],
                       ),
                     ),
@@ -112,13 +112,11 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => ViewContiCatPage(
-                                    idCat: cat.elementAt(index),
-                                  ),
+                                  builder: (context) => ViewContiCatPage(idCat: cat[index]),
                                 ),
                               );
                             },
-                            child: Text(cat.elementAt(index)),
+                            child: Text(cat[index]),
                           ),
                         );
                       },
@@ -131,20 +129,19 @@ class _VisualizzaCatPageState extends State<VisualizzaCatPage> {
   }
 
   Future<void> getCat() async {
-    await FirebaseFirestore.instance.collection('categorie').get().then(
+    final appState = Provider.of<AppState>(context, listen: false);
+    await appState.categorie.get().then(
       (value) => value.docs.forEach((categ) {
         if (categ.id != 'riepilogoCat' && categ.id != 'Valore della Produzione') {
           cat.add(categ.id);
-        }
-        else if (categ.id == 'riepilogoCat') {
-          riepilogoCatData = categ.data();
-        }
-        else if (categ.id == 'Valore della Produzione') {
-          valoreProduzione = categ.data();
+        } else if (categ.id == 'riepilogoCat') {
+          riepilogoCatData = categ.data() as Map<String, dynamic>?;
+        } else if (categ.id == 'Valore della Produzione') {
+          valoreProduzione = categ.data() as Map<String, dynamic>?;
         }
       }),
     );
-    calcolaEInserisciRiepilogoCat();
+    await calcolaEInserisciRiepilogoCat(context);
     setState(() {
       isLoading = false;
     });

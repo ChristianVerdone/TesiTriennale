@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:printing/printing.dart';
+import 'package:provider/provider.dart';
+import 'app_state.dart';
 import 'conto.dart';
 import 'get_conto.dart';
 import 'utils.dart';
@@ -37,14 +39,16 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
     'Attivita non economiche',
     'Codice progetto'
   ];
+  late AppState appState;
 
   @override
   void initState() {
     super.initState();
+    appState = Provider.of<AppState>(context, listen: false);
   }
 
   Future getConti() async{
-    await FirebaseFirestore.instance.collection('conti').get().then(
+    await appState.conti.get().then(
       (snapshot) => snapshot.docs.forEach(
         (conto) async {
           if(conto.reference.id != 'Codice Conto'){
@@ -66,7 +70,7 @@ class _VisualizzaPageState extends State<VisualizzaPage>{
 
   Future getLines(String idConto) async {
     csvData2 = [];
-    await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
+    await appState.conti.doc(idConto).collection('lineeConto').get().then(
       (snapshot) => snapshot.docs.forEach((linea) async{
         Map<String, dynamic> c = linea.data();
         csvData2.add(c);
@@ -256,7 +260,7 @@ FutureOr<Uint8List> _generatePdfContent() async {
       'Numero documento',
       'Data documento',
       'Importo',
-      'Saldo',
+      //'Saldo',
       'Contropartita',
       'Costi diretti',
       'Costi indiretti',

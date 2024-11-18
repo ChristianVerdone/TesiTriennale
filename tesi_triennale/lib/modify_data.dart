@@ -1,3 +1,4 @@
+import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'scrollable_widget.dart';
 import 'show_text_dialog.dart';
 import 'conto.dart';
 import 'utils.dart';
+import 'app_state.dart';
 
 class ModifyData extends StatefulWidget {
   List<Map<String, dynamic>> lines;
@@ -50,90 +52,90 @@ class _ModifyDataState extends State<ModifyData> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      systemOverlayStyle: const SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
-        statusBarIconBrightness:
-        Brightness.dark,
-        statusBarBrightness: Brightness.light,
-      ),
-      centerTitle: true,
-      title:  Text(widget.codiceConto,
-        style: const TextStyle(
-          color: Colors.black,
-          fontSize: 20.0,
-        )),
-      actions: <Widget>[
-        ElevatedButton(
-          child: const Text('Applica'),
-          onPressed: () async {
-            String linea;
-            for (int i = 0; i < widget.lines.length; i++) {
-              if(widget.lines[i]['isModified'] == false) {
-                continue;
-              } else {
-                linea = widget.lines[i]['linea'];
-                var conto = conti[i];
-                final json = {
-                  'Codice Conto': widget.codiceConto,
-                  'Descrizione conto': conto.descrizioneConto,
-                  'Data operazione': conto.dataOperazione,
-                  'Descrizione operazione': conto.descrizioneOperazione,
-                  'Numero documento': conto.numeroDocumento,
-                  'Data documento': conto.dataDocumento,
-                  'Importo': conto.importo,
-                  'Saldo': conto.saldo,
-                  'Contropartita': conto.contropartita,
-                  'Costi Diretti': conto.costiDiretti,
-                  'Costi Indiretti': conto.costiIndiretti,
-                  'Attività economiche': conto.attivitaEconomiche,
-                  'Attività non economiche': conto.attivitaNonEconomiche,
-                  'Codice progetto': conto.codiceProgetto
-                };
-                await FirebaseFirestore.instance.collection('conti').doc(
-                    widget.codiceConto).collection('lineeConto').doc(linea).set(
-                    json, SetOptions(merge: true));
-              }
-            }
-            Navigator.pop(context, 'refresh');
-          },
+  Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context, listen: false);
+
+    return Scaffold(
+      appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.white,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
         ),
-        const SizedBox(width: 16),
-        IconButton(
-          onPressed: (){
-            Navigator.popUntil(context, ModalRoute.withName('/'));
-          },
-          icon: const Icon(Icons.home)),
-        const SizedBox(width: 16),
-      ],
-    ),
-    body: Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: _searchController,
-            decoration: const InputDecoration(
-              labelText: 'Search',
-              suffixIcon: Icon(Icons.search),
-            ),
-            onChanged: (value) {
-              setState(() {
-                _searchQuery = value;
-              });
+        centerTitle: true,
+        title: Text(widget.codiceConto,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+            )),
+        actions: <Widget>[
+          ElevatedButton(
+            child: const Text('Applica'),
+            onPressed: () async {
+              String linea;
+              for (int i = 0; i < widget.lines.length; i++) {
+                if (widget.lines[i]['isModified'] == false) {
+                  continue;
+                } else {
+                  linea = widget.lines[i]['linea'];
+                  var conto = conti[i];
+                  final json = {
+                    'Codice Conto': widget.codiceConto,
+                    'Descrizione conto': conto.descrizioneConto,
+                    'Data operazione': conto.dataOperazione,
+                    'Descrizione operazione': conto.descrizioneOperazione,
+                    'Numero documento': conto.numeroDocumento,
+                    'Data documento': conto.dataDocumento,
+                    'Importo': conto.importo,
+                    //'Saldo': conto.saldo,
+                    'Contropartita': conto.contropartita,
+                    'Costi Diretti': conto.costiDiretti,
+                    'Costi Indiretti': conto.costiIndiretti,
+                    'Attività economiche': conto.attivitaEconomiche,
+                    'Attività non economiche': conto.attivitaNonEconomiche,
+                    'Codice progetto': conto.codiceProgetto
+                  };
+                  await appState.conti.doc(widget.codiceConto).collection('lineeConto').doc(linea).set(json, SetOptions(merge: true));                }
+              }
+              Navigator.pop(context, 'refresh');
             },
           ),
-        ),
-        Expanded(
-          child: ScrollableWidget(
-            controller: _controller,
-            child: buildDataTable(),
+          const SizedBox(width: 16),
+          IconButton(
+              onPressed: () {
+                Navigator.popUntil(context, ModalRoute.withName('/'));
+              },
+              icon: const Icon(Icons.home)),
+          const SizedBox(width: 16),
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                labelText: 'Search',
+                suffixIcon: Icon(Icons.search),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+            ),
           ),
-        ),
-      ],
-    ),
-  );
+          Expanded(
+            child: ScrollableWidget(
+              controller: _controller,
+              child: buildDataTable(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget buildDataTable() {
     final filteredConti = filterConti(conti, _searchQuery);
@@ -343,7 +345,8 @@ class _ModifyDataState extends State<ModifyData> {
   }
 
   Future<List<String>> getProjects() async {
-    final projectsRef = FirebaseFirestore.instance.collection('progetti');
+    final appState = Provider.of<AppState>(context, listen: false);
+    final projectsRef = appState.progetti;
     final snapshot = await projectsRef.get();
     return snapshot.docs.map((doc) => doc.id).toList();
   }

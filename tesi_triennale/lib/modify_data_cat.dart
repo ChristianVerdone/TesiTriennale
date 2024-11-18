@@ -3,6 +3,8 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'app_state.dart';
 import 'scrollable_widget.dart';
 import 'show_text_dialog.dart';
 import 'conto.dart';
@@ -34,7 +36,6 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
     'Numero documento',
     'Data documento',
     'Importo',
-    'Saldo',
     'Contropartita',
     'Costi diretti',
     'Costi indiretti',
@@ -58,126 +59,109 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      systemOverlayStyle: const SystemUiOverlayStyle(
-        statusBarColor: Colors.white,
-        statusBarIconBrightness:
-        Brightness.dark,
-        statusBarBrightness: Brightness.light,
-      ),
-      centerTitle: true,
-      title: const Text('Modifica',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20.0,
-          )),
-      actions: <Widget>[
-        ElevatedButton(
-          child: const Text('Applica'),
-          onPressed: () async {
-            if(widget.idCat == 'Personale'){
-              for (int i = 0; i < widget.lines.length; i++) {
-                if (widget.lines[i]['isModified'] == false) {
-                  continue;
-                }
-                else {
-                  String linea = widget.lines[i]['linea'];
-                  String idConto = linea.substring(0, 8);
-                  var conto = conti[i];
-                  var projectAmounts = conto.projectAmounts;
-                  final json = {
-                    'Codice Conto': conto.codiceConto,
-                    'Descrizione conto': conto.descrizioneConto,
-                    'Data operazione': conto.dataOperazione,
-                    'Descrizione operazione': conto.descrizioneOperazione,
-                    'Numero documento': conto.numeroDocumento,
-                    'Data documento': conto.dataDocumento,
-                    'Importo': conto.importo,
-                    'Saldo': conto.saldo,
-                    'Contropartita': conto.contropartita,
-                    'Costi Diretti': conto.costiDiretti,
-                    'Costi Indiretti': conto.costiIndiretti,
-                    'Attività economiche': conto.attivitaEconomiche,
-                    'Attività non economiche': conto.attivitaNonEconomiche,
-                    'Codice progetto': conto.codiceProgetto,
-                    'Project Amounts': projectAmounts
-                  };
-                  await FirebaseFirestore.instance.collection('conti').doc(
-                      idConto).collection('lineeConto').doc(linea).set(json,
-                      SetOptions(merge: true));
-                }
-              }
-            }
-            else {
-              String linea;
-              for (int i = 0; i < widget.lines.length; i++) {
-                if (widget.lines[i]['isModified'] == false) {
-                  continue;
-                }
-                else {
-                  linea = widget.lines[i]['linea'];
-                  String idConto = linea.substring(0, 8);
-                  final json = {
-                    'Codice Conto': conti[i].codiceConto,
-                    'Descrizione conto': conti[i].descrizioneConto,
-                    'Data operazione': conti[i].dataOperazione,
-                    'Descrizione operazione': conti[i].descrizioneOperazione,
-                    'Numero documento': conti[i].numeroDocumento,
-                    'Data documento': conti[i].dataDocumento,
-                    'Importo': conti[i].importo,
-                    'Saldo': conti[i].saldo,
-                    'Contropartita': conti[i].contropartita,
-                    'Costi Diretti': conti[i].costiDiretti,
-                    'Costi Indiretti': conti[i].costiIndiretti,
-                    'Attività economiche': conti[i].attivitaEconomiche,
-                    'Attività non economiche': conti[i].attivitaNonEconomiche,
-                    'Codice progetto': conti[i].codiceProgetto
-                  };
-                  await FirebaseFirestore.instance.collection('conti').doc(
-                      idConto).collection('lineeConto').doc(linea).set(json,
-                      SetOptions(merge: true));
-                }
-              }
-            }
-            Navigator.pop(context, 'refresh');
-          },
+  Widget build(BuildContext context) {
+    final appstate = Provider.of<AppState>(context, listen: false);
+    return Scaffold(
+      appBar: AppBar(
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.white,
+          statusBarIconBrightness:
+          Brightness.dark,
+          statusBarBrightness: Brightness.light,
         ),
-        const SizedBox(width: 16),
-        IconButton(
-          onPressed: (){
-            Navigator.popUntil(context, ModalRoute.withName('/'));
-          },
-          icon: const Icon(Icons.home)),
-        const SizedBox(width: 16),
-      ],
-    ),
-    body:  Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            controller: _searchController,
-            decoration: const InputDecoration(
-              labelText: 'Search',
-              suffixIcon: Icon(Icons.search),
-            ),
-            onChanged: (value) {
-              setState(() {
-                _searchQuery = value;
-              });
+        centerTitle: true,
+        title: const Text('Modifica',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20.0,
+            )),
+        actions: <Widget>[
+          ElevatedButton(
+            child: const Text('Applica'),
+            onPressed: () async {
+              if(widget.idCat == 'Personale'){
+                for (int i = 0; i < widget.lines.length; i++) {
+                  if (widget.lines[i]['isModified'] == false) {
+                    continue;
+                  }
+                  else {
+                    String linea = widget.lines[i]['linea'];
+                    String idConto = linea.substring(0, 8);
+                    var conto = conti[i];
+                    var projectAmounts = conto.projectAmounts;
+                    final json = {
+                      'Costi Diretti': conto.costiDiretti,
+                      'Costi Indiretti': conto.costiIndiretti,
+                      'Attività economiche': conto.attivitaEconomiche,
+                      'Attività non economiche': conto.attivitaNonEconomiche,
+                      'Codice progetto': conto.codiceProgetto,
+                      'Project Amounts': projectAmounts
+                    };
+                    await appstate.conti.doc(idConto).collection('lineeConto').doc(linea).set(json,
+                        SetOptions(merge: true));
+                  }
+                }
+              }
+              else {
+                String linea;
+                for (int i = 0; i < widget.lines.length; i++) {
+                  if (widget.lines[i]['isModified'] == false) {
+                    continue;
+                  }
+                  else {
+                    linea = widget.lines[i]['linea'];
+                    String idConto = linea.substring(0, 8);
+                    final json = {
+                      'Costi Diretti': conti[i].costiDiretti,
+                      'Costi Indiretti': conti[i].costiIndiretti,
+                      'Attività economiche': conti[i].attivitaEconomiche,
+                      'Attività non economiche': conti[i].attivitaNonEconomiche,
+                      'Codice progetto': conti[i].codiceProgetto
+                    };
+                    await appstate.conti.doc(idConto).collection('lineeConto').doc(linea).set(json,
+                        SetOptions(merge: true));
+                  }
+                }
+              }
+              Navigator.pop(context, 'refresh');
             },
           ),
-        ),
-        Expanded(
-          child: ScrollableWidget(
-            controller: _controller,
-            child: buildDataTable(),
+          const SizedBox(width: 16),
+          IconButton(
+              onPressed: (){
+                Navigator.popUntil(context, ModalRoute.withName('/'));
+              },
+              icon: const Icon(Icons.home)),
+          const SizedBox(width: 16),
+        ],
+      ),
+      body:  Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                labelText: 'Search',
+                suffixIcon: Icon(Icons.search),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+            ),
           ),
-        ),
-      ],
-    ),
-  );
+          Expanded(
+            child: ScrollableWidget(
+              controller: _controller,
+              child: buildDataTable(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget buildDataTable() {
     final filteredConti = filterConti(conti, _searchQuery);
@@ -206,7 +190,6 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
       conto.numeroDocumento,
       conto.dataDocumento,
       conto.importo,
-      conto.saldo,
       conto.contropartita,
       conto.costiDiretti,
       conto.costiIndiretti,
@@ -218,7 +201,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
     return DataRow(
       cells: Utils.modelBuilder(cells, (index, cell) {
         switch (index) {
-          case 9:
+          case 8:
             return DataCell(Center(
               child: Tooltip(
                 message: 'Costi diretti',
@@ -241,7 +224,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                 ),
               ),
             ));
-          case 10:
+          case 9:
             return DataCell(Center(
               child: Tooltip(
                   message: 'Costi indiretti',
@@ -261,7 +244,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                     },
                   )),
             ));
-          case 11:
+          case 10:
             return DataCell(Center(
               child: Tooltip(
                   message: 'Attività economiche',
@@ -281,7 +264,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                     },
                   )),
             ));
-          case 12:
+          case 11:
             return DataCell(Center(
               child: Tooltip(
                   message: 'Attività non economiche',
@@ -301,7 +284,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                     },
                   )),
             ));
-          case 13:
+          case 12:
             final showEditIcon = index == 13;
             return DataCell(
                 Tooltip(
@@ -332,7 +315,6 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
     if (i == 5) return columns[i];
     if (i == 6) return columns[i];
     if (i == 7) return columns[i];
-    if (i == 8) return columns[i];
     return testo;
   }
 

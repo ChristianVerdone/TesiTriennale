@@ -8,6 +8,51 @@ class Progetto{
   late final dynamic perc;
   dynamic contributo;
   late final List references;
+  bool isA1;
+  bool isA5;
+
+
+  Map<String, dynamic> toJson() => {
+    'nomeProgetto': nomeProgetto,
+    'anno': anno,
+    'valore': valore,
+    'contributo': contributo,
+    'isEconomico': isEconomico,
+    'isA1': isA1,
+    'isA5': isA5,
+    'costiDiretti': costiDiretti,
+    'costiIndiretti': costiIndiretti,
+    'perc': perc,
+    'references': references,
+  };
+
+  Progetto({
+    required this.nomeProgetto,
+    required this.anno,
+    required this.valore,
+    required this.costiDiretti,
+    required this.costiIndiretti,
+    required this.isEconomico,
+    required this.perc,
+    required this.contributo,
+    required this.references,
+    required this.isA1,
+    required this.isA5,
+  });
+
+  static Progetto fromJson(Map<String, dynamic> json) => Progetto(
+    nomeProgetto: json['nomeProgetto'],
+    anno: json['anno'],
+    valore: json['valore'],
+    contributo: json['contributo'],
+    isEconomico: json['isEconomico'],
+    isA1: json['isA1'],
+    isA5: json['isA5'],
+    costiDiretti: json['costiDiretti'],
+    costiIndiretti: json['costiIndiretti'],
+    perc: json['perc'],
+    references: json['references'],
+  );
 
   @override
   bool operator ==(Object other) =>
@@ -44,6 +89,8 @@ class Progetto{
     required this.isEconomico,
     required this.perc,
     required this.contributo,
-    required this.references
+    required this.references,
+    required this.isA1,
+    required this.isA5,
   });
 }

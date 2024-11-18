@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show SystemUiOverlayStyle, Uint8List;
+import 'package:provider/provider.dart';
+import 'app_state.dart';
 import 'modify_data.dart';
 import 'scrollable_widget.dart';
 import 'conto.dart';
@@ -32,7 +34,9 @@ class _VisualizzaConto extends State<VisualizzaConto> {
     'Numero documento',
     'Data documento',
     'Importo',
-    'Saldo',
+    //'Saldo',
+    'Codice Fiscale',
+    'Partita IVA',
     'Contropartita',
     'Costi diretti',
     'Costi indiretti',
@@ -181,20 +185,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
 
   List<List<dynamic>> _makeListConti() {
     List<List<dynamic>> list = [];
-    final columns = [
-      'Data operazione',
-      'Descrizione operazione',
-      'Data documento',
-      'Numero documento',
-      'Importo',
-      'Saldo',
-      'Contropartita',
-      'Costi diretti',
-      'Costi indiretti',
-      'Attività economiche',
-      'Attività non economiche',
-      'Codice progetto'
-    ];
+
     list.add(columns);
     int i = 0;
     for (var conto in conti) {
@@ -235,7 +226,8 @@ class _VisualizzaConto extends State<VisualizzaConto> {
       conto.numeroDocumento,
       conto.dataDocumento,
       conto.importo,
-      conto.saldo,
+      conto.codiceFiscale,
+      conto.partitaIva,
       conto.contropartita,
       conto.costiDiretti,
       conto.costiIndiretti,
@@ -247,7 +239,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
     return DataRow(
       color: conto.costiDiretti ? MaterialStateProperty.all(Colors.blue) : null,
       cells: Utils.modelBuilder(cells, (index, cell) {
-        if (index == 7) {
+        if (index == 8) {
           switch (conto.costiDiretti) {
             case true:
               return const DataCell(Center(
@@ -259,7 +251,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
               );
           }
         }
-        if (index == 8) {
+        if (index == 9) {
           switch (conto.costiIndiretti) {
             case true:
               return const DataCell(Center(
@@ -271,7 +263,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
               );
           }
         }
-        if (index == 9) {
+        if (index == 10) {
           switch (conto.attivitaEconomiche) {
             case true:
               return const DataCell(Center(
@@ -283,7 +275,7 @@ class _VisualizzaConto extends State<VisualizzaConto> {
               );
           }
         }
-        if (index == 10) {
+        if (index == 11) {
           switch (conto.attivitaNonEconomiche) {
             case true:
               return const DataCell(Center(
@@ -314,12 +306,14 @@ class _VisualizzaConto extends State<VisualizzaConto> {
     if (i == 4) return columns[i];
     if (i == 5) return columns[i];
     if (i == 6) return columns[i];
+    if (i == 7) return columns[i];
     if (i == 12) return columns[i];
     return testo;
   }
 
   Future getLines(String idConto) async {
-    await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
+    final appState = Provider.of<AppState>(context, listen: false);
+    await appState.conti.doc(idConto).collection('lineeConto').get().then(
       (snapshot) => snapshot.docs.forEach((linea) {
         if(linea.reference.id != 'defaultLine'){
           Map<String, dynamic> c = linea.data();
@@ -329,8 +323,6 @@ class _VisualizzaConto extends State<VisualizzaConto> {
       })
     );
     conti = convertMapToObject(csvData);
-    calcolaSommaImporti(idConto);
+    calcolaSommaImporti(context, idConto);
   }
-
-
 }

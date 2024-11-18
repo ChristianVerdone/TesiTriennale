@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'app_state.dart';
 import 'visualizza_tab_conto.dart';
 
 class GetConto extends StatelessWidget{
@@ -9,7 +11,8 @@ class GetConto extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    CollectionReference lineeConto = FirebaseFirestore.instance.collection('conti');
+    final appState = Provider.of<AppState>(context, listen: false);
+    CollectionReference lineeConto = appState.firestore.collection(appState.conti.path);
     lineeConto.doc(idConto).get().then((value) => descrizione = value.get('Descrizione conto'));
     return FutureBuilder<DocumentSnapshot>(
         future: lineeConto.doc(idConto).get(),

@@ -1,13 +1,16 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'conto.dart';
+import 'app_state.dart';
 
-class Utils{
-  static List<T> modelBuilder<M, T>(List<M> models, T Function(int index, M model) builder )=>
-    models.asMap().map<int, T>((index, model) => MapEntry(index, builder(index, model))).values.toList();
+class Utils {
+  static List<T> modelBuilder<M, T>(List<M> models, T Function(int index, M model) builder) =>
+      models.asMap().map<int, T>((index, model) => MapEntry(index, builder(index, model))).values.toList();
 }
 
 const platform = MethodChannel('mychannel');
@@ -25,26 +28,27 @@ Future<int?> myDartFunction(int arg) async {
   return null;
 }
 
-Future<List<Conto>> getLines(String idConto) async {
+Future<List<Conto>> getLines(BuildContext context, String idConto) async {
+  final appState = Provider.of<AppState>(context, listen: false);
   List<String> lines = [];
   List<Map<String, dynamic>> csvData = [];
-  await FirebaseFirestore.instance.collection('conti/$idConto/lineeConto').get().then(
-          (snapshot) => snapshot.docs.forEach((linea) {
-        if(linea.reference.id != 'defaultLine'){
-          Map<String, dynamic> c = linea.data();
-          lines.add(linea.id);
-          csvData.add(c);
-        }
-      })
-  );
+  await appState.conti.doc(idConto).collection('lineeConto').get().then(
+      (snapshot) => snapshot.docs.forEach((linea) {
+            if (linea.reference.id != 'defaultLine') {
+              Map<String, dynamic> c = linea.data();
+              lines.add(linea.id);
+              csvData.add(c);
+            }
+          }));
   List<Conto> conti = convertMapToObject2(csvData);
   return conti;
 }
 
-Future<List<DocumentReference>> getContiPersonale() async {
+Future<List<DocumentReference>> getContiPersonale(BuildContext context) async {
+  final appState = Provider.of<AppState>(context, listen: false);
   List<DocumentReference> contiPersonale = [];
   try {
-    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection('categorie').doc('Personale').get();
+    DocumentSnapshot documentSnapshot = await appState.categorie.doc('Personale').get();
     if (documentSnapshot.exists) {
       contiPersonale = List<DocumentReference>.from(documentSnapshot.get('Conti'));
     } else {
@@ -56,10 +60,11 @@ Future<List<DocumentReference>> getContiPersonale() async {
   return contiPersonale;
 }
 
-void calcolaSommaImporti(String idConto) async {
-  DocumentReference contoRef = FirebaseFirestore.instance.collection('conti').doc(idConto);
-  List<Conto> conti = await getLines(idConto);
-  List<DocumentReference> contiPersonale = await getContiPersonale();
+void calcolaSommaImporti(BuildContext context, String idConto) async {
+  final appState = Provider.of<AppState>(context, listen: false);
+  DocumentReference contoRef = appState.conti.doc(idConto);
+  List<Conto> conti = await getLines(context, idConto);
+  List<DocumentReference> contiPersonale = await getContiPersonale(context);
   double somma = 0.0;
   double totIndiretti = 0.0;
   double totDnE = 0.0;
@@ -67,57 +72,53 @@ void calcolaSommaImporti(String idConto) async {
   double importo = 0.0;
   double sum = 0.0;
   for (var conto in conti) {
-    if(conto.importo is String){
+    if (conto.importo is String) {
       importo = double.parse(conto.importo);
       somma += importo;
-    }
-    else{
-      importo = conto.importo;
+    } else {
+      importo = conto.importo as double;
       somma += importo;
     }
-    if(conto.costiIndiretti){
-      if(!conto.attivitaNonEconomiche && !conto.attivitaEconomiche){
+    if (conto.costiIndiretti) {
+      if (!conto.attivitaNonEconomiche && !conto.attivitaEconomiche) {
         totIndiretti = totIndiretti + importo;
       }
     }
-    if(conto.costiDiretti){
-      if(contiPersonale.contains(contoRef)){
-        if(conto.attivitaNonEconomiche) {
+    if (conto.costiDiretti) {
+      if (contiPersonale.contains(contoRef)) {
+        if (conto.attivitaNonEconomiche) {
           LinkedHashMap<String, double>? projectAmounts = conto.projectAmounts;
           sum = 0.0;
           if (projectAmounts != null) {
             sum += projectAmounts.values.reduce((a, b) => a + b);
-            if(sum == importo){
+            if (sum == importo) {
               totDnE = totDnE + importo;
-            }
-            else{
+            } else {
               var diff = importo - sum;
               totIndiretti = totIndiretti + diff;
               totDnE = totDnE + sum;
             }
           }
         }
-        if(conto.attivitaEconomiche){
+        if (conto.attivitaEconomiche) {
           LinkedHashMap<String, double>? projectAmounts = conto.projectAmounts;
           sum = 0.0;
           if (projectAmounts != null) {
             sum += projectAmounts.values.reduce((a, b) => a + b);
-            if(sum == importo){
+            if (sum == importo) {
               totDE = totDE + importo;
-            }
-            else{
+            } else {
               var diff = importo - sum;
               totIndiretti = totIndiretti + diff;
               totDE = totDE + sum;
             }
           }
         }
-      }
-      else{
-        if(conto.attivitaNonEconomiche) {
+      } else {
+        if (conto.attivitaNonEconomiche) {
           totDnE = totDnE + importo;
         }
-        if(conto.attivitaEconomiche){
+        if (conto.attivitaEconomiche) {
           totDE = totDE + importo;
         }
       }
@@ -128,7 +129,7 @@ void calcolaSommaImporti(String idConto) async {
   }
 
   // Update the Saldo attribute in the conti/idConto document on Firebase
-  await FirebaseFirestore.instance.collection('conti').doc(idConto).update({
+  await appState.conti.doc(idConto).update({
     'Saldo': somma,
     'TotaleCostiIndiretti': totIndiretti,
     'TotaleCostiDirettiNonEconomici': totDnE,
@@ -138,9 +139,10 @@ void calcolaSommaImporti(String idConto) async {
 
 bool valuate = true;
 
-Future<void> processProgetti() async {
-  if(valuate) {
-    final collectionRef = FirebaseFirestore.instance.collection('A1-A5');
+Future<void> processProgetti(BuildContext context) async {
+  if (valuate) {
+    final appState = Provider.of<AppState>(context, listen: false);
+    final collectionRef = appState.a1a5;
     final documents = ['A1', 'A5'];
 
     for (var docId in documents) {
@@ -153,8 +155,7 @@ Future<void> processProgetti() async {
         double totalNonEconomic = 0.0;
 
         for (var progetto in progetti) {
-          DocumentSnapshot progettoSnapshot = await FirebaseFirestore.instance
-              .collection('progetti').doc(progetto).get();
+          DocumentSnapshot progettoSnapshot = await appState.progetti.doc(progetto).get();
           if (progettoSnapshot.exists) {
             Map<String, dynamic> progettoData = progettoSnapshot.data() as Map<String, dynamic>;
             double contributo = double.parse(progettoData['Contributo Competenza']) ?? 0.0;
@@ -181,9 +182,10 @@ Future<void> processProgetti() async {
   }
 }
 
-Future<void> calcolaEInserisciRiepilogoCat() async {
+Future<void> calcolaEInserisciRiepilogoCat(BuildContext context) async {
+  final appState = Provider.of<AppState>(context, listen: false);
   // Recupera tutte le categorie
-  QuerySnapshot categorieSnapshot = await FirebaseFirestore.instance.collection('categorie').get();
+  QuerySnapshot categorieSnapshot = await appState.categorie.get();
 
   // Inizializza le variabili per i calcoli
   double totCostiDirettiAttEco = 0.0;
@@ -200,27 +202,23 @@ Future<void> calcolaEInserisciRiepilogoCat() async {
   for (var categoriaDoc in categorieSnapshot.docs) {
     if (categoriaDoc.id != 'riepilogoCat' && categoriaDoc.id != 'Valore della Produzione') {
       var data = categoriaDoc.data() as Map<String, dynamic>;
-      if(categoriaDoc.id.toString() == 'Oneri finanziari'){
+      if (categoriaDoc.id.toString() == 'Oneri finanziari') {
         saldoOneriFinanziari = data['Totale Costi Diretti A E'] ?? 0.0;
         saldoOneriFinanziari += data['Totale Costi Diretti A nE'] ?? 0.0;
         saldoOneriFinanziari += data['Totale Costi Indiretti A E'] ?? 0.0;
         saldoOneriFinanziari += data['Totale Costi Indiretti A nE'] ?? 0.0;
-      }
-      else {
+      } else {
         // Somma i valori parziali esistenti
         totCostiDirettiAttEco += data['Totale Costi Diretti A E'] ?? 0.0;
         totCostiDirettiAttNonEco += data['Totale Costi Diretti A nE'] ?? 0.0;
-        /*totCostiIndirettiAttEco += data['Totale Costi Indiretti A E'] ?? 0.0;
-      totCostiIndirettiAttNonEco += data['Totale Costi Indiretti A nE'] ?? 0.0;
-      */
       }
     }
   }
 
-  DocumentSnapshot value = await FirebaseFirestore.instance.collection('categorie').doc('Valore della Produzione').get();
+  DocumentSnapshot value = await appState.categorie.doc('Valore della Produzione').get();
 
   // Recupera tutti i conti
-  QuerySnapshot contiSnapshot = await FirebaseFirestore.instance.collection('conti').get();
+  QuerySnapshot contiSnapshot = await appState.firestore.collection('conti').get();
 
   // Somma i saldi di ogni categoria
   for (var categoriaDoc in categorieSnapshot.docs) {
@@ -232,7 +230,6 @@ Future<void> calcolaEInserisciRiepilogoCat() async {
       }
     }
   }
-  //costiDiProduzione = costiDiProduzione - saldoOneriFinanziari;
   totCostiAttEco = costiDiProduzione * value.get('percTotProgettiE') / 100;
   totCostiAttNonEco = costiDiProduzione * value.get('percValoreProduzioneNonE') / 100;
   print('Costi att eco: $totCostiAttEco');
@@ -248,7 +245,7 @@ Future<void> calcolaEInserisciRiepilogoCat() async {
   double percIndirettiAttNonEco = totIndiretti != 0 ? (totCostiIndirettiAttNonEco / totIndiretti) * 100 : 0;
 
   // Salva i risultati nel documento riepilogoCat nella collezione categorie
-  await FirebaseFirestore.instance.collection('categorie').doc('riepilogoCat').set({
+  await appState.categorie.doc('riepilogoCat').set({
     'totCostiAttEco': totCostiAttEco,
     'totCostiAttNonEco': totCostiAttNonEco,
     'percIndirettiAttEco': percIndirettiAttEco,
@@ -274,7 +271,6 @@ List<Conto> filterConti(List<Conto> conti, String query) {
         conto.numeroDocumento.toLowerCase().contains(lowerCaseQuery) ||
         conto.dataDocumento.toLowerCase().contains(lowerCaseQuery) ||
         conto.importo.toLowerCase().contains(lowerCaseQuery) ||
-        conto.saldo.toLowerCase().contains(lowerCaseQuery) ||
         conto.contropartita.toLowerCase().contains(lowerCaseQuery) ||
         conto.costiDiretti.toString().toLowerCase().contains(lowerCaseQuery) ||
         conto.costiIndiretti.toString().toLowerCase().contains(lowerCaseQuery) ||
@@ -286,20 +282,22 @@ List<Conto> filterConti(List<Conto> conti, String query) {
 
 List<Conto> convertMapToObject(List<Map<String, dynamic>> csvData) => csvData
     .map((item) => Conto(
-    codiceConto: item['Codice Conto'],
-    descrizioneConto: item['Descrizione conto'],
-    dataOperazione: item['Data operazione'],
-    descrizioneOperazione: item['Descrizione operazione'],
-    numeroDocumento: item['Numero documento'].toString(),
-    dataDocumento: item['Data documento'],
-    importo: item['Importo'].toString(),
-    saldo: item['Saldo'].toString(),
-    contropartita: item['Contropartita'],
-    costiDiretti: item['Costi Diretti'].toString() == "" ? false : item['Costi Diretti'],
-    costiIndiretti: item['Costi Indiretti'].toString() == "" ? false : item['Costi Indiretti'],
-    attivitaEconomiche: item['Attività economiche'].toString() == "" ? false : item['Attività economiche'],
-    attivitaNonEconomiche: item['Attività non economiche'].toString() == "" ? false : item['Attività non economiche'],
-    codiceProgetto: item['Codice progetto'])).toList();
+        codiceConto: item['Codice Conto'],
+        descrizioneConto: item['Descrizione conto'] ?? item['Descrizione Conto'],
+        dataOperazione: item['Data operazione'] ?? item['Data Operazione'],
+        descrizioneOperazione: item['Descrizione operazione'],
+        numeroDocumento: (item['Numero documento'] ?? item['Numero Documento']).toString(),
+        dataDocumento: item['Data documento'] ?? item['Data Documento'],
+        importo: item['Importo'].toString(),
+        contropartita: item['Contropartita'],
+        costiDiretti: item['Costi Diretti'].toString() == "" ? false : item['Costi Diretti'],
+        costiIndiretti: item['Costi Indiretti'].toString() == "" ? false : item['Costi Indiretti'],
+        attivitaEconomiche: item['Attività economiche'].toString() == "" ? false : item['Attività economiche'],
+        attivitaNonEconomiche: item['Attività non economiche'].toString() == "" ? false : item['Attività non economiche'],
+        codiceProgetto: item['Codice progetto'],
+        codiceFiscale: item['Codice Fiscale'] ?? '',
+        partitaIva: item['Partita IVA'] ?? ''))
+    .toList();
 
 List<Conto> convertMapToObject2(List<Map<String, dynamic>> csvData) => csvData
     .map((item) {
@@ -310,20 +308,20 @@ List<Conto> convertMapToObject2(List<Map<String, dynamic>> csvData) => csvData
         projectAmounts = LinkedHashMap<String, double>.from(projectAmounts.map((key, value) => MapEntry(key, value.toDouble())));
       }
       return Conto(
-        codiceConto: item['Codice Conto'],
-        descrizioneConto: item['Descrizione conto'],
-        dataOperazione: item['Data operazione'],
-        descrizioneOperazione: item['Descrizione operazione'],
-        numeroDocumento: item['Numero documento'].toString(),
-        dataDocumento: item['Data documento'],
-        importo: item['Importo'].toString(),
-        saldo: item['Saldo'].toString(),
-        contropartita: item['Contropartita'],
-        costiDiretti: item['Costi Diretti'].toString() == "" ? false : item['Costi Diretti'],
-        costiIndiretti: item['Costi Indiretti'].toString() == "" ? false : item['Costi Indiretti'],
-        attivitaEconomiche: item['Attività economiche'].toString() == "" ? false : item['Attività economiche'],
-        attivitaNonEconomiche: item['Attività non economiche'].toString() == "" ? false : item['Attività non economiche'],
-        projectAmounts: projectAmounts,
-        codiceProgetto: item['Codice progetto']
-      );
+          codiceConto: item['Codice Conto'],
+          descrizioneConto: item['Descrizione conto'] ?? item['Descrizione Conto'],
+          dataOperazione: item['Data operazione'] ?? item['Data Operazione'],
+          descrizioneOperazione: item['Descrizione operazione'],
+          numeroDocumento: (item['Numero documento'] ?? item['Numero Documento']).toString(),
+          dataDocumento: item['Data documento'] ?? item['Data Documento'],
+          importo: item['Importo'].toString(),
+          contropartita: item['Contropartita'],
+          costiDiretti: item['Costi Diretti'].toString() == "" ? false : item['Costi Diretti'],
+          costiIndiretti: item['Costi Indiretti'].toString() == "" ? false : item['Costi Indiretti'],
+          attivitaEconomiche: item['Attività economiche'].toString() == "" ? false : item['Attività economiche'],
+          attivitaNonEconomiche: item['Attività non economiche'].toString() == "" ? false : item['Attività non economiche'],
+          projectAmounts: projectAmounts,
+          codiceProgetto: item['Codice progetto'],
+          codiceFiscale: item['Codice Fiscale'] ?? '',
+          partitaIva: item['Partita IVA'] ?? '');
     }).toList();

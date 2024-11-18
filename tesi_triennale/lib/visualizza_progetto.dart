@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
+import 'package:provider/provider.dart';
 import 'package:tesi_triennale/utils.dart';
 import 'package:tesi_triennale/visualizza_progetti.dart';
+import 'app_state.dart';
 import 'conto.dart';
 import 'modify_progetto.dart';
 import 'progetto.dart';
@@ -159,8 +161,9 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
 
   Future getLinesProg() async {
     if (csvData.isEmpty) {
+      final appState = Provider.of<AppState>(context, listen: false);
       for (var ref in widget.p.references) {
-        await FirebaseFirestore.instance.doc(ref).get().then(
+        await appState.firestore.doc(ref).get().then(
               (linea) {
             if (linea.reference.id != 'defaultLine') {
               var data = linea.data();
@@ -337,7 +340,8 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
   }
 
   getCat() async {
-    await FirebaseFirestore.instance.collection('categorie').get().then((value) {
+    final appState = Provider.of<AppState>(context, listen: false);
+    await appState.categorie.get().then((value) {
       for (var element in value.docs) {
         categories.add(element.id);
       }
@@ -359,23 +363,25 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
   }
 
   evaluate(String nomeProgetto) async {
-
     num s;
+    final appState = Provider.of<AppState>(context, listen: false);
     for (var categoria in widget.p.costiDiretti.keys) {
       s = 0;
-      await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
+      await appState.categorie.doc(categoria).get().then(
         (cat) async {
           if(cat.reference.id == 'Personale'){
             for (var element in (cat.get('Conti') as List<dynamic>)) {
               DocumentReference d = element as DocumentReference;
-              await FirebaseFirestore.instance.collection('conti/${d.id}/lineeConto').get().then(
+              await appState.conti.doc(d.id).collection('lineeConto').get().then(
                 (value) => value.docs.forEach((linea) {
                   if (linea.reference.id != 'defaultLine') {
-                    LinkedHashMap<String, double> progetti = LinkedHashMap<String, double>.from(linea.data()['Project Amounts'].map((key, value) => MapEntry(key, value.toDouble())));
-                    if (progetti.containsKey(nomeProgetto) && linea.get('Costi Diretti') == true) {
+                    if(linea.data()['Project Amounts'] != null){
+                      LinkedHashMap<String, double> progetti = LinkedHashMap<String, double>.from(linea.data()['Project Amounts'].map((key, value) => MapEntry(key, value.toDouble())));
+                      if (progetti.containsKey(nomeProgetto) && linea.get('Costi Diretti') == true) {
                         s = s + num.parse(progetti[nomeProgetto].toString());
                         // Aggiungi il DocumentReference all'array
                         documentReferences.add(linea.reference);
+                      }
                     }
                   }
                 })
@@ -385,7 +391,7 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
           else {
             for (var element in (cat.get('Conti') as List<dynamic>)) {
               DocumentReference d = element as DocumentReference;
-              await FirebaseFirestore.instance.collection('conti/${d.id}/lineeConto').get().then(
+              await appState.conti.doc(d.id).collection('lineeConto').get().then(
                 (value) => value.docs.forEach( (linea) {
                   if (linea.reference.id != 'defaultLine') {
                     var c = linea.data()['Codice progetto']
@@ -408,13 +414,13 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     }
     num totCostiIndAE = 0;
     num totCostiIndAnE = 0;
-    DocumentSnapshot riepilogoCatDoc = await FirebaseFirestore.instance.collection('categorie').doc('riepilogoCat').get();
+    DocumentSnapshot riepilogoCatDoc = await appState.categorie.doc('riepilogoCat').get();
     totCostiIndAE = num.parse(riepilogoCatDoc.get('totCostiIndirettiAttEco').toString());
     totCostiIndAnE = num.parse(riepilogoCatDoc.get('totCostiIndirettiAttNonEco').toString());
 
     for (var categoria in widget.p.costiIndiretti.keys) {
       s = 0;
-      await FirebaseFirestore.instance.collection('categorie').doc(categoria).get().then(
+      await appState.categorie.doc(categoria).get().then(
         (cat) {
           if(widget.p.isEconomico){
             s = (num.parse(widget.p.perc.toString()) / 100 * totCostiIndAE) * num.parse(cat.get('Percentuale CI A E').toString()) / 100;
@@ -431,10 +437,11 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
       'Costi Indiretti' : widget.p.costiIndiretti,
       'CostiDirettiValue': documentReferences.map((docRef) => docRef.path).toList(),
     };
-    await FirebaseFirestore.instance.collection('progetti').doc(nomeProgetto).update(json);
+    await appState.progetti.doc(nomeProgetto).update(json);
   }
 
   deleteProgetto() async {
-    await FirebaseFirestore.instance.collection('progetti').doc(widget.p.nomeProgetto).delete();
+    final appState = Provider.of<AppState>(context, listen: false);
+    await appState.progetti.doc(widget.p.nomeProgetto).delete();
   }
 }

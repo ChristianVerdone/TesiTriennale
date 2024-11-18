@@ -21,6 +21,8 @@ class FirebaseCollectionDownloader:
         # Convert documents to list of dictionaries with document reference as string
         collection_data = []
         for doc in docs:
+            if doc.id in ['riepilogoCat', 'Valore della Produzione']:
+                continue
             doc_dict = doc.to_dict()
             # print(doc_dict)
             # Convert DocumentReference objects to their string paths
@@ -123,22 +125,18 @@ class FirebaseCollectionDownloader:
                 # Access the 'Conti' field
                 if 'Conti' in doc_dict:
                     for account_ref in doc_dict['Conti']:
-                        account_doc = account_ref.get().to_dict()
+                        account_linee_conto_ref = account_ref.collection('lineeConto')
+                        account_linee_conto_docs = account_linee_conto_ref.stream()
 
-                        # Check if 'Project Amounts' key exists in the account document
-                        if 'Project Amounts' in account_doc:
-                            # Calculate the sum of the values in the 'Project Amounts' map
-                            project_amounts_sum = sum(double(value) for value in account_doc['Project Amounts'].values())
-                            total_project_amounts_sum += project_amounts_sum
-
-                # Calculate the difference between 'importo' and the total sum of 'Project Amounts'
-                importo = double(doc_dict.get('importo', 0))
-                difference = importo - total_project_amounts_sum
-
-                # Save the difference in the dictionary
-                doc_dict['Difference'] = difference
-
-                collection_data.append(doc_dict)
+                        for linea_doc in account_linee_conto_docs:
+                            linea_dict = linea_doc.to_dict()
+                            if 'Project Amounts' in linea_dict:
+                                project_amounts_sum = sum(double(value) for value in linea_dict['Project Amounts'].values())
+                                difference = double(float(linea_dict.get('Importo', 0))) - project_amounts_sum
+                                print(difference)
+                                if difference > 0 and linea_dict.get('Costi Diretti', False):
+                                    linea_dict['Difference'] = difference
+                                    collection_data.append(linea_dict)
 
         # Check if collection_data is not empty
         if collection_data:
@@ -154,7 +152,7 @@ class FirebaseCollectionDownloader:
 
 # Example usage:
 downloader = FirebaseCollectionDownloader('C:/UTILS/tesitriennale-4d2f1-firebase-adminsdk-2u5v6-69e53a1fdf.json')
-#downloader.download_collection('categorie', 'categorie.csv')
+downloader.download_collection('categorie', 'categorie.csv')
 #downloader.download_collection2('conti', 'conti.csv')
-downloader.download_collection3('progetti', 'progetti.csv')
+#downloader.download_collection3('progetti', 'progetti.csv')
 #downloader.download_collection4('categorie', 'personale.csv')
