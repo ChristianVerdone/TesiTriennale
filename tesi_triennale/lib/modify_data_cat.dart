@@ -51,7 +51,8 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
   void initState() {
     super.initState();
     conti = convertMapToObject2(widget.csvData);
-    getProjects().then((projectList) {
+    final appState = Provider.of<AppState>(context, listen: false);
+    getProjects(appState).then((projectList) {
       setState(() {
         projects = projectList;
       });
@@ -86,7 +87,6 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                   }
                   else {
                     String linea = widget.lines[i]['linea'];
-                    String idConto = linea.substring(0, 8);
                     var conto = conti[i];
                     var projectAmounts = conto.projectAmounts;
                     final json = {
@@ -97,7 +97,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                       'Codice progetto': conto.codiceProgetto,
                       'Project Amounts': projectAmounts
                     };
-                    await appstate.conti.doc(idConto).collection('lineeConto').doc(linea).set(json,
+                    await appstate.conti.doc(conto.codiceConto).collection('lineeConto').doc(linea).set(json,
                         SetOptions(merge: true));
                   }
                 }
@@ -110,7 +110,6 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                   }
                   else {
                     linea = widget.lines[i]['linea'];
-                    String idConto = linea.substring(0, 8);
                     final json = {
                       'Costi Diretti': conti[i].costiDiretti,
                       'Costi Indiretti': conti[i].costiIndiretti,
@@ -118,8 +117,9 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                       'Attività non economiche': conti[i].attivitaNonEconomiche,
                       'Codice progetto': conti[i].codiceProgetto
                     };
-                    await appstate.conti.doc(idConto).collection('lineeConto').doc(linea).set(json,
+                    await appstate.conti.doc(conti[i].codiceConto).collection('lineeConto').doc(linea).set(json,
                         SetOptions(merge: true));
+                    print('ho salvato la linea $linea');
                   }
                 }
               }
@@ -374,8 +374,8 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
     }).toList());
   }
 
-  Future<List<String>> getProjects() async {
-    final projectsRef = FirebaseFirestore.instance.collection('progetti');
+  Future<List<String>> getProjects(AppState appState) async {
+    final projectsRef = appState.progetti;
     final snapshot = await projectsRef.get();
     return snapshot.docs.map((doc) => doc.id).toList();
   }
@@ -408,9 +408,15 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                               onChanged: (bool? value) {
                                 setState(() {
                                   if (value == true) {
-                                    projectAmounts[project] = 0;
+                                    projectAmounts.addEntries([MapEntry(project, 0)]);
                                   } else {
                                     projectAmounts.remove(project);
+                                    if (projectAmounts.isNotEmpty) {
+                                      total = totalAmount - projectAmounts.values.reduce((a, b) => a + b);
+                                    }
+                                    else {
+                                      total = totalAmount;
+                                    }
                                   }
                                 });
                               },
@@ -421,7 +427,7 @@ class _ModifyDataCatState extends State<ModifyDataCat> {
                               Expanded(
                                 child: TextFormField(
                                   initialValue: projectAmounts[project].toString(),
-                                  onFieldSubmitted: (value) {
+                                  onChanged: (value) {
                                     double amount = double.tryParse(value) ?? 0;
                                     if (amount > 0 && amount <= totalAmount) {
                                       double total2 = totalAmount - amount - projectAmounts.values.reduce((a, b) => a + b);

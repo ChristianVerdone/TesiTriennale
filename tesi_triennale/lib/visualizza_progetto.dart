@@ -382,6 +382,10 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
                         // Aggiungi il DocumentReference all'array
                         documentReferences.add(linea.reference);
                       }
+                    }else if (linea.data()['Codice progetto'] == nomeProgetto && linea.get('Costi Diretti') == true) {
+                      s = s + num.parse(linea.get('Importo').toString());
+                      // Aggiungi il DocumentReference all'array
+                      documentReferences.add(linea.reference);
                     }
                   }
                 })

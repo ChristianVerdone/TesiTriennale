@@ -305,7 +305,26 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
 
   Future<void> viewProjectAmounts(Conto conto, String rowIndex) async {
     LinkedHashMap<String, double> projectAmounts = await fetchProjectAmounts(conto, rowIndex);
-
+    if(projectAmounts.isEmpty) {
+      var prog = conto.codiceProgetto;
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Visualizza Progetti'),
+            content: Text(prog),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
     await showDialog(
       context: context,
       builder: (BuildContext context) {

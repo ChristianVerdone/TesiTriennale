@@ -10,32 +10,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/code/caricaDati.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code/initCategorie.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/categorie.csv" beforeDir="false" afterPath="$PROJECT_DIR$/code/categorie.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/personale.csv" beforeDir="false" afterPath="$PROJECT_DIR$/code/personale.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/progetti.csv" beforeDir="false" afterPath="$PROJECT_DIR$/code/progetti.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/retrieveDb.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/retrieveDb.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/conto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/firebase_options.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/firebase_options.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/get_conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/get_conto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/get_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/get_progetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/home.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/insert_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/insert_progetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/modify_data.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/modify_data.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/modify_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/modify_progetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/progetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/show_database.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/show_database.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view_categorie.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view_categorie.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/scrollable_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/scrollable_widget.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetti.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetti.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetto.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_tab_conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_tab_conto.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -346,6 +325,8 @@
       <workItem from="1731325068970" duration="3595000" />
       <workItem from="1731422579363" duration="19184000" />
       <workItem from="1731592574483" duration="10354000" />
+      <workItem from="1731928511164" duration="15777000" />
+      <workItem from="1732027437114" duration="889000" />
     </task>
     <servers />
   </component>
