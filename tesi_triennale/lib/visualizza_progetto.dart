@@ -58,7 +58,8 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: const Text('Conferma Rimozione'),
-                    content: const Text('Sei sicuro di voler rimuovere questo Progetto?'),
+                    content: const Text('Sei sicuro di voler rimuovere questo '
+                        'Progetto?'),
                     actions: <Widget>[
                       TextButton(
                         child: const Text('Annulla'),
@@ -78,13 +79,15 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
                   );
                 },
               );
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const VisualizzaProg()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+              const VisualizzaProg()));
             },
             icon: const Icon(Icons.delete, color: Colors.red)),
           ElevatedButton(
             child: const Text('Modifica'),
             onPressed: () async {
-              await Navigator.push(context, MaterialPageRoute(builder: (context) => ModifyProgetto(progetto: widget.p)));
+              await Navigator.push(context, MaterialPageRoute(builder:
+                  (context) => ModifyProgetto(progetto: widget.p)));
             },
           ),
           IconButton(
@@ -119,7 +122,8 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
         : Center(
           child: Column(
             children: [
-              Text('| Anno: ${widget.p.anno} | Valore: ${widget.p.valore} | isEconomico: ${widget.p.isEconomico.toString()} | '
+              Text('| Anno: ${widget.p.anno} | Valore: ${widget.p.valore} | '
+                  'isEconomico: ${widget.p.isEconomico.toString()} | '
               'Contributo di competenza: ${widget.p.contributo} |',
               ),
               const SizedBox(height: 20),
@@ -131,7 +135,9 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
                   itemBuilder: (context, index){
                     return ListTile(
                       visualDensity: VisualDensity.compact,
-                      title: Text('${widget.p.costiDiretti.keys.elementAt(index)}: ${widget.p.costiDiretti.values.elementAt(index)}'),
+                      title: Text('${widget.p.costiDiretti.keys.
+                      elementAt(index)}: ${widget.p.costiDiretti.values.
+                      elementAt(index)}'),
                     );
                   }
                 ),
@@ -146,7 +152,9 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
                   itemBuilder: (context, index){
                     return ListTile(
                       visualDensity: VisualDensity.compact,
-                      title: Text('${widget.p.costiIndiretti.keys.elementAt(index)}: ${widget.p.costiIndiretti.values.elementAt(index)}'),
+                      title: Text('${widget.p.costiIndiretti.keys.
+                      elementAt(index)}: ${widget.p.costiIndiretti.values.
+                      elementAt(index)}'),
                     );
                   }
                 )
@@ -178,6 +186,9 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
   }
 
   List<List<dynamic>> _makeListConti() {
+    if (conti.isEmpty) {
+      return [];
+    }
     List<List<dynamic>> list = [];
     final columns = [
       'Codice Conto',
@@ -187,7 +198,6 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
       'Data documento',
       'Numero documento',
       'Importo',
-      'Saldo',
       'Contropartita',
       'Costi diretti',
       'Costi indiretti',
@@ -217,15 +227,19 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     await getLinesProg();
     var tableData = _makeListConti();
     const contentPerPage = 35; // Numero massimo di righe per pagina
-    final totalPageCount = (tableData.length / contentPerPage).ceil();
-    //final image = await imageFromAssetBundle('CeRICT_logo.png');
-    // Load the image as a Uint8List
-    final ByteData bytes = await rootBundle.load('assets/images/CeRICT_logo.png');
+    var totalPageCount = 0;
+    if (tableData.isNotEmpty) {
+      totalPageCount = (tableData.length / contentPerPage).ceil();
+    }
+    final ByteData bytes = await rootBundle.load('assets/images/'
+        'CeRICT_logo.png');
     final Uint8List imageData = bytes.buffer.asUint8List();
     final image = pw.MemoryImage(imageData);
     // Load custom fonts
-    final fontRegular = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSans-Regular.ttf'));
-    final fontBold = pw.Font.ttf(await rootBundle.load('assets/fonts/NotoSans-Bold.ttf'));
+    final fontRegular = pw.Font.ttf(await rootBundle.load('assets/fonts/'
+        'NotoSans-Regular.ttf'));
+    final fontBold = pw.Font.ttf(await rootBundle.load('assets/fonts/'
+        'NotoSans-Bold.ttf'));
 
     pdf.addPage(pw.Page(
       margin: const pw.EdgeInsets.all(3),
@@ -299,7 +313,8 @@ class _VisualizzaProgettoState extends State<VisualizzaProgetto> {
     for (int pageIndex = 1; pageIndex < (totalPageCount + 1); pageIndex++) {
       final startIndex = (pageIndex - 1) * contentPerPage;
       final endIndex = pageIndex * contentPerPage;
-      final currentPageData = tableData.sublist(startIndex, endIndex > tableData.length ? tableData.length : endIndex);
+      final currentPageData = tableData.sublist(startIndex, endIndex >
+          tableData.length ? tableData.length : endIndex);
 
       final table = pw.TableHelper.fromTextArray(
         data: currentPageData,
