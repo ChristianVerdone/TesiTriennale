@@ -118,7 +118,6 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
       _isProcessing = true;
     });
 
-    try {
       final appState = Provider.of<AppState>(context, listen: false);
       QuerySnapshot snapshot = await appState.progetti.get();
       for (var doc in snapshot.docs) {
@@ -126,17 +125,15 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
           await evaluate(doc.id);
         }
       }
-    } catch (e) {
-      // Handle errors if necessary
-    } finally {
       setState(() {
         _isProcessing = false;
       });
-    }
   }
 
   Future getProgetti() async{
-    num perc = 0;
+    print(totProgPerPercNonEco);
+    print(totProgPerPercEco);
+    double perc = 0;
     final appState = Provider.of<AppState>(context, listen: false);
     await appState.progetti.get().then(
       (snapshot) => snapshot.docs.forEach(
@@ -169,7 +166,7 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
                 }
               }
               final json = {
-                'Percentuale': perc.toStringAsFixed(2),
+                'Percentuale': perc.toString(),
               };
               progetto.reference.update(json);
             }
@@ -178,6 +175,10 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
         }
       )
     );
+  }
+
+  double roundToTwoDecimalPlaces(double value) {
+    return (value * 100).round() / 100;
   }
 
   Future<void> valuatetot() async {
@@ -432,8 +433,10 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
                 await appState.conti.doc(d.id).collection('lineeConto').get().then(
                         (value) => value.docs.forEach((linea) {
                       if (linea.reference.id != 'defaultLine') {
-                        LinkedHashMap<String, double> progetti = LinkedHashMap<String, double>.from(linea.data()['Project Amounts'].map((key, value) => MapEntry(key, value.toDouble())));
-                        if (progetti.containsKey(nomeProgetto) && linea.get('Costi Diretti') == true) {
+                        var projectAmounts = linea.data()['Project Amounts'];
+                        LinkedHashMap<String, double> progetti = projectAmounts != null
+                            ? LinkedHashMap<String, double>.from(projectAmounts.map((key, value) => MapEntry(key, value.toDouble())))
+                            : LinkedHashMap<String, double>();                        if (progetti.containsKey(nomeProgetto) && linea.get('Costi Diretti') == true) {
                           s = s + num.parse(progetti[nomeProgetto].toString());
                           // Aggiungi il DocumentReference all'array
                           documentReferences.add(linea.reference);
