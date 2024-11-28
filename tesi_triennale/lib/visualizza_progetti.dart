@@ -3,7 +3,9 @@ import 'dart:collection';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
+import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 import 'package:tesi_triennale/progetto.dart';
 import 'package:tesi_triennale/utils.dart';
@@ -73,7 +75,7 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
             const SizedBox(width: 16),
             FloatingActionButton(
               onPressed: () {
-                // Printing.layoutPdf(onLayout: (format) => _generatePdfContent());
+                Printing.layoutPdf(onLayout: (format) => _generatePdfContent());
               },
               child: const Icon(Icons.print),
             ),
@@ -256,6 +258,7 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
   }
 
   Future getLinesProg(Progetto p) async {
+    csvData = [];
     conti = [];
     final appState = Provider.of<AppState>(context, listen: false);
     for(var ref in p.references){
@@ -269,10 +272,13 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
         },
       );
     }
-    conti = convertMapToObject(csvData);
+    conti = convertMapToObject2(csvData);
   }
 
-  List<List<dynamic>> _makeListConti() {
+  List<List<dynamic>> _makeListConti(Progetto project) {
+    if (conti.isEmpty) {
+      return [];
+    }
     List<List<dynamic>> list = [];
     final columns = [
       'Codice Conto',
@@ -282,23 +288,27 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
       'Data documento',
       'Numero documento',
       'Importo',
-      //'Saldo',
+      'Codice Fiscale',
+      'Partita IVA',
       'Contropartita',
       'Costi diretti',
       'Costi indiretti',
       'Attivita economiche',
       'Attivita non economiche',
-      'Codice progetto'
+      'Codice progetto',
+      'Project Amounts'
     ];
     list.add(columns);
     int i = 0;
     for (var conto in conti) {
-      if(i/14 >= 1){
-        list.add(conto.toListF());
+      if(i/34 >= 1){
         list.add(columns);
+        list.add(conto.toListFPAmounts(project.nomeProgetto));
+        i = 0;
       }
       else{
-        list.add(conto.toListF());
+        list.add(conto.toListFPAmounts(project.nomeProgetto));
+        i++;
       }
     }
     return list;
@@ -309,56 +319,42 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
     CollectionReference progettiRef = appState.progetti;
     Progetto prog;
     List<List> tableData;
+    // Load the image as a Uint8List
+    final ByteData bytes = await rootBundle.load('assets/images/CeRICT_logo.png');
+    final Uint8List imageData = bytes.buffer.asUint8List();
+    final image = pw.MemoryImage(imageData);
+    final fontRegular = pw.Font.ttf(
+        await rootBundle.load('assets/fonts/NotoSans-Regular.ttf'));
+    final fontBold = pw.Font.ttf(
+        await rootBundle.load('assets/fonts/NotoSans-Bold.ttf'));
     final pdf = pw.Document();
-    const contentPerPage = 20;
+    const contentPerPage = 35;
     for(String p in progetti){
-      await progettiRef.doc(p).get().then((value) {
-        prog = Progetto.prog(nomeProgetto: p, anno: value.get('Anno'), valore: value.get('Valore'), costiDiretti: value.get('Costi Diretti'),
-          costiIndiretti: value.get('Costi Indiretti'), isEconomico: value.get('isEconomico'), perc: value.get('Percentuale'),
-          contributo: value.get('Contributo Competenza'), references: value.get('CostiDirettiValue'), isA1: value.get('isA1'), isA5: value.get('isA5'));
-        getLinesProg(prog);
-        tableData = _makeListConti();
-        final totalPageCount = (tableData.length / contentPerPage).ceil();
-        pdf.addPage(pw.Page(
-          margin: const pw.EdgeInsets.all(3),
-          build: (pw.Context context) {
-            return pw.Center(
-              child: pw.Column(
-                children: [
-                  pw.Text('${prog.nomeProgetto}'),
-                  pw.Text('Anno: ${prog.anno} | Valore: ${prog.valore} | isEconomico: ${prog.isEconomico.toString()} | '
-                    'Contributo di competenza: ${prog.contributo}',
-                  ),
-                  pw.SizedBox(height: 10),
-                  pw.Text('Costi Diretti:', textAlign: pw.TextAlign.left),
-                  pw.ListView.builder(
-                    itemCount: prog.costiDiretti.length,
-                    itemBuilder: (context, index){
-                      return pw.Container(
-                        child: pw.Text('${prog.costiDiretti.keys.elementAt(index)}: ${prog.costiDiretti.values.elementAt(index)}'),
-                      );
-                    }
-                  ),
-                  pw.Text('Totale:${n = getSum(prog.costiDiretti.values)}'),
-                  pw.SizedBox(height: 10),
-                  pw.Text('Costi Indiretti:', textAlign: pw.TextAlign.left),
-                  pw.ListView.builder(
-                    itemCount: prog.costiIndiretti.length,
-                    itemBuilder: (context, index){
-                      return pw.Container(
-                        child: pw.Text('${prog.costiIndiretti.keys.elementAt(index)}: ${prog.costiIndiretti.values.elementAt(index)}'),
-                      );
-                    }
-                  ),
-                  pw.Text('Totale:${n = getSum(prog.costiIndiretti.values)}'),
-                ],
-              ));
-          },
-        ));
+      final value = await progettiRef.doc(p).get();
+      prog = Progetto.prog(nomeProgetto: p, anno: value.get('Anno'),
+          valore: value.get('Valore'), costiDiretti: value.get('Costi Diretti'),
+          costiIndiretti: value.get('Costi Indiretti'),
+          isEconomico: value.get('isEconomico'), perc: value.get('Percentuale'),
+          contributo: value.get('Contributo Competenza'),
+          references: value.get('CostiDirettiValue'), isA1: (value.data() as
+          Map<String, dynamic>).containsKey('isA1') ?
+          value.get('isA1') : false, isA5: (value.data() as
+          Map<String, dynamic>).containsKey('isA5') ?
+          value.get('isA5') : false);
+      await getLinesProg(prog);
+      tableData = await _makeListConti(prog);
+      var totalPageCount = 0;
+      if (tableData.isNotEmpty) {
+        totalPageCount = (tableData.length / contentPerPage).ceil();
+      }
+      pw.Page page = _buildSummaryPage(prog, image, fontRegular, fontBold);
+      pdf.addPage(page);
+      if(totalPageCount != 0){
         for (int pageIndex = 1; pageIndex < (totalPageCount + 1); pageIndex++) {
           final startIndex = (pageIndex - 1) * contentPerPage;
           final endIndex = pageIndex * contentPerPage;
           final currentPageData = tableData.sublist(startIndex, endIndex > tableData.length ? tableData.length : endIndex);
+
           final table = pw.TableHelper.fromTextArray(
             data: currentPageData,
             cellAlignment: pw.Alignment.centerLeft,
@@ -370,6 +366,7 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
             cellStyle: pw.TextStyle(fontSize: 4,font: pw.Font.helvetica()),
             headerStyle: pw.TextStyle(fontSize: 4, font: pw.Font.helvetica()),
           );
+
           pw.Page p = pw.Page(
             orientation: pw.PageOrientation.landscape,
             margin: const pw.EdgeInsets.all(3),
@@ -390,12 +387,86 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
               );
             },
           );
-          pdf.addPage(p, index: pageIndex,);
+          pdf.addPage(p);
         }
-      });
+      }
     }
     return pdf.save();
   }
+
+  pw.Page _buildSummaryPage(Progetto prog, pw.MemoryImage image, pw.Font fontRegular, pw.Font fontBold) {
+  return pw.Page(
+    margin: const pw.EdgeInsets.all(3),
+    build: (pw.Context context) {
+      return pw.Center(
+        child: pw.Column(
+          children: [
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Image(image, width: 100, height: 100),
+                pw.Text(
+                  'Riepilogo Progetto: ${prog.nomeProgetto}',
+                  style: pw.TextStyle(fontSize: 20, fontWeight: pw.FontWeight.bold, font: fontBold),
+                ),
+                pw.SizedBox(width: 100),
+              ],
+            ),
+            pw.SizedBox(height: 20),
+            pw.Text(
+              'L\'anno di riferimento: ${prog.anno}, il progetto nella sua interezza assume un valore di: ${prog.valore} \u20AC.',
+              style: pw.TextStyle(fontSize: 12, font: fontRegular),
+            ),
+            pw.Text(
+              prog.isEconomico ? 'Il Progetto \u00E8 di natura economica' : 'Il Progetto \u00E8 di natura non economica',
+              style: pw.TextStyle(fontSize: 12, font: fontRegular),
+            ),
+            pw.Text(
+              'Il contributo di competenza per l\'anno di riferimento \u00E8 di: ${prog.contributo} \u20AC.',
+              style: pw.TextStyle(fontSize: 12, font: fontRegular),
+            ),
+            pw.SizedBox(height: 10),
+            pw.Text(
+              'I Costi Diretti associati al progetto divisi per categoria sono:',
+              textAlign: pw.TextAlign.left,
+              style: pw.TextStyle(fontSize: 12, font: fontRegular),
+            ),
+            for (var entry in prog.costiDiretti.entries)
+              pw.Container(
+                child: pw.Text(
+                  '${entry.key}:     ${entry.value} \u20AC',
+                  style: pw.TextStyle(fontSize: 12, font: fontRegular),
+                ),
+                alignment: pw.Alignment.centerLeft,
+              ),
+            pw.Text(
+              'Totale:${getSum(prog.costiDiretti.values)} \u20AC',
+              style: pw.TextStyle(fontSize: 12, font: fontRegular),
+            ),
+            pw.SizedBox(height: 10),
+            pw.Text(
+              'I Costi Indiretti associati al progetto divisi per categoria sono:',
+              textAlign: pw.TextAlign.left,
+              style: pw.TextStyle(fontSize: 12, font: fontRegular),
+            ),
+            for (var entry in prog.costiIndiretti.entries)
+              pw.Container(
+                child: pw.Text(
+                  '${entry.key}:     ${entry.value} \u20AC',
+                  style: pw.TextStyle(fontSize: 12, font: fontRegular),
+                ),
+                alignment: pw.Alignment.centerLeft,
+              ),
+            pw.Text(
+              'Totale:${getSum(prog.costiIndiretti.values)} \u20AC',
+              style: pw.TextStyle(fontSize: 12, font: fontRegular),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
 
   num getSum(Iterable<dynamic> iterable) {
     n = 0;
@@ -406,13 +477,19 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
   }
 
   Future<Progetto> getProgetto(String nomeProgetto) async {
-    Progetto p = Progetto.prog(nomeProgetto: '', anno: 0, valore: 0, costiDiretti: {}, costiIndiretti: {}, isEconomico: false, perc: 0, contributo: 0, references: [], isA1: false, isA5: false);
+    Progetto p = Progetto.prog(nomeProgetto: '', anno: 0, valore: 0,
+        costiDiretti: {}, costiIndiretti: {}, isEconomico: false, perc: 0,
+        contributo: 0, references: [], isA1: false, isA5: false);
     final appState = Provider.of<AppState>(context, listen: false);
     await appState.progetti.doc(nomeProgetto).get().then(
       (value) {
-        p = Progetto.prog(nomeProgetto: nomeProgetto, anno: value.get('Anno'), valore: value.get('Valore'), costiDiretti: value.get('Costi Diretti'),
-          costiIndiretti: value.get('Costi Indiretti'), isEconomico: value.get('isEconomico'), perc: value.get('Percentuale'),
-          contributo: value.get('Contributo Competenza'), references: value.get('CostiDirettiValue'), isA1: value.get('isA1'), isA5: value.get('isA5'));
+        p = Progetto.prog(nomeProgetto: nomeProgetto, anno: value.get('Anno'),
+          valore: value.get('Valore'), costiDiretti: value.get('Costi Diretti'),
+          costiIndiretti: value.get('Costi Indiretti'),
+          isEconomico: value.get('isEconomico'), perc: value.get('Percentuale'),
+          contributo: value.get('Contributo Competenza'),
+          references: value.get('CostiDirettiValue'), isA1: value.get('isA1'),
+          isA5: value.get('isA5'));
       }
     );
     return p;
@@ -430,7 +507,8 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
             if(cat.reference.id == 'Personale'){
               for (var element in (cat.get('Conti') as List<dynamic>)) {
                 DocumentReference d = element as DocumentReference;
-                await appState.conti.doc(d.id).collection('lineeConto').get().then(
+                await appState.conti.doc(d.id).collection('lineeConto').get().
+                  then(
                         (value) => value.docs.forEach((linea) {
                       if (linea.reference.id != 'defaultLine') {
                         var projectAmounts = linea.data()['Project Amounts'];
@@ -449,7 +527,8 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
             else {
               for (var element in (cat.get('Conti') as List<dynamic>)) {
                 DocumentReference d = element as DocumentReference;
-                await appState.conti.doc(d.id).collection('lineeConto').get().then(
+                await appState.conti.doc(d.id).collection('lineeConto').get().
+                  then(
                         (value) => value.docs.forEach( (linea) {
                       if (linea.reference.id != 'defaultLine') {
                         var c = linea.data()['Codice progetto']
@@ -472,28 +551,33 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
     }
     num totCostiIndAE = 0;
     num totCostiIndAnE = 0;
-    DocumentSnapshot riepilogoCatDoc = await appState.categorie.doc('riepilogoCat').get();
-    totCostiIndAE = num.parse(riepilogoCatDoc.get('totCostiIndirettiAttEco').toString());
-    totCostiIndAnE = num.parse(riepilogoCatDoc.get('totCostiIndirettiAttNonEco').toString());
+    DocumentSnapshot riepilogoCatDoc = await appState.categorie.doc(''
+        'riepilogoCat').get();
+    totCostiIndAE = num.parse(riepilogoCatDoc.get(''
+        'totCostiIndirettiAttEco').toString());
+    totCostiIndAnE = num.parse(riepilogoCatDoc.get(''
+        'totCostiIndirettiAttNonEco').toString());
 
     for (var categoria in p.costiIndiretti.keys) {
       s = 0;
       await appState.categorie.doc(categoria).get().then(
               (cat) {
             if(p.isEconomico){
-              s = (num.parse(p.perc.toString()) / 100 * totCostiIndAE) * num.parse(cat.get('Percentuale CI A E').toString()) / 100;
+              s = (num.parse(p.perc.toString()) / 100 * totCostiIndAE) *
+                  num.parse(cat.get('Percentuale CI A E').toString()) / 100;
             }
             else {
-              s = (num.parse(p.perc.toString()) / 100 * totCostiIndAnE) * num.parse(cat.get('Percentuale CI A nE').toString()) / 100;
+              s = (num.parse(p.perc.toString()) / 100 * totCostiIndAnE) *
+                  num.parse(cat.get('Percentuale CI A nE').toString()) / 100;
             }
           }
       );
       p.costiIndiretti.update(categoria, (value) => s.toStringAsFixed(2));
     }
     final json = {
-      'Costi Diretti' : p.costiDiretti,
-      'Costi Indiretti' : p.costiIndiretti,
-      'CostiDirettiValue': documentReferences.map((docRef) => docRef.path).toList(),
+      'Costi Diretti' : p.costiDiretti, 'Costi Indiretti' : p.costiIndiretti,
+      'CostiDirettiValue': documentReferences.map((docRef) =>
+      docRef.path).toList(),
     };
     await appState.progetti.doc(nomeProgetto).update(json);
   }
