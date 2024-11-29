@@ -411,9 +411,6 @@ class _ViewContiCatPage extends State<ViewContiCatPage> {
     num totInE = 0;
     num totDnE = 0;
     num totDE = 0;
-    num totD = 0;
-    num percDE = 0;
-    num percDnE = 0;
     num totSaldo = 0;
     DocumentReference d = appState.categorie.doc(widget.idCat);
     for (var conto in conti) {

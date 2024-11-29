@@ -158,7 +158,7 @@ Future<void> processProgetti(BuildContext context) async {
           DocumentSnapshot progettoSnapshot = await appState.progetti.doc(progetto).get();
           if (progettoSnapshot.exists) {
             Map<String, dynamic> progettoData = progettoSnapshot.data() as Map<String, dynamic>;
-            double contributo = double.parse(progettoData['Contributo Competenza']) ?? 0.0;
+            double contributo = double.parse(progettoData['Contributo Competenza']);
             bool isEconomic = progettoData['isEconomico'] ?? false;
 
             if (isEconomic) {
@@ -194,7 +194,6 @@ Future<void> calcolaEInserisciRiepilogoCat(BuildContext context) async {
   double totCostiIndirettiAttNonEco = 0.0;
   double totIndiretti = 0.0;
   double costiDiProduzione = 0.0;
-  double saldoOneriFinanziari = 0.0;
   double totCostiAttEco = 0.0;
   double totCostiAttNonEco = 0.0;
 
@@ -203,10 +202,6 @@ Future<void> calcolaEInserisciRiepilogoCat(BuildContext context) async {
     if (categoriaDoc.id != 'riepilogoCat' && categoriaDoc.id != 'Valore della Produzione') {
       var data = categoriaDoc.data() as Map<String, dynamic>;
       if (categoriaDoc.id.toString() == 'Oneri finanziari') {
-        saldoOneriFinanziari = data['Totale Costi Diretti A E'] ?? 0.0;
-        saldoOneriFinanziari += data['Totale Costi Diretti A nE'] ?? 0.0;
-        saldoOneriFinanziari += data['Totale Costi Indiretti A E'] ?? 0.0;
-        saldoOneriFinanziari += data['Totale Costi Indiretti A nE'] ?? 0.0;
       } else {
         // Somma i valori parziali esistenti
         totCostiDirettiAttEco += data['Totale Costi Diretti A E'] ?? 0.0;
@@ -218,7 +213,6 @@ Future<void> calcolaEInserisciRiepilogoCat(BuildContext context) async {
   DocumentSnapshot value = await appState.categorie.doc('Valore della Produzione').get();
 
   // Recupera tutti i conti
-  QuerySnapshot contiSnapshot = await appState.firestore.collection('conti').get();
 
   // Somma i saldi di ogni categoria
   for (var categoriaDoc in categorieSnapshot.docs) {
@@ -239,6 +233,7 @@ Future<void> calcolaEInserisciRiepilogoCat(BuildContext context) async {
   print('Costi indiretti att eco: $totCostiIndirettiAttEco');
   print('Costi indiretti att non eco: $totCostiIndirettiAttNonEco');
   totIndiretti = totCostiIndirettiAttEco + totCostiIndirettiAttNonEco;
+  print('Totale indiretti: $totIndiretti');
 
   // Calcola le percentuali
   double percIndirettiAttEco = totIndiretti != 0 ? (totCostiIndirettiAttEco / totIndiretti) * 100 : 0;

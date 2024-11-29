@@ -10,11 +10,88 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d32c160f-61e5-4ec9-8624-2735faed83ff" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/modify_data_cat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/scrollable_widget.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/scrollable_widget.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/caricaDati.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/caricaDati.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/errored.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/code/errored.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/out.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/code/out.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/progetti.csv" beforeDir="false" afterPath="$PROJECT_DIR$/code/progetti.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/retrieveDb.py" beforeDir="false" afterPath="$PROJECT_DIR$/code/retrieveDb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/.metadata" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/.metadata" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/home.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/modify_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/modify_progetto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/utils.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view_categorie.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view_categorie.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/view_conti_cat.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetti.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_progetti.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_tab_conto.dart" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/lib/visualizza_tab_conto.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/flutter/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugin_registrant.cc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugin_registrant.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/flutter/generated_plugins.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/main.cc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/my_application.cc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/linux/my_application.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Flutter/Flutter-Debug.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Flutter/Flutter-Release.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Flutter/GeneratedPluginRegistrant.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner.xcodeproj/project.pbxproj" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner.xcworkspace/contents.xcworkspacedata" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/AppDelegate.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_128.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_16.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_256.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_32.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_64.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Base.lproj/MainMenu.xib" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Configs/AppInfo.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Configs/Debug.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Configs/Release.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Configs/Warnings.xcconfig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/DebugProfile.entitlements" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/GoogleService-Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/MainFlutterWindow.swift" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/Runner/Release.entitlements" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/macos/firebase_app_id_file.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/tesi_triennale/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/web/favicon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/web/icons/Icon-192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/web/icons/Icon-512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/web/icons/Icon-maskable-192.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/web/icons/Icon-maskable-512.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/web/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/web/manifest.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/flutter/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugin_registrant.cc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugin_registrant.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/flutter/generated_plugins.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/runner/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/runner/Runner.rc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/runner/flutter_window.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/runner/flutter_window.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/runner/main.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/runner/resource.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/runner/resources/app_icon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/runner/utils.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/runner/utils.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/runner/win32_window.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tesi_triennale/windows/runner/win32_window.h" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -327,6 +404,13 @@
       <workItem from="1731592574483" duration="10354000" />
       <workItem from="1731928511164" duration="15777000" />
       <workItem from="1732027437114" duration="889000" />
+      <workItem from="1732098669354" duration="21100000" />
+      <workItem from="1732611611664" duration="2383000" />
+      <workItem from="1732706653751" duration="7271000" />
+      <workItem from="1732725877762" duration="8777000" />
+      <workItem from="1732869693852" duration="4866000" />
+      <workItem from="1732875028414" duration="3786000" />
+      <workItem from="1732879005053" duration="1251000" />
     </task>
     <servers />
   </component>

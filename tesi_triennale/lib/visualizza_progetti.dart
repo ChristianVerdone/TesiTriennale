@@ -185,7 +185,6 @@ class _VisualizzaProgState extends State<VisualizzaProg> {
 
   Future<void> valuatetot() async {
     List<dynamic> contiRef = [];
-    Map<String, dynamic>? data;
     double valoreProduzione = 0;
     final appState = Provider.of<AppState>(context, listen: false);
     await appState.progetti.get().then(
